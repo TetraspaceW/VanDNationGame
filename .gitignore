@@ -1,0 +1,10 @@
+*.exe
+*.pck
+
+# Godot-specific ignores
+.import/
+export.cfg
+
+# Mono-specific ignores
+.mono/
+data_*/
