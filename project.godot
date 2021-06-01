@@ -16,7 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="VanDNationGame"
+run/main_scene="res://src/MapView.tscn"
 config/icon="res://icon.png"
+
+[display]
+
+window/size/height=640
 
 [rendering]
 
