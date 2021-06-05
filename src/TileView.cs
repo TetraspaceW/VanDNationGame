@@ -2,29 +2,27 @@ using Godot;
 public class TileView : Area2D
 {
     TileModel _tile;
-    AnimatedSprite sprite;
-    CollisionShape2D collisionShape;
-
-    public TileModel tile
+    AnimatedSprite Sprite;
+    public TileModel Tile
     {
         get { return _tile; }
         set
         {
             _tile = value;
-            updateSpriteForTile();
+            UpdateSpriteForTile();
         }
     }
 
     public override void _Ready()
     {
         base._Ready();
-        sprite = GetNode<AnimatedSprite>("AnimatedSprite");
+        Sprite = GetNode<AnimatedSprite>("AnimatedSprite");
     }
-    private void updateSpriteForTile()
+    private void UpdateSpriteForTile()
     {
         SpriteFrames newFrames = new SpriteFrames();
-        newFrames.AddFrame(anim: "default", frame: tile.imageForTileType());
-        sprite.Frames = newFrames;
+        newFrames.AddFrame(anim: "default", frame: Tile.imageForTileType());
+        Sprite.Frames = newFrames;
     }
 
     public override void _InputEvent(Object viewport, InputEvent @event, int shapeIdx)
@@ -34,8 +32,17 @@ public class TileView : Area2D
             InputEventMouseButton mouseClickEvent = @event as InputEventMouseButton;
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed)
             {
-                GD.Print($"Clicked on tile with type {tile.Type}!");
+                ZoomIntoInternalMap();
             }
         }
+    }
+
+    private void ZoomIntoInternalMap()
+    {
+        if (Tile.internalMap == null)
+        {
+            Tile.internalMap = new MapModel();
+        }
+        GetParent<MapView>().UpdateWholeMapTo(Tile.internalMap);
     }
 }

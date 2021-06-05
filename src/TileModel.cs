@@ -2,8 +2,8 @@ using Godot;
 public class TileModel
 {
     private TerrainType type;
-
     public TerrainType Type { get => type; }
+    public MapModel internalMap;
 
     public TileModel(TerrainType type)
     {
