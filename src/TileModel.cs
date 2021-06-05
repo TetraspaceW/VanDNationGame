@@ -2,6 +2,9 @@ using Godot;
 public class TileModel
 {
     private TerrainType type;
+
+    public TerrainType Type { get => type; }
+
     public TileModel(TerrainType type)
     {
         this.type = type;
@@ -9,10 +12,7 @@ public class TileModel
 
     public enum TerrainType
     {
-        Space,
-        Void,
-        Energy,
-        Defect
+        Space, Void, Energy, Defect
     }
 
     public Texture imageForTileType()
