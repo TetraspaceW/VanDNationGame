@@ -1,23 +1,24 @@
 using Godot;
 public class TileModel
 {
-    private TerrainType type;
-    public TerrainType Type { get => type; }
+    private TerrainType terrain;
+    public TerrainType Terrain { get => terrain; }
     public MapModel internalMap;
 
     public TileModel(TerrainType type)
     {
-        this.type = type;
+        this.terrain = type;
     }
 
     public enum TerrainType
     {
+        Universe,
         Space, Void, Energy, Defect
     }
 
     public Texture imageForTileType()
     {
-        switch (type)
+        switch (terrain)
         {
             case TerrainType.Space:
                 return GD.Load<Texture>("res://assets/tiles/space.png");

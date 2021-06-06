@@ -5,9 +5,8 @@ public class MapView : Node2D
     private TileView[,] Tiles;
     public override void _Ready()
     {
-        Model = new MapModel();
+        Model = new MapModel(TileModel.TerrainType.Universe);
         UpdateWholeMapTo(Model);
-        UpdateTileAtLocation(new TileModel(TileModel.TerrainType.Energy), 8, 8);
     }
 
     void UpdateTileAtLocation(TileModel newTile, int x, int y)

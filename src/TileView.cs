@@ -41,7 +41,7 @@ public class TileView : Area2D
     {
         if (Tile.internalMap == null)
         {
-            Tile.internalMap = new MapModel();
+            Tile.internalMap = new MapModel(terrainType: Tile.Terrain);
         }
         GetParent<MapView>().UpdateWholeMapTo(Tile.internalMap);
     }
