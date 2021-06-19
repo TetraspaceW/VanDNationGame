@@ -4,10 +4,12 @@ public class TileModel
     private TerrainType terrain;
     public TerrainType Terrain { get => terrain; }
     public MapModel internalMap;
+    public TileModel parent;
 
-    public TileModel(TerrainType type)
+    public TileModel(TerrainType type, TileModel parent)
     {
         this.terrain = type;
+        this.parent = parent;
     }
 
     public enum TerrainType

@@ -1,4 +1,5 @@
 using Godot;
+using System;
 public class TileView : Area2D
 {
     TileModel _tile;
@@ -25,7 +26,7 @@ public class TileView : Area2D
         Sprite.Frames = newFrames;
     }
 
-    public override void _InputEvent(Object viewport, InputEvent @event, int shapeIdx)
+    public override void _InputEvent(Godot.Object viewport, InputEvent @event, int shapeIdx)
     {
         if (@event is InputEventMouseButton)
         {
@@ -34,6 +35,10 @@ public class TileView : Area2D
             {
                 ZoomIntoInternalMap();
             }
+            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
+            {
+                ZoomOuttoExternalMap();
+            }
         }
     }
 
@@ -41,8 +46,22 @@ public class TileView : Area2D
     {
         if (Tile.internalMap == null)
         {
-            Tile.internalMap = new MapModel(terrainType: Tile.Terrain);
+            Tile.internalMap = new MapModel(terrainType: Tile.Terrain, Tile);
         }
         GetParent<MapView>().UpdateWholeMapTo(Tile.internalMap);
+    }
+    private void ZoomOuttoExternalMap()
+    {
+        if (Tile.parent.parent == null)
+        {
+            Tile.parent.parent = new TileModel(type: TileModel.TerrainType.Energy, null);
+        }
+        if (Tile.parent.parent.internalMap == null)
+        {
+            Tile.parent.parent.internalMap = new MapModel(terrainType: Tile.parent.parent.Terrain, Tile.parent.parent);
+            MapModel grandparentMap = Tile.parent.parent.internalMap;
+            grandparentMap.Tiles[grandparentMap.randomNumber(0, 10), grandparentMap.randomNumber(0, 10)] = Tile.parent;
+        }
+        GetParent<MapView>().UpdateWholeMapTo(Tile.parent.parent.internalMap);
     }
 }

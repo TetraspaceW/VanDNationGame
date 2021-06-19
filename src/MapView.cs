@@ -5,7 +5,9 @@ public class MapView : Node2D
     private TileView[,] Tiles;
     public override void _Ready()
     {
-        Model = new MapModel(TileModel.TerrainType.Universe);
+        TileModel tile = new TileModel(TileModel.TerrainType.Universe, null);
+        Model = new MapModel(TileModel.TerrainType.Universe, tile);
+        tile.internalMap = Model;
         UpdateWholeMapTo(Model);
     }
 

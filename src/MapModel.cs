@@ -3,9 +3,11 @@ public class MapModel
 {
     public TileModel[,] Tiles;
     private readonly Random _random = new Random();
+    public TileModel parent;
 
-    public MapModel(TileModel.TerrainType terrainType)
+    public MapModel(TileModel.TerrainType terrainType, TileModel parent)
     {
+        this.parent = parent;
         Tiles = new TileModel[16, 10];
         switch (terrainType)
         {
@@ -24,15 +26,15 @@ public class MapModel
                     {
                         if (x == 0 || y == 0 || x == 9 || y == 9)
                         {
-                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Energy);
+                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Energy, parent);
                         }
                         else if (_random.Next(0, 2) == 0)
                         {
-                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Space);
+                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Space, parent);
                         }
                         else
                         {
-                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Void);
+                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Void, parent);
                         }
                     }
                 }
@@ -46,8 +48,13 @@ public class MapModel
         {
             for (int y = 0; y < 10; y++)
             {
-                Tiles[x, y] = new TileModel(terrainType);
+                Tiles[x, y] = new TileModel(terrainType, parent);
             }
         }
+    }
+
+    public int randomNumber(int low, int high)
+    {
+        return _random.Next(low, high);
     }
 }
