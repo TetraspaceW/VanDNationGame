@@ -31,7 +31,7 @@ public class TileView : Area2D
         if (@event is InputEventMouseButton)
         {
             InputEventMouseButton mouseClickEvent = @event as InputEventMouseButton;
-            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed)
+            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
             {
                 ZoomInToInternalMap();
             }
@@ -46,19 +46,20 @@ public class TileView : Area2D
     {
         if (Tile.internalMap == null)
         {
-            Tile.internalMap = new MapModel(terrainType: Tile.Terrain, Tile);
+            Tile.internalMap = new MapModel(Tile);
         }
         GetParent<MapView>().UpdateWholeMapTo(Tile.internalMap);
+
     }
     private void ZoomOutToExternalMap()
     {
         if (Tile.parent.parent == null)
         {
-            Tile.parent.parent = new TileModel(type: TileModel.TerrainType.Energy, null, Tile.scale + 2);
+            Tile.parent.parent = new TileModel(type: TileModel.TerrainType.InteruniversalSpace, null, Tile.scale + 2, zoomable: true);
         }
         if (Tile.parent.parent.internalMap == null)
         {
-            Tile.parent.parent.internalMap = new MapModel(terrainType: Tile.parent.parent.Terrain, Tile.parent.parent);
+            Tile.parent.parent.internalMap = new MapModel(Tile.parent.parent);
             MapModel grandparentMap = Tile.parent.parent.internalMap;
             grandparentMap.Tiles[grandparentMap.randomNumber(0, 10), grandparentMap.randomNumber(0, 10)] = Tile.parent;
         }

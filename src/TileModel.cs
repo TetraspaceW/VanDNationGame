@@ -1,24 +1,26 @@
 using Godot;
 public class TileModel
 {
-    private TerrainType terrain;
+    public TerrainType terrain;
     public TerrainType Terrain { get => terrain; }
     public MapModel internalMap;
     public TileModel parent;
+    public bool zoomable;
 
     public int scale;
 
-    public TileModel(TerrainType type, TileModel parent, int scale)
+    public TileModel(TerrainType type, TileModel parent, int scale, bool zoomable = false)
     {
         this.terrain = type;
         this.parent = parent;
         this.scale = scale;
+        this.zoomable = zoomable;
     }
 
     public enum TerrainType
     {
         // 10g ly across
-        Universe,
+        Universe, InteruniversalSpace,
         // 1g ly across
         Space, Void, Energy, Defect,
         // 100m ly across
@@ -60,6 +62,7 @@ public class TileModel
             case TerrainType.Void:
                 return GD.Load<Texture>("res://assets/tiles/void.png");
             case TerrainType.Energy:
+            case TerrainType.InteruniversalSpace:
                 return GD.Load<Texture>("res://assets/tiles/energy.png");
             case TerrainType.Defect:
                 return GD.Load<Texture>("res://assets/tiles/defect.png");
