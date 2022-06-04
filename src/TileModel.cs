@@ -6,10 +6,13 @@ public class TileModel
     public MapModel internalMap;
     public TileModel parent;
 
-    public TileModel(TerrainType type, TileModel parent)
+    public int scale;
+
+    public TileModel(TerrainType type, TileModel parent, int scale)
     {
         this.terrain = type;
         this.parent = parent;
+        this.scale = scale;
     }
 
     public enum TerrainType

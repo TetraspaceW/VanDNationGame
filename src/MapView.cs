@@ -3,11 +3,13 @@ public class MapView : Node2D
 {
     private MapModel Model;
     private TileView[,] Tiles;
+    private MapInfoTooltip tooltip;
     public override void _Ready()
     {
-        TileModel tile = new TileModel(TileModel.TerrainType.Universe, null);
+        TileModel tile = new TileModel(TileModel.TerrainType.Universe, null, 10);
         Model = new MapModel(TileModel.TerrainType.Universe, tile);
         tile.internalMap = Model;
+        CreateTooltip();
         UpdateWholeMapTo(Model);
     }
 
@@ -42,6 +44,14 @@ public class MapView : Node2D
             }
         }
 
+        tooltip.setText(new ScaleUtil(Model.parent.scale).TextForScale());
+        MoveChild(tooltip, GetChildCount());
+    }
+
+    public void CreateTooltip()
+    {
+        this.tooltip = GD.Load<PackedScene>("res://src/MapInfoTooltip.tscn").Instance() as MapInfoTooltip;
+        AddChild(tooltip);
     }
 
     Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);

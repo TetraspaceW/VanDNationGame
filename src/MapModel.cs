@@ -26,15 +26,15 @@ public class MapModel
                     {
                         if (x == 0 || y == 0 || x == 9 || y == 9)
                         {
-                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Energy, parent);
+                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Energy, parent, parent.scale - 1);
                         }
                         else if (_random.Next(0, 2) == 0)
                         {
-                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Space, parent);
+                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Space, parent, parent.scale - 1);
                         }
                         else
                         {
-                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Void, parent);
+                            Tiles[x, y] = new TileModel(type: TileModel.TerrainType.Void, parent, parent.scale - 1);
                         }
                     }
                 }
@@ -48,7 +48,7 @@ public class MapModel
         {
             for (int y = 0; y < 10; y++)
             {
-                Tiles[x, y] = new TileModel(terrainType, parent);
+                Tiles[x, y] = new TileModel(terrainType, parent, parent.scale - 1);
             }
         }
     }
