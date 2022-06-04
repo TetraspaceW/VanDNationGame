@@ -17,10 +17,38 @@ public class TileModel
 
     public enum TerrainType
     {
-        // 10b ly across
+        // 10g ly across
         Universe,
+        // 1g ly across
+        Space, Void, Energy, Defect,
         // 100m ly across
-        Space, Void, Energy, Defect
+        GalaxySupercluster, IntersuperclusterVoid,
+        // 10m ly across
+        GalaxyCluster, InterclusterSpace,
+        // 1m ly across
+        GalaxyGroup, IntergroupSpace,
+        // 100k ly across
+        Galaxy, DwarfGalaxy, IntergalacticSpace,
+        // 10k ly across
+        SpiralArm, GalacticCore,
+        // 1k ly across
+        StellarBelt,
+        // 100 ly across
+        StellarBubble,
+        // 10 ly across
+        StellarCloud,
+        // 1 ly across
+        SolarSystem, InterstellarSpace,
+        // 1t km across / 0.1 ly / 60000 AU
+        HillsCloud, OortCloudBodies,
+        // 100g km across / 6000 AU
+        ScatteredDisk, HillsCloudBodies,
+        // 10g km across / 60 AU
+        OuterSolarSystem, ScatteredDiskBodies,
+        // 1g km across / 6 AU
+        InnerSolarSystem, OuterSystemOrbit, OuterSystemBody, KuiperBeltBodies,
+        // 100m km across / 0.6 AU
+        Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies
     }
 
     public Texture imageForTileType()
