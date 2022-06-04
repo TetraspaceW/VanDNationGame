@@ -17,7 +17,9 @@ public class TileModel
 
     public enum TerrainType
     {
+        // 10b ly across
         Universe,
+        // 100m ly across
         Space, Void, Energy, Defect
     }
 
@@ -33,6 +35,8 @@ public class TileModel
                 return GD.Load<Texture>("res://assets/tiles/energy.png");
             case TerrainType.Defect:
                 return GD.Load<Texture>("res://assets/tiles/defect.png");
+            case TerrainType.Universe:
+                return GD.Load<Texture>("res://assets/tiles/universe.png");
             default:
                 return null;
         }
