@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex"
+path="res://.import/inner_planet.png-f0e379bb9a6c874f55e045cef6cfb186.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/void.png"
-dest_files=[ "res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex" ]
+source_file="res://assets/tiles/inner_planet.png"
+dest_files=[ "res://.import/inner_planet.png-f0e379bb9a6c874f55e045cef6cfb186.stex" ]
 
 [params]
 

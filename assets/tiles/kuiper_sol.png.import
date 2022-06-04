@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex"
+path="res://.import/kuiper_sol.png-a2f86d488661fd2d7f1440fdedde6301.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/void.png"
-dest_files=[ "res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex" ]
+source_file="res://assets/tiles/kuiper_sol.png"
+dest_files=[ "res://.import/kuiper_sol.png-a2f86d488661fd2d7f1440fdedde6301.stex" ]
 
 [params]
 

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex"
+path="res://.import/dense_stars.png-3dbd105bea8dfb938638342e293b11e1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/void.png"
-dest_files=[ "res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex" ]
+source_file="res://assets/tiles/dense_stars.png"
+dest_files=[ "res://.import/dense_stars.png-3dbd105bea8dfb938638342e293b11e1.stex" ]
 
 [params]
 

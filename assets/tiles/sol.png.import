@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex"
+path="res://.import/sol.png-0a4abd2a591094a11adb4686a1f73ac4.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/void.png"
-dest_files=[ "res://.import/void.png-67ca71d1a21de42014d730387a38a088.stex" ]
+source_file="res://assets/tiles/sol.png"
+dest_files=[ "res://.import/sol.png-0a4abd2a591094a11adb4686a1f73ac4.stex" ]
 
 [params]
 
