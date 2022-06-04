@@ -33,16 +33,16 @@ public class TileView : Area2D
             InputEventMouseButton mouseClickEvent = @event as InputEventMouseButton;
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed)
             {
-                ZoomIntoInternalMap();
+                ZoomInToInternalMap();
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
             {
-                ZoomOuttoExternalMap();
+                ZoomOutToExternalMap();
             }
         }
     }
 
-    private void ZoomIntoInternalMap()
+    private void ZoomInToInternalMap()
     {
         if (Tile.internalMap == null)
         {
@@ -50,7 +50,7 @@ public class TileView : Area2D
         }
         GetParent<MapView>().UpdateWholeMapTo(Tile.internalMap);
     }
-    private void ZoomOuttoExternalMap()
+    private void ZoomOutToExternalMap()
     {
         if (Tile.parent.parent == null)
         {
