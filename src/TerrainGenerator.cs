@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 class TerrainGenerator
 {
@@ -12,11 +13,11 @@ class TerrainGenerator
     public TileModel[,] GenerateTerrain()
     {
         var scale = tile.scale;
-        var terrainType = tile.terrain.terrainType;
+        var terrain = tile.terrain;
 
         var Tiles = new TileModel[10, 10];
 
-        switch (terrainType)
+        switch (terrain.terrainType)
         {
             case Terrain.TerrainType.InteruniversalSpace:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InteruniversalSpace) });
@@ -77,27 +78,50 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.StellarCloud:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true),
-                    new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 6)
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.00001, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.O.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.1, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.B.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.7, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.A.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 2, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.F.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 3.5, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.G.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 8, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.K.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 80, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.M.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, weight: 5, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.D.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 1895)
                 });
                 break;
             case Terrain.TerrainType.SolarSystem:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.OortCloudBodies)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HillsCloud, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HillsCloud, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.HillsCloud:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.HillsCloudBodies)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ScatteredDisk, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ScatteredDisk, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.ScatteredDisk:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.ScatteredDiskBodies)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSolarSystem, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSolarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.OuterSolarSystem:
                 Fill(Tiles, new[] {
@@ -105,7 +129,7 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.OuterSystemBody, weight: 2)
                 });
                 AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.KuiperBeltBodies) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSolarSystem, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSolarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
                 Fill(Tiles, new[] {
@@ -113,7 +137,7 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: 2)
                 });
                 AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star, props: terrain.props) });
                 break;
         }
 
@@ -161,19 +185,19 @@ class TerrainGenerator
 
     private TileModel RandomTileFromRule(TerrainRule[] rules)
     {
-        int weightSum = 0;
+        double weightSum = 0;
         foreach (var rule in rules)
         {
             weightSum += rule.weight;
         }
 
-        var rand = _random.Next(0, weightSum);
+        var rand = _random.NextDouble() * weightSum;
         foreach (var rule in rules)
         {
             rand -= rule.weight;
             if (rand < 0)
             {
-                return new TileModel(new Terrain(rule.terrainType), tile, tile.scale - 1, rule.zoomable);
+                return new TileModel(new Terrain(rule.terrainType, rule.props), tile, tile.scale - 1, rule.zoomable);
             }
         }
 
@@ -185,14 +209,16 @@ class TerrainGenerator
 
     private class TerrainRule
     {
-        public int weight;
+        public double weight;
         public Terrain.TerrainType terrainType;
         public bool zoomable;
-        public TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, int weight = 1)
+        public Dictionary<PropKey, string> props;
+        public TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, double weight = 1, Dictionary<PropKey, string> props = null)
         {
             this.terrainType = terrainType;
             this.zoomable = zoomable;
             this.weight = weight;
+            this.props = props;
         }
     }
 }

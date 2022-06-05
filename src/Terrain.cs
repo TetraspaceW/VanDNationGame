@@ -1,10 +1,13 @@
+using System.Collections.Generic;
 public class Terrain
 {
     public TerrainType terrainType;
+    public Dictionary<PropKey, string> props;
 
-    public Terrain(TerrainType type)
+    public Terrain(TerrainType type, Dictionary<PropKey, string> props = null)
     {
         terrainType = type;
+        this.props = (props == null) ? new Dictionary<PropKey, string>() : props;
     }
 
     public string filenameForTileType()
@@ -48,7 +51,7 @@ public class Terrain
                 return "core_stars";
             case TerrainType.HillsCloud:
             case TerrainType.ScatteredDisk:
-                return "kuiper_sol";
+                return "stars/kuiper_" + props[PropKey.SpectralClass].ToString().ToLower();
             case TerrainType.OortCloudBodies:
             case TerrainType.HillsCloudBodies:
             case TerrainType.KuiperBeltBodies:
@@ -57,7 +60,7 @@ public class Terrain
             case TerrainType.SolarSystem:
             case TerrainType.OuterSolarSystem:
             case TerrainType.InnerSolarSystem:
-                return "sol";
+                return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
             case TerrainType.OuterSystemBody:
                 return "outer_planet";
             case TerrainType.InnerSystemBody:
@@ -65,7 +68,7 @@ public class Terrain
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
             case TerrainType.Star:
-                return "star";
+                return "stars/star_" + props[PropKey.SpectralClass].ToString().ToLower();
             default:
                 return null;
         }
@@ -106,4 +109,14 @@ public class Terrain
         // 100m km across / 0.6 AU
         Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies
     }
+
+    public enum StarSpectralClass
+    {
+        O, B, A, F, G, K, M, D
+    }
+}
+
+public enum PropKey
+{
+    SpectralClass
 }
