@@ -90,6 +90,12 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.HillsCloudBodies)
                 });
+                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.ScatteredDisk, zoomable: true) });
+                break;
+            case TileModel.TerrainType.ScatteredDisk:
+                Fill(Tiles, new[] {
+                    new TerrainRule(TileModel.TerrainType.ScatteredDiskBodies)
+                });
                 AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.OuterSolarSystem, zoomable: true) });
                 break;
             case TileModel.TerrainType.OuterSolarSystem:

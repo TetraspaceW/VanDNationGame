@@ -91,10 +91,12 @@ public class TileModel
             case TerrainType.GalacticCore:
                 return "core_stars";
             case TerrainType.HillsCloud:
+            case TerrainType.ScatteredDisk:
                 return "kuiper_sol";
             case TerrainType.OortCloudBodies:
             case TerrainType.HillsCloudBodies:
             case TerrainType.KuiperBeltBodies:
+            case TerrainType.ScatteredDiskBodies:
                 return "kuiper";
             case TerrainType.SolarSystem:
             case TerrainType.OuterSolarSystem:
