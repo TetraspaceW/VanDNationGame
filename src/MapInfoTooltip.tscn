@@ -13,3 +13,13 @@ margin_bottom = 16.0
 margin_right = 640.0
 margin_bottom = 16.0
 text = "Default Text"
+
+[node name="BottomPanel" type="Panel" parent="."]
+margin_left = 640.0
+margin_right = 840.0
+margin_bottom = 656.0
+
+[node name="Text" type="RichTextLabel" parent="BottomPanel"]
+margin_right = 200.0
+margin_bottom = 656.0
+text = "All kinds of cool stuff can go on this left-hand panel!"

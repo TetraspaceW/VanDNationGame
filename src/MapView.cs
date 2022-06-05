@@ -30,7 +30,6 @@ public class MapView : Node2D
 
         var newShape = ((viewHeight != height) && (viewWidth != width));
 
-
         if (newShape)
         {
             if (Tiles != null)
