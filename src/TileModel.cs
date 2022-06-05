@@ -2,12 +2,11 @@ using Godot;
 public class TileModel
 {
     public TerrainType terrain;
-    public TerrainType Terrain { get => terrain; }
     public MapModel internalMap;
     public TileModel parent;
     public bool zoomable;
-
     public int scale;
+    private string image;
 
     public TileModel(TerrainType type, TileModel parent, int scale, bool zoomable = false)
     {
@@ -15,6 +14,7 @@ public class TileModel
         this.parent = parent;
         this.scale = scale;
         this.zoomable = zoomable;
+        this.image = filenameForTileType();
     }
 
     public enum TerrainType
@@ -117,7 +117,7 @@ public class TileModel
     }
     public Texture imageForTileType()
     {
-        return GD.Load<Texture>("res://assets/tiles/" + filenameForTileType() + ".png");
+        return GD.Load<Texture>("res://assets/tiles/" + image + ".png");
     }
 
 }
