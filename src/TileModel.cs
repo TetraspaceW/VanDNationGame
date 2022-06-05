@@ -79,10 +79,10 @@ public class TileModel
             case TerrainType.SpiralArm:
             case TerrainType.StellarBelt:
             case TerrainType.StellarBubble:
-            case TerrainType.StellarCloud:
                 return GD.Load<Texture>("res://assets/tiles/dense_stars.png");
             case TerrainType.GalaxyCluster:
             case TerrainType.GalaxyGroup:
+            case TerrainType.StellarCloud:
                 return GD.Load<Texture>("res://assets/tiles/stars.png");
             case TerrainType.Galaxy:
                 return GD.Load<Texture>("res://assets/tiles/galaxy.png");
