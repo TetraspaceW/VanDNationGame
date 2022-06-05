@@ -3,7 +3,7 @@ using System;
 public class TileView : Area2D
 {
     TileModel _tile;
-    AnimatedSprite Sprite;
+    Sprite Sprite;
     public TileModel Tile
     {
         get { return _tile; }
@@ -17,13 +17,11 @@ public class TileView : Area2D
     public override void _Ready()
     {
         base._Ready();
-        Sprite = GetNode<AnimatedSprite>("AnimatedSprite");
+        Sprite = GetNode<Sprite>("Sprite");
     }
     private void UpdateSpriteForTile()
     {
-        SpriteFrames newFrames = new SpriteFrames();
-        newFrames.AddFrame(anim: "default", frame: Tile.imageForTileType());
-        Sprite.Frames = newFrames;
+        Sprite.Texture = Tile.imageForTileType();
     }
 
     public override void _InputEvent(Godot.Object viewport, InputEvent @event, int shapeIdx)

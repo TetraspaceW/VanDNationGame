@@ -14,7 +14,7 @@ class TerrainGenerator
         var scale = tile.scale;
         var terrainType = tile.terrain;
 
-        var Tiles = new TileModel[32, 32];
+        var Tiles = new TileModel[10, 10];
 
         switch (terrainType)
         {
