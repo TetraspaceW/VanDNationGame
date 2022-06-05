@@ -6,7 +6,7 @@ public class ScaleUtil
         this.scale = scale;
     }
 
-    string[] numbersDict = { "", " thousand", " million", " billion", " trillion", " quadrillion" };
+    string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion" };
 
     public string TextForScale()
     {
@@ -29,6 +29,6 @@ public class ScaleUtil
 
     private string NumberStringForScale(int value)
     {
-        return "1" + new string('0', value % 3) + numbersDict[(value / 3)];
+        return "1" + new string('0', value % 3) + numberNames[(value / 3)];
     }
 }

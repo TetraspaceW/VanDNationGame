@@ -10,8 +10,8 @@ public class MapModel
         this.parent = parent;
         Tiles = new TileModel[10, 10];
 
-        var generator = new TerrainGenerator();
-        Tiles = generator.GenerateTerrainFor(parent);
+        var generator = new TerrainGenerator(insideTile: parent);
+        Tiles = generator.GenerateTerrain();
     }
 
     private void fillMapWith(TileModel.TerrainType terrainType)

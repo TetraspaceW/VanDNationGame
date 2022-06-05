@@ -1,19 +1,20 @@
 using Godot;
 using System;
 
-public class MapInfoTooltip : RichTextLabel
+public class MapInfoTooltip : Panel
 {
+    RichTextLabel label;
 
     public override void _Ready()
     {
-
+        label = (RichTextLabel)GetChild(0);
     }
 
     public void setText(string text)
     {
-        Text = "";
-        this.PushColor(new Color(0, 0, 0));
-        AppendBbcode(text);
-        this.Pop();
+        label.Text = "";
+        label.PushColor(new Color(1, 1, 1));
+        label.AppendBbcode(text);
+        label.Pop();
     }
 }

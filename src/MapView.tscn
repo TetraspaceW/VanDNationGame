@@ -3,4 +3,5 @@
 [ext_resource path="res://src/MapView.cs" type="Script" id=1]
 
 [node name="MapView" type="Node2D"]
+position = Vector2( 0, 16 )
 script = ExtResource( 1 )
