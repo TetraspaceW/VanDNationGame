@@ -28,7 +28,7 @@ class TerrainGenerator
                     new TerrainRule(TileModel.TerrainType.Space, zoomable: true),
                     new TerrainRule(TileModel.TerrainType.Void)
                     });
-                AddBorder(Tiles, new TerrainRule(TileModel.TerrainType.Energy));
+                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.Energy) });
                 break;
             case TileModel.TerrainType.Space:
                 Fill(Tiles, new[] {
@@ -59,7 +59,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.SpiralArm, zoomable: true),
                 });
-                AddCenter(Tiles, new TerrainRule(TileModel.TerrainType.GalacticCore));
+                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.GalacticCore) });
                 break;
             case TileModel.TerrainType.SpiralArm:
                 Fill(Tiles, new[] {
@@ -86,36 +86,36 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.OortCloudBodies)
                 });
-                AddCenter(Tiles, new TerrainRule(TileModel.TerrainType.HillsCloud, zoomable: true));
+                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.HillsCloud, zoomable: true) });
                 break;
             case TileModel.TerrainType.HillsCloud:
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.HillsCloudBodies)
                 });
-                AddCenter(Tiles, new TerrainRule(TileModel.TerrainType.OuterSolarSystem, zoomable: true));
+                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.OuterSolarSystem, zoomable: true) });
                 break;
             case TileModel.TerrainType.OuterSolarSystem:
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.OuterSystemOrbit, weight: 75),
                     new TerrainRule(TileModel.TerrainType.OuterSystemBody, weight: 2)
                 });
-                AddBorder(Tiles, new TerrainRule(TileModel.TerrainType.KuiperBeltBodies));
-                AddCenter(Tiles, new TerrainRule(TileModel.TerrainType.InnerSolarSystem, zoomable: true));
+                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.KuiperBeltBodies) });
+                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.InnerSolarSystem, zoomable: true) });
                 break;
             case TileModel.TerrainType.InnerSolarSystem:
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.InnerSystemOrbit, weight: 75),
                     new TerrainRule(TileModel.TerrainType.InnerSystemBody, weight: 2)
                 });
-                AddBorder(Tiles, new TerrainRule(TileModel.TerrainType.AsteroidBeltBodies));
-                AddCenter(Tiles, new TerrainRule(TileModel.TerrainType.Star));
+                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.AsteroidBeltBodies) });
+                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.Star) });
                 break;
         }
 
         return Tiles;
     }
 
-    private void AddBorder(TileModel[,] tiles, TerrainRule rule)
+    private void AddBorder(TileModel[,] tiles, TerrainRule[] rules)
     {
         var (width, height) = Shape(tiles);
 
@@ -125,20 +125,20 @@ class TerrainGenerator
             {
                 if (x == 0 || y == 0 || x == width - 1 || y == height - 1)
                 {
-                    tiles[x, y] = new TileModel(type: rule.terrainType, tile, tile.scale - 1, rule.zoomable);
+                    tiles[x, y] = RandomTileFromRule(rules);
                 }
             }
         }
     }
 
-    private void AddCenter(TileModel[,] tiles, TerrainRule rule)
+    private void AddCenter(TileModel[,] tiles, TerrainRule[] rules)
     {
         var (width, height) = Shape(tiles);
 
         var centerX = (width % 2 == 0) ? width / 2 - _random.Next(0, 2) : width / 2;
         var centerY = (height % 2 == 0) ? height / 2 - _random.Next(0, 2) : height / 2;
 
-        tiles[centerX, centerY] = new TileModel(type: rule.terrainType, tile, tile.scale - 1, rule.zoomable);
+        tiles[centerX, centerY] = RandomTileFromRule(rules);
     }
 
     private void Fill(TileModel[,] tiles, TerrainRule[] rules)
