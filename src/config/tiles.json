@@ -1,0 +1,36 @@
+{
+    "interuniversal_void": {
+        "image": "energy",
+        "fill": {
+            "interuniversal_void": 1
+        },
+        "zoomable": true
+    },
+    "universe": {
+        "image": "universe",
+        "fill": {
+            "space": 1,
+            "void": 1
+        },
+        "border": {
+            "energy": 1
+        },
+        "zoomable": true
+    },
+    "space": {
+        "image": "universe",
+        "fill": {
+            "supercluster": 1,
+            "intercluster_void": 1
+        },
+        "zoomable": true
+    },
+    "void": {
+        "image": "void",
+        "zoomable": false
+    },
+    "intercluster_void": {
+        "image": "void",
+        "zoomable": false
+    }
+}

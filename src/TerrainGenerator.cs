@@ -16,8 +16,6 @@ class TerrainGenerator
 
         var Tiles = new TileModel[10, 10];
 
-        // Todo: load this in from a json config or something
-        // Todo: read in a string
         switch (terrainType)
         {
             case TileModel.TerrainType.InteruniversalSpace:

@@ -1,4 +1,4 @@
-interface TerrainType
+class TerrainType
 {
-
+    string texture;
 }

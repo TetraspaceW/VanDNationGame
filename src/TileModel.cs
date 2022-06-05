@@ -53,12 +53,12 @@ public class TileModel
         Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies
     }
 
-    public Texture imageForTileType()
+    private string filenameForTileType()
     {
         switch (terrain)
         {
             case TerrainType.Space:
-                return GD.Load<Texture>("res://assets/tiles/space.png");
+                return "space";
             case TerrainType.Void:
             case TerrainType.IntersuperclusterVoid:
             case TerrainType.InterclusterSpace:
@@ -67,50 +67,54 @@ public class TileModel
             case TerrainType.InterstellarSpace:
             case TerrainType.OuterSystemOrbit:
             case TerrainType.InnerSystemOrbit:
-                return GD.Load<Texture>("res://assets/tiles/void.png");
+                return "void";
             case TerrainType.Energy:
             case TerrainType.InteruniversalSpace:
-                return GD.Load<Texture>("res://assets/tiles/energy.png");
+                return "energy";
             case TerrainType.Defect:
-                return GD.Load<Texture>("res://assets/tiles/defect.png");
+                return "defect";
             case TerrainType.Universe:
-                return GD.Load<Texture>("res://assets/tiles/universe.png");
+                return "universe";
             case TerrainType.GalaxySupercluster:
             case TerrainType.SpiralArm:
             case TerrainType.StellarBelt:
             case TerrainType.StellarBubble:
-                return GD.Load<Texture>("res://assets/tiles/dense_stars.png");
+                return "dense_stars";
             case TerrainType.GalaxyCluster:
             case TerrainType.GalaxyGroup:
             case TerrainType.StellarCloud:
-                return GD.Load<Texture>("res://assets/tiles/stars.png");
+                return "stars";
             case TerrainType.Galaxy:
-                return GD.Load<Texture>("res://assets/tiles/galaxy.png");
+                return "galaxy";
             case TerrainType.DwarfGalaxy:
-                return GD.Load<Texture>("res://assets/tiles/dwarf_galaxy.png");
+                return "dwarf_galaxy";
             case TerrainType.GalacticCore:
-                return GD.Load<Texture>("res://assets/tiles/core_stars.png");
+                return "core_stars";
             case TerrainType.HillsCloud:
-                return GD.Load<Texture>("res://assets/tiles/kuiper_sol.png");
+                return "kuiper_sol";
             case TerrainType.OortCloudBodies:
             case TerrainType.HillsCloudBodies:
             case TerrainType.KuiperBeltBodies:
-                return GD.Load<Texture>("res://assets/tiles/kuiper.png");
+                return "kuiper";
             case TerrainType.SolarSystem:
             case TerrainType.OuterSolarSystem:
             case TerrainType.InnerSolarSystem:
-                return GD.Load<Texture>("res://assets/tiles/sol.png");
+                return "sol";
             case TerrainType.OuterSystemBody:
-                return GD.Load<Texture>("res://assets/tiles/outer_planet.png");
+                return "outer_planet";
             case TerrainType.InnerSystemBody:
-                return GD.Load<Texture>("res://assets/tiles/inner_planet.png");
+                return "inner_planet";
             case TerrainType.AsteroidBeltBodies:
-                return GD.Load<Texture>("res://assets/tiles/asteroid.png");
+                return "asteroid";
             case TerrainType.Star:
-                return GD.Load<Texture>("res://assets/tiles/star.png");
+                return "star";
             default:
                 return null;
         }
+    }
+    public Texture imageForTileType()
+    {
+        return GD.Load<Texture>("res://assets/tiles/" + filenameForTileType() + ".png");
     }
 
 }
