@@ -33,12 +33,13 @@ public class Terrain
             case TerrainType.GalaxySupercluster:
             case TerrainType.SpiralArm:
             case TerrainType.StellarBelt:
-            case TerrainType.StellarBubble:
                 return "dense_stars";
             case TerrainType.GalaxyCluster:
+            case TerrainType.StellarBubble:
+                return "stars";
             case TerrainType.GalaxyGroup:
             case TerrainType.StellarCloud:
-                return "stars";
+                return "stars_sparse";
             case TerrainType.Galaxy:
                 return "galaxy";
             case TerrainType.DwarfGalaxy:
