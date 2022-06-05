@@ -180,10 +180,8 @@ class TerrainGenerator
         return null;
     }
 
-    private (int, int) Shape<T>(T[,] array)
-    {
-        return (array.GetLength(0), array.GetLength(1));
-    }
+    private (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
+
 
     private class TerrainRule
     {

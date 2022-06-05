@@ -26,28 +26,43 @@ public class MapView : Node2D
         Model = newModel;
 
         var (width, height) = (newModel.Tiles.GetLength(0), newModel.Tiles.GetLength(1));
+        var (viewWidth, viewHeight) = (Tiles != null) ? (Tiles.GetLength(0), Tiles.GetLength(1)) : (0, 0);
 
-        if (Tiles != null)
+        var newShape = ((viewHeight != height) && (viewWidth != width));
+
+
+        if (newShape)
         {
-            foreach (TileView tile in Tiles)
+            if (Tiles != null)
             {
-                tile.QueueFree();
+                foreach (TileView tile in Tiles)
+                {
+                    tile.QueueFree();
+                }
             }
+            Tiles = new TileView[width, height];
         }
 
-        Tiles = new TileView[width, height];
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                GD.Print("Adding tile to (" + x + "," + y, ")");
-                TileView tileForPosition = GD.Load<PackedScene>("res://src/TileView.tscn").Instance() as TileView;
-                AddChild(tileForPosition);
-                tileForPosition.Tile = newModel.Tiles[x, y];
-                tileForPosition.Position = positionForCoordinates(x, y);
-                Tiles[x, y] = tileForPosition;
+                if (newShape)
+                {
+                    TileView tileForPosition = GD.Load<PackedScene>("res://src/TileView.tscn").Instance() as TileView;
+                    AddChild(tileForPosition);
+                    tileForPosition.Tile = newModel.Tiles[x, y];
+                    tileForPosition.Position = positionForCoordinates(x, y);
+                    Tiles[x, y] = tileForPosition;
+                }
+                else
+                {
+                    UpdateTileAtLocation(newModel.Tiles[x, y], x, y);
+                }
             }
         }
+
+
 
         tooltip.setText(new ScaleUtil(Model.parent.scale).TextForScale());
         MoveChild(tooltip, GetChildCount());
