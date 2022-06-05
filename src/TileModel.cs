@@ -90,7 +90,6 @@ public class TileModel
                 return GD.Load<Texture>("res://assets/tiles/dwarf_galaxy.png");
             case TerrainType.GalacticCore:
                 return GD.Load<Texture>("res://assets/tiles/core_stars.png");
-            case TerrainType.OuterSolarSystem:
             case TerrainType.HillsCloud:
                 return GD.Load<Texture>("res://assets/tiles/kuiper_sol.png");
             case TerrainType.OortCloudBodies:
@@ -98,6 +97,7 @@ public class TileModel
             case TerrainType.KuiperBeltBodies:
                 return GD.Load<Texture>("res://assets/tiles/kuiper.png");
             case TerrainType.SolarSystem:
+            case TerrainType.OuterSolarSystem:
             case TerrainType.InnerSolarSystem:
                 return GD.Load<Texture>("res://assets/tiles/sol.png");
             case TerrainType.OuterSystemBody:
