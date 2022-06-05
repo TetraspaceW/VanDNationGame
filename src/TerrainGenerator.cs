@@ -12,108 +12,108 @@ class TerrainGenerator
     public TileModel[,] GenerateTerrain()
     {
         var scale = tile.scale;
-        var terrainType = tile.terrain;
+        var terrainType = tile.terrain.terrainType;
 
         var Tiles = new TileModel[10, 10];
 
         switch (terrainType)
         {
-            case TileModel.TerrainType.InteruniversalSpace:
-                Fill(Tiles, new[] { new TerrainRule(TileModel.TerrainType.InteruniversalSpace) });
+            case Terrain.TerrainType.InteruniversalSpace:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InteruniversalSpace) });
                 break;
-            case TileModel.TerrainType.Universe:
+            case Terrain.TerrainType.Universe:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.Space, zoomable: true),
-                    new TerrainRule(TileModel.TerrainType.Void)
+                    new TerrainRule(Terrain.TerrainType.Space, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.Void)
                     });
-                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.Energy) });
+                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Energy) });
                 break;
-            case TileModel.TerrainType.Space:
+            case Terrain.TerrainType.Space:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.GalaxySupercluster, zoomable: true),
-                    new TerrainRule(TileModel.TerrainType.IntersuperclusterVoid),
+                    new TerrainRule(Terrain.TerrainType.GalaxySupercluster, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.IntersuperclusterVoid),
                 });
                 break;
-            case TileModel.TerrainType.GalaxySupercluster:
+            case Terrain.TerrainType.GalaxySupercluster:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.GalaxyCluster, zoomable: true),
-                    new TerrainRule(TileModel.TerrainType.InterclusterSpace),
+                    new TerrainRule(Terrain.TerrainType.GalaxyCluster, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.InterclusterSpace),
                 });
                 break;
-            case TileModel.TerrainType.GalaxyCluster:
+            case Terrain.TerrainType.GalaxyCluster:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.GalaxyGroup, zoomable: true),
-                    new TerrainRule(TileModel.TerrainType.IntergroupSpace),
+                    new TerrainRule(Terrain.TerrainType.GalaxyGroup, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.IntergroupSpace),
                 });
                 break;
-            case TileModel.TerrainType.GalaxyGroup:
+            case Terrain.TerrainType.GalaxyGroup:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.Galaxy, zoomable: true, 2),
-                    new TerrainRule(TileModel.TerrainType.DwarfGalaxy, weight: 5),
-                    new TerrainRule(TileModel.TerrainType.IntergroupSpace, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 2),
+                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 5),
+                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 75),
                 });
                 break;
-            case TileModel.TerrainType.Galaxy:
+            case Terrain.TerrainType.Galaxy:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.SpiralArm, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true),
                 });
-                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.GalacticHalo) });
-                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.GalacticCore) });
+                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticHalo) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
                 break;
-            case TileModel.TerrainType.SpiralArm:
+            case Terrain.TerrainType.SpiralArm:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.StellarBelt, zoomable: true),
-                });
-                break;
-            case TileModel.TerrainType.StellarBelt:
-                Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.StellarBubble, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.StellarBelt, zoomable: true),
                 });
                 break;
-            case TileModel.TerrainType.StellarBubble:
+            case Terrain.TerrainType.StellarBelt:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.StellarCloud, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.StellarBubble, zoomable: true),
                 });
                 break;
-            case TileModel.TerrainType.StellarCloud:
+            case Terrain.TerrainType.StellarBubble:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.SolarSystem, zoomable: true),
-                    new TerrainRule(TileModel.TerrainType.InterstellarSpace, weight: 6)
+                    new TerrainRule(Terrain.TerrainType.StellarCloud, zoomable: true),
                 });
                 break;
-            case TileModel.TerrainType.SolarSystem:
+            case Terrain.TerrainType.StellarCloud:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.OortCloudBodies)
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 6)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.HillsCloud, zoomable: true) });
                 break;
-            case TileModel.TerrainType.HillsCloud:
+            case Terrain.TerrainType.SolarSystem:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.HillsCloudBodies)
+                    new TerrainRule(Terrain.TerrainType.OortCloudBodies)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.ScatteredDisk, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HillsCloud, zoomable: true) });
                 break;
-            case TileModel.TerrainType.ScatteredDisk:
+            case Terrain.TerrainType.HillsCloud:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.ScatteredDiskBodies)
+                    new TerrainRule(Terrain.TerrainType.HillsCloudBodies)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.OuterSolarSystem, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ScatteredDisk, zoomable: true) });
                 break;
-            case TileModel.TerrainType.OuterSolarSystem:
+            case Terrain.TerrainType.ScatteredDisk:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.OuterSystemOrbit, weight: 75),
-                    new TerrainRule(TileModel.TerrainType.OuterSystemBody, weight: 2)
+                    new TerrainRule(Terrain.TerrainType.ScatteredDiskBodies)
                 });
-                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.KuiperBeltBodies) });
-                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.InnerSolarSystem, zoomable: true) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSolarSystem, zoomable: true) });
                 break;
-            case TileModel.TerrainType.InnerSolarSystem:
+            case Terrain.TerrainType.OuterSolarSystem:
                 Fill(Tiles, new[] {
-                    new TerrainRule(TileModel.TerrainType.InnerSystemOrbit, weight: 75),
-                    new TerrainRule(TileModel.TerrainType.InnerSystemBody, weight: 2)
+                    new TerrainRule(Terrain.TerrainType.OuterSystemOrbit, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.OuterSystemBody, weight: 2)
                 });
-                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.AsteroidBeltBodies) });
-                AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.Star) });
+                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.KuiperBeltBodies) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSolarSystem, zoomable: true) });
+                break;
+            case Terrain.TerrainType.InnerSolarSystem:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.InnerSystemOrbit, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: 2)
+                });
+                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star) });
                 break;
         }
 
@@ -173,7 +173,7 @@ class TerrainGenerator
             rand -= rule.weight;
             if (rand < 0)
             {
-                return new TileModel(rule.terrainType, tile, tile.scale - 1, rule.zoomable);
+                return new TileModel(new Terrain(rule.terrainType), tile, tile.scale - 1, rule.zoomable);
             }
         }
 
@@ -186,9 +186,9 @@ class TerrainGenerator
     private class TerrainRule
     {
         public int weight;
-        public TileModel.TerrainType terrainType;
+        public Terrain.TerrainType terrainType;
         public bool zoomable;
-        public TerrainRule(TileModel.TerrainType terrainType, bool zoomable = false, int weight = 1)
+        public TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, int weight = 1)
         {
             this.terrainType = terrainType;
             this.zoomable = zoomable;

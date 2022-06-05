@@ -14,13 +14,13 @@ public class MapModel
         Tiles = generator.GenerateTerrain();
     }
 
-    private void fillMapWith(TileModel.TerrainType terrainType)
+    private void fillMapWith(Terrain.TerrainType terrainType)
     {
         for (int x = 0; x < 10; x++)
         {
             for (int y = 0; y < 10; y++)
             {
-                Tiles[x, y] = new TileModel(terrainType, parent, parent.scale - 1);
+                Tiles[x, y] = new TileModel(new Terrain(terrainType), parent, parent.scale - 1);
             }
         }
     }

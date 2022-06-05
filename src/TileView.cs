@@ -54,7 +54,7 @@ public class TileView : Area2D
     {
         if (Tile.parent.parent == null)
         {
-            Tile.parent.parent = new TileModel(type: TileModel.TerrainType.InteruniversalSpace, null, Tile.scale + 2, zoomable: true);
+            Tile.parent.parent = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, Tile.scale + 2, zoomable: true);
         }
         if (Tile.parent.parent.internalMap == null)
         {

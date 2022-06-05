@@ -7,7 +7,7 @@ public class MapView : Node2D
     private MapInfoTooltip tooltip;
     public override void _Ready()
     {
-        TileModel tile = new TileModel(TileModel.TerrainType.Universe, null, 10, zoomable: true);
+        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
         Model = new MapModel(tile);
         tile.internalMap = Model;
         CreateTooltip();
