@@ -1,13 +1,13 @@
 using Godot;
 using System;
 
-public class MapInfoTooltip : Panel
+public class MapInfoTooltip : CanvasLayer
 {
     RichTextLabel label;
 
     public override void _Ready()
     {
-        label = (RichTextLabel)GetChild(0);
+        label = (RichTextLabel)((Panel)GetChild(0)).GetChild(0);
     }
 
     public void setText(string text)

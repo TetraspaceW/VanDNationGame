@@ -1,6 +1,7 @@
 using Godot;
 public class MapView : Node2D
 {
+    private CameraBuddy camera;
     private MapModel Model;
     private TileView[,] Tiles;
     private MapInfoTooltip tooltip;
@@ -10,6 +11,7 @@ public class MapView : Node2D
         Model = new MapModel(tile);
         tile.internalMap = Model;
         CreateTooltip();
+        camera = (CameraBuddy)GetNode("CameraBuddy");
         UpdateWholeMapTo(Model);
     }
 
@@ -23,19 +25,22 @@ public class MapView : Node2D
     {
         Model = newModel;
 
+        var (width, height) = (newModel.Tiles.GetLength(0), newModel.Tiles.GetLength(1));
+
         if (Tiles != null)
         {
             foreach (TileView tile in Tiles)
             {
-                RemoveChild(tile);
+                tile.QueueFree();
             }
         }
 
-        Tiles = new TileView[10, 10];
-        for (int x = 0; x < 10; x++)
+        Tiles = new TileView[width, height];
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < 10; y++)
+            for (int y = 0; y < height; y++)
             {
+                GD.Print("Adding tile to (" + x + "," + y, ")");
                 TileView tileForPosition = GD.Load<PackedScene>("res://src/TileView.tscn").Instance() as TileView;
                 AddChild(tileForPosition);
                 tileForPosition.Tile = newModel.Tiles[x, y];
@@ -46,6 +51,8 @@ public class MapView : Node2D
 
         tooltip.setText(new ScaleUtil(Model.parent.scale).TextForScale());
         MoveChild(tooltip, GetChildCount());
+
+        camera.SetMapSize(width, height);
     }
 
     public void CreateTooltip()

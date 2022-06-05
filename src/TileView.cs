@@ -33,6 +33,7 @@ public class TileView : Area2D
             InputEventMouseButton mouseClickEvent = @event as InputEventMouseButton;
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
             {
+                GD.Print("Entering tile of type " + Tile.terrain);
                 ZoomInToInternalMap();
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)

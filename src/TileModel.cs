@@ -32,7 +32,7 @@ public class TileModel
         // 100k ly across
         Galaxy, DwarfGalaxy, IntergalacticSpace,
         // 10k ly across
-        SpiralArm, GalacticCore,
+        SpiralArm, GalacticCore, GalacticHalo,
         // 1k ly across
         StellarBelt,
         // 100 ly across
@@ -64,6 +64,7 @@ public class TileModel
             case TerrainType.InterclusterSpace:
             case TerrainType.IntergroupSpace:
             case TerrainType.IntergalacticSpace:
+            case TerrainType.GalacticHalo:
             case TerrainType.InterstellarSpace:
             case TerrainType.OuterSystemOrbit:
             case TerrainType.InnerSystemOrbit:

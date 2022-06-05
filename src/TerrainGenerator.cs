@@ -14,7 +14,7 @@ class TerrainGenerator
         var scale = tile.scale;
         var terrainType = tile.terrain;
 
-        var Tiles = new TileModel[10, 10];
+        var Tiles = new TileModel[32, 32];
 
         switch (terrainType)
         {
@@ -57,6 +57,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(TileModel.TerrainType.SpiralArm, zoomable: true),
                 });
+                AddBorder(Tiles, new[] { new TerrainRule(TileModel.TerrainType.GalacticHalo) });
                 AddCenter(Tiles, new[] { new TerrainRule(TileModel.TerrainType.GalacticCore) });
                 break;
             case TileModel.TerrainType.SpiralArm:
