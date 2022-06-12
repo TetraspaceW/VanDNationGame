@@ -70,13 +70,12 @@ public class Terrain
             case TerrainType.OuterLunarSystem:
             case TerrainType.InnerLunarSystem:
             case TerrainType.TerrestrialPlanet:
-                return "inner_planet";
+            case TerrainType.LunarBody:
+                return "planets/" + props[PropKey.PlanetType].ToString().ToLower();
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
             case TerrainType.Star:
                 return "stars/star_" + props[PropKey.SpectralClass].ToString().ToLower();
-            case TerrainType.LunarBody:
-                return "moon";
             case TerrainType.Land:
                 return "land";
             case TerrainType.Ocean:
@@ -135,7 +134,14 @@ public class Terrain
 
     public enum PlanetType
     {
-        Terrestrial, GasGiant
+        // Dwarf Terrestrial
+        Rockball, Arean, Meltball, Hebean, Promethean, Snowball,
+        // Terrestrial
+        Telluric, Arid, Tectonic, Oceanic,
+        // Helian
+        Helian, Panthallasic,
+        // Jovian
+        Jovian
     }
     public enum StarSpectralClass
     {

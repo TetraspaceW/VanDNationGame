@@ -171,21 +171,54 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.OuterSolarSystem:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.OuterSystemOrbit, weight: 75),
-                    new TerrainRule(Terrain.TerrainType.OuterSystemBody, weight: 2)
+                    new TerrainRule(Terrain.TerrainType.OuterSystemOrbit, weight: 99 - 2.5),
+                    new TerrainRule(Terrain.TerrainType.OuterSystemBody, weight: 2.5)
                 });
                 AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.KuiperBeltBodies) });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSolarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
+                var innerSystemWeight = (terrain.props[PropKey.SpectralClass] == Terrain.StarSpectralClass.M.ToString()) ? 5f / 3f : 5f / 2f;
+                var asteroidsWeight = innerSystemWeight / 6f;
+                innerSystemWeight *= 5f / 6f;
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.InnerSystemOrbit, weight: 75),
-                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: 2, zoomable: true, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Terrestrial.ToString()}
+                    new TerrainRule(Terrain.TerrainType.InnerSystemOrbit, weight: 99 - innerSystemWeight),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 3f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Meltball.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 1f/6f * 4f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Hebean.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 9f/36f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Telluric.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 9f/36f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Arid.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 9f/36f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Tectonic.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 9f/36f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Oceanic.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 4f/6f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Helian.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 2f/6f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Panthallasic.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 2f/5f * 6f/6f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Jovian.ToString()}
                     })
                 });
                 var centralStar = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star, props: terrain.props) });
-                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) }, centralStar, 5, false);
+                if (_random.NextDouble() < (double)asteroidsWeight)
+                {
+                    AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) }, centralStar, 5, false);
+                }
                 break;
             case Terrain.TerrainType.InnerSystemBody:
                 switch (tile.scale)
@@ -203,14 +236,18 @@ class TerrainGenerator
             case Terrain.TerrainType.OuterLunarSystem:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.OuterLunarOrbit, weight: 98),
-                    new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1)
+                    new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
+                    })
                 });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.InnerLunarSystem:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.InnerLunarOrbit, weight: 98),
-                    new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1)
+                    new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
+                    })
                 });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
                 break;
