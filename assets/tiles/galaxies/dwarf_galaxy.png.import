@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/galaxy.png-9efe3067cd09d0a879bb04c1f7073717.stex"
+path="res://.import/dwarf_galaxy.png-0073e308f984d2ab066878c6e156663e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxy.png"
-dest_files=[ "res://.import/galaxy.png-9efe3067cd09d0a879bb04c1f7073717.stex" ]
+source_file="res://assets/tiles/galaxies/dwarf_galaxy.png"
+dest_files=[ "res://.import/dwarf_galaxy.png-0073e308f984d2ab066878c6e156663e.stex" ]
 
 [params]
 

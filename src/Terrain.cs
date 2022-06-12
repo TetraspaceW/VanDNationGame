@@ -44,9 +44,9 @@ public class Terrain
             case TerrainType.StellarCloud:
                 return "stars_sparse";
             case TerrainType.Galaxy:
-                return "galaxy";
+                return "galaxies/" + props[PropKey.GalaxyType].ToString().ToLower();
             case TerrainType.DwarfGalaxy:
-                return "dwarf_galaxy";
+                return "galaxies/dwarf_galaxy";
             case TerrainType.GalacticCore:
                 return "core_stars";
             case TerrainType.HillsCloud:
@@ -118,7 +118,7 @@ public class Terrain
 
     public enum GalaxyType
     {
-        S0, Sa, Sb, Sc, Irr
+        E, S0, S, SB, Irr
     }
 
     public string _debugProps()
