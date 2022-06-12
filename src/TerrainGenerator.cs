@@ -79,22 +79,22 @@ class TerrainGenerator
                 {
                     case Terrain.GalaxyType.E:
                         AddGalaxy(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.SpiralArm)
+                            new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
                         }, 5);
                         break;
                     case Terrain.GalaxyType.S0:
                         AddGalaxy(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.SpiralArm)
+                            new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
                         }, 5, hasCore: 1);
                         break;
                     case Terrain.GalaxyType.S:
                         AddGalaxy(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.SpiralArm)
+                            new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
                         }, 5, hasCore: 1, hasArms: true);
                         break;
                     case Terrain.GalaxyType.SB:
                         AddGalaxy(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.SpiralArm)
+                            new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
                         }, 5, hasCore: 2, hasArms: true);
                         break;
                     case Terrain.GalaxyType.Irr:
