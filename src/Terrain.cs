@@ -70,6 +70,7 @@ public class Terrain
             case TerrainType.OuterLunarSystem:
             case TerrainType.InnerLunarSystem:
             case TerrainType.TerrestrialPlanet:
+            case TerrainType.GasGiant:
             case TerrainType.LunarBody:
                 return "planets/" + props[PropKey.PlanetType].ToString().ToLower();
             case TerrainType.AsteroidBeltBodies:
