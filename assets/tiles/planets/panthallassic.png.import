@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/panthalassic.png-149f026181ccb16cecc2c30e437e8cd6.stex"
+path="res://.import/panthallassic.png-c4378589b4aa5e63496884864fc2dcee.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/planets/panthalassic.png"
-dest_files=[ "res://.import/panthalassic.png-149f026181ccb16cecc2c30e437e8cd6.stex" ]
+source_file="res://assets/tiles/planets/panthallassic.png"
+dest_files=[ "res://.import/panthallassic.png-c4378589b4aa5e63496884864fc2dcee.stex" ]
 
 [params]
 

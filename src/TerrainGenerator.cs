@@ -74,9 +74,9 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
 
-                Terrain.GalaxyType result;
-                Enum.TryParse<Terrain.GalaxyType>(terrain.props[PropKey.GalaxyType], out result);
-                switch (result)
+                Terrain.GalaxyType galaxyType;
+                Enum.TryParse<Terrain.GalaxyType>(terrain.props[PropKey.GalaxyType], out galaxyType);
+                switch (galaxyType)
                 {
                     case Terrain.GalaxyType.E:
                         AddGalaxy(Tiles, new[] {
@@ -252,13 +252,45 @@ class TerrainGenerator
                         {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
                     })
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
+                if (PlanetIsTerrestrial(terrain.props[PropKey.PlanetType]))
+                {
+                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
+                }
+                else
+                {
+                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, props: terrain.props) });
+                }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Ocean, weight: 75),
-                    new TerrainRule(Terrain.TerrainType.Land, weight: 25)
+                var (oceanWeight, landWeight) = (0, 1);
+                Terrain.PlanetType terrestrialPlanetType;
+                Enum.TryParse<Terrain.PlanetType>(terrain.props[PropKey.PlanetType], out terrestrialPlanetType);
+                switch (terrestrialPlanetType)
+                {
+                    case Terrain.PlanetType.Oceanic:
+                    case Terrain.PlanetType.Panthallasic:
+                        oceanWeight = 1;
+                        landWeight = 0;
+                        break;
+                    case Terrain.PlanetType.Tectonic:
+                    case Terrain.PlanetType.Promethean:
+                        oceanWeight = 3;
+                        landWeight = 1;
+                        break;
+                    case Terrain.PlanetType.Hebean:
+                    case Terrain.PlanetType.Arid:
+                        oceanWeight = 1;
+                        landWeight = 3;
+                        break;
+                }
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarOrbit) });
+                var planetaryCenter = AddCenter(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.InnerLunarOrbit)
                 });
+                AddCircle(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Ocean, weight: oceanWeight),
+                    new TerrainRule(Terrain.TerrainType.Land, weight: landWeight)
+                }, planetaryCenter, 100, true);
                 break;
         }
 
@@ -352,8 +384,31 @@ class TerrainGenerator
 
         return null;
     }
-
     private (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
+
+    private bool PlanetIsTerrestrial(string planetType)
+    {
+        Terrain.PlanetType output;
+        Enum.TryParse<Terrain.PlanetType>(planetType, out output);
+        switch (output)
+        {
+            case Terrain.PlanetType.Jovian:
+            case Terrain.PlanetType.Helian:
+            case Terrain.PlanetType.Panthallasic:
+                return false;
+            case Terrain.PlanetType.Rockball:
+            case Terrain.PlanetType.Meltball:
+            case Terrain.PlanetType.Hebean:
+            case Terrain.PlanetType.Promethean:
+            case Terrain.PlanetType.Snowball:
+            case Terrain.PlanetType.Telluric:
+            case Terrain.PlanetType.Arid:
+            case Terrain.PlanetType.Tectonic:
+            case Terrain.PlanetType.Oceanic:
+                return true;
+        }
+        return false;
+    }
     private class TerrainRule
     {
         public double weight;
