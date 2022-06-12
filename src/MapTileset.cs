@@ -8,6 +8,16 @@ public class MapTileset
     public MapTileset()
     {
         this.images = GetFilesInFolder("", ".png");
+
+        var tileset = new TileSet();
+        foreach (var image in images)
+        {
+            var id = tileset.GetLastUnusedTileId();
+            tileset.CreateTile(id);
+            tileset.TileSetName(id, image);
+            tileset.TileSetTexture(id, GD.Load<Texture>("res://assets/tiles/" + image + ".png"));
+            tileset.TileSetRegion(id, new Rect2(0, 0, 64, 64));
+        }
     }
 
     List<String> GetFilesInFolder(string folder, string extension)
