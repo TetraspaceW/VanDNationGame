@@ -116,6 +116,11 @@ public class Terrain
         O, B, A, F, G, K, M, D
     }
 
+    public enum GalaxyType
+    {
+        S0, Sa, Sb, Sc, Irr
+    }
+
     public string _debugProps()
     {
         var s = "";
@@ -129,5 +134,6 @@ public class Terrain
 
 public enum PropKey
 {
-    SpectralClass
+    SpectralClass,
+    GalaxyType
 }

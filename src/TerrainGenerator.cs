@@ -49,17 +49,56 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.GalaxyGroup:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 2),
-                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 5),
-                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 5, props: new Dictionary<PropKey, string>() {
+                        {PropKey.GalaxyType, Terrain.GalaxyType.S0.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 5, props: new Dictionary<PropKey, string>() {
+                        {PropKey.GalaxyType, Terrain.GalaxyType.Sa.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 10, props: new Dictionary<PropKey, string>() {
+                        {PropKey.GalaxyType, Terrain.GalaxyType.Sb.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 40, props: new Dictionary<PropKey, string>() {
+                        {PropKey.GalaxyType, Terrain.GalaxyType.Sc.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 40, props: new Dictionary<PropKey, string>() {
+                        {PropKey.GalaxyType, Terrain.GalaxyType.Irr.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 250),
+                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 3250),
                 });
                 break;
             case Terrain.TerrainType.Galaxy:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
-                var core = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
-                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true) }, core, 5, true, core);
+
+                Terrain.GalaxyType result;
+                Enum.TryParse<Terrain.GalaxyType>(terrain.props[PropKey.GalaxyType], out result);
+                switch (result)
+                {
+                    case Terrain.GalaxyType.S0:
+                    case Terrain.GalaxyType.Sa:
+                    case Terrain.GalaxyType.Sb:
+                    case Terrain.GalaxyType.Sc:
+                        var coreS = AddCenter(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.GalacticCore)
+                        });
+                        AddCircle(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
+                        }, coreS, 5, true, coreS);
+                        break;
+                    case Terrain.GalaxyType.Irr:
+                        var coreIrr = AddCenter(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.GalacticHalo)
+                        });
+                        AddCircle(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true),
+                            new TerrainRule(Terrain.TerrainType.GalacticHalo)
+                        }, coreIrr, 5, true);
+                        break;
+                }
+
                 break;
             case Terrain.TerrainType.SpiralArm:
                 Fill(Tiles, new[] {
