@@ -7,6 +7,7 @@ public class MapView : Node2D
     private MapInfoTooltip tooltip;
     public override void _Ready()
     {
+        CreateTileset();
         TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
         Model = new MapModel(tile);
         tile.internalMap = Model;
@@ -74,4 +75,9 @@ public class MapView : Node2D
     }
 
     Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);
+
+    public void CreateTileset()
+    {
+        var tileset = new MapTileset();
+    }
 }

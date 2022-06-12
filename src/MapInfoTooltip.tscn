@@ -20,6 +20,8 @@ margin_right = 840.0
 margin_bottom = 656.0
 
 [node name="Text" type="RichTextLabel" parent="BottomPanel"]
-margin_right = 200.0
-margin_bottom = 656.0
+margin_left = 16.0
+margin_top = 16.0
+margin_right = 184.0
+margin_bottom = 640.0
 text = "All kinds of cool stuff can go on this left-hand panel!"
