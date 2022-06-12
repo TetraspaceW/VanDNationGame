@@ -53,7 +53,7 @@ public class MapView : Area2D
             }
         }
 
-        tooltip.setText(new ScaleUtil(Model.parent.scale).TextForScale());
+        tooltip.setScaleLabelText(new ScaleUtil(Model.parent.scale).TextForScale());
         MoveChild(tooltip, GetChildCount());
 
         camera.SetMapSize(width, height);

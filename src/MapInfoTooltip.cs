@@ -2,18 +2,20 @@ using Godot;
 
 public class MapInfoTooltip : CanvasLayer
 {
-    RichTextLabel label;
+    RichTextLabel scaleLabel;
+    RichTextLabel sidePanelLabel;
 
     public override void _Ready()
     {
-        label = (RichTextLabel)((Panel)GetChild(0)).GetChild(0);
+        scaleLabel = (RichTextLabel)FindNode("ScaleText");
+        sidePanelLabel = (RichTextLabel)FindNode("SidePanelText");
     }
 
-    public void setText(string text)
+    public void setScaleLabelText(string text)
     {
-        label.Text = "";
-        label.PushColor(new Color(1, 1, 1));
-        label.AppendBbcode(text);
-        label.Pop();
+        scaleLabel.Text = "";
+        scaleLabel.PushColor(new Color(1, 1, 1));
+        scaleLabel.AppendBbcode(text);
+        scaleLabel.Pop();
     }
 }

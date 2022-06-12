@@ -5,23 +5,60 @@
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource( 1 )
 
-[node name="MapInfoTooltip" type="Panel" parent="."]
-margin_right = 640.0
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchor_right = 1.0
 margin_bottom = 16.0
 
-[node name="Text" type="RichTextLabel" parent="MapInfoTooltip"]
-margin_right = 640.0
-margin_bottom = 16.0
+[node name="MapInfoPanel" type="Panel" parent="MarginContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="ScaleText" type="RichTextLabel" parent="MarginContainer/MapInfoPanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 text = "Default Text"
 
-[node name="BottomPanel" type="Panel" parent="."]
-margin_left = 640.0
-margin_right = 840.0
+[node name="MarginContainer2" type="MarginContainer" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -200.0
+
+[node name="SidePanel" type="Panel" parent="MarginContainer2"]
+margin_right = 200.0
 margin_bottom = 656.0
 
-[node name="Text" type="RichTextLabel" parent="BottomPanel"]
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/SidePanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 16.0
 margin_top = 16.0
-margin_right = 184.0
-margin_bottom = 640.0
-text = "All kinds of cool stuff can go on this left-hand panel!"
+margin_right = -16.0
+margin_bottom = -16.0
+
+[node name="SidePanelText" type="RichTextLabel" parent="MarginContainer2/SidePanel/MarginContainer"]
+margin_right = 168.0
+margin_bottom = 624.0
+text = "All kinds of fun content could appear on this panel on the left hand side of the UI!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"
