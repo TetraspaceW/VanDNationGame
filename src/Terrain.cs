@@ -115,6 +115,16 @@ public class Terrain
     {
         O, B, A, F, G, K, M, D
     }
+
+    public string _debugProps()
+    {
+        var s = "";
+        foreach (var p in props)
+        {
+            s += p.Key + ": " + p.Value + ", ";
+        }
+        return s.TrimEnd(", ".ToCharArray());
+    }
 }
 
 public enum PropKey

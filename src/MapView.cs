@@ -87,7 +87,7 @@ public class MapView : Area2D
 
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
             {
-                GD.Print("Entering tile of type " + Tile.terrain.terrainType);
+                GD.Print("Entering tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
                 ZoomInToInternalMap(Tile);
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)

@@ -56,10 +56,10 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.Galaxy:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
-                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticHalo) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
+                var core = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true) }, core, 5, true, core);
                 break;
             case Terrain.TerrainType.SpiralArm:
                 Fill(Tiles, new[] {
@@ -107,9 +107,10 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.SolarSystem:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.OortCloudBodies)
+                    new TerrainRule(Terrain.TerrainType.InterstellarSpace)
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HillsCloud, zoomable: true, props: terrain.props) });
+                var system = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HillsCloud, zoomable: true, props: terrain.props) });
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OortCloudBodies) }, system, 5, true, system);
                 break;
             case Terrain.TerrainType.HillsCloud:
                 Fill(Tiles, new[] {
@@ -136,8 +137,8 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.InnerSystemOrbit, weight: 75),
                     new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: 2)
                 });
-                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star, props: terrain.props) });
+                var centralStar = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star, props: terrain.props) });
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) }, centralStar, 5, false);
                 break;
         }
 
@@ -160,7 +161,7 @@ class TerrainGenerator
         }
     }
 
-    private void AddCenter(TileModel[,] tiles, TerrainRule[] rules)
+    private (int, int) AddCenter(TileModel[,] tiles, TerrainRule[] rules)
     {
         var (width, height) = Shape(tiles);
 
@@ -168,6 +169,7 @@ class TerrainGenerator
         var centerY = (height % 2 == 0) ? height / 2 - _random.Next(0, 2) : height / 2;
 
         tiles[centerX, centerY] = RandomTileFromRule(rules);
+        return (centerX, centerY);
     }
 
     private void Fill(TileModel[,] tiles, TerrainRule[] rules)
@@ -179,6 +181,27 @@ class TerrainGenerator
             for (int y = 0; y < height; y++)
             {
                 tiles[x, y] = RandomTileFromRule(rules);
+            }
+        }
+    }
+
+    private void AddCircle(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool filled, (int, int)? mask = null)
+    {
+        var (width, height) = Shape(tiles);
+        var (centerX, centerY) = center;
+
+        for (int x = Math.Max(centerX - radius - 1, 0); x < Math.Min(centerX + radius + 1, width); x++)
+        {
+            for (int y = Math.Max(centerY - radius - 1, 0); y < Math.Min(centerY + radius + 1, height); y++)
+            {
+                var distance = Math.Pow(((float)x - centerX), 2) + Math.Pow(((float)y - centerY), 2);
+                if (distance <= Math.Pow(radius, 2) && (filled || (distance > Math.Pow(radius - 1, 2))))
+                {
+                    if (!mask.HasValue || mask.Value != (x, y))
+                    {
+                        tiles[x, y] = RandomTileFromRule(rules);
+                    }
+                }
             }
         }
     }

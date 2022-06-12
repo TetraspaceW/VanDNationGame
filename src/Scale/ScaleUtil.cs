@@ -6,24 +6,40 @@ public class ScaleUtil
         this.scale = scale;
     }
 
-    string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion" };
+    string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion", " octillion", " nonillion", };
 
     public string TextForScale()
     {
         try
         {
-            if (scale < 0)
+            if (scale < -40)
             {
+                // let's get a little silly
+                return NumberStringForScale(scale + 51) + " lₚ";
+            }
+            else if (scale < -26)
+            {
+                // 10^40 Å = 1 light year
+                return NumberStringForScale(scale + 40) + " ym";
+            }
+            else if (scale < -13)
+            {
+                // 10^26 Å = 1 light year
+                return NumberStringForScale(scale + 26) + " Å";
+            }
+            else if (scale < 0)
+            {
+                // 10^13 km = 1 light year
                 return NumberStringForScale(scale + 13) + " km";
             }
             else
             {
-                return NumberStringForScale(scale) + " light years";
+                return NumberStringForScale(scale) + " ly";
             }
         }
         catch
         {
-            return "10^" + scale + " light years";
+            return "10^" + scale + " ly";
         }
     }
 
