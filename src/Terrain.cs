@@ -58,9 +58,10 @@ public class Terrain
             case TerrainType.ScatteredDiskBodies:
                 return "kuiper";
             case TerrainType.SolarSystem:
+                return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
             case TerrainType.OuterSolarSystem:
             case TerrainType.InnerSolarSystem:
-                return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
+                return "stars/" + props[PropKey.SpectralClass].ToString().ToLower() + "_noletter";
             case TerrainType.OuterSystemBody:
                 return "outer_planet";
             case TerrainType.InnerSystemBody:
