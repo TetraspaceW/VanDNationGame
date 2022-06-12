@@ -192,6 +192,9 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 1f/6f * 4f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
                         {PropKey.PlanetType, Terrain.PlanetType.Hebean.ToString()}
                     }),
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 1f/6f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Promethean.ToString()}
+                    }),
                     new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: innerSystemWeight * 1f/5f * 9f/36f * 2f/6f, zoomable: true, props: new Dictionary<PropKey, string>() {
                         {PropKey.PlanetType, Terrain.PlanetType.Telluric.ToString()}
                     }),
