@@ -4,12 +4,12 @@ using Godot;
 
 public class MapTileset
 {
-    public List<String> images;
+    public TileSet tileset;
     public MapTileset()
     {
-        this.images = GetFilesInFolder("", ".png");
+        var images = GetFilesInFolder("", ".png");
 
-        var tileset = new TileSet();
+        tileset = new TileSet();
         foreach (var image in images)
         {
             var id = tileset.GetLastUnusedTileId();

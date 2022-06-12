@@ -6,7 +6,7 @@ public class TileModel
     public TileModel parent;
     public bool zoomable;
     public int scale;
-    private string image;
+    public string image;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
     {
