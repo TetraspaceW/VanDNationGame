@@ -14,7 +14,7 @@ public class Terrain
     {
         switch (terrainType)
         {
-            case TerrainType.Space:
+            case TerrainType.Filament:
                 return "space";
             case TerrainType.Void:
             case TerrainType.IntersuperclusterVoid:
@@ -25,8 +25,10 @@ public class Terrain
             case TerrainType.InterstellarSpace:
             case TerrainType.OuterSystemOrbit:
             case TerrainType.InnerSystemOrbit:
+            case TerrainType.OuterLunarOrbit:
+            case TerrainType.InnerLunarOrbit:
                 return "void";
-            case TerrainType.Energy:
+            case TerrainType.CMB:
             case TerrainType.InteruniversalSpace:
                 return "energy";
             case TerrainType.Defect:
@@ -65,11 +67,20 @@ public class Terrain
             case TerrainType.OuterSystemBody:
                 return "outer_planet";
             case TerrainType.InnerSystemBody:
+            case TerrainType.OuterLunarSystem:
+            case TerrainType.InnerLunarSystem:
+            case TerrainType.TerrestrialPlanet:
                 return "inner_planet";
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
             case TerrainType.Star:
                 return "stars/star_" + props[PropKey.SpectralClass].ToString().ToLower();
+            case TerrainType.LunarBody:
+                return "moon";
+            case TerrainType.Land:
+                return "land";
+            case TerrainType.Ocean:
+                return "ocean";
             default:
                 return null;
         }
@@ -77,40 +88,55 @@ public class Terrain
 
     public enum TerrainType
     {
-        // 10g ly across
+        // 10   10g ly across
         Universe, InteruniversalSpace,
-        // 1g ly across
-        Space, Void, Energy, Defect,
-        // 100m ly across
+        // 9    1g ly across
+        Filament, Void, CMB, Defect,
+        // 8    100m ly across
         GalaxySupercluster, IntersuperclusterVoid,
-        // 10m ly across
+        // 7    10m ly across
         GalaxyCluster, InterclusterSpace,
-        // 1m ly across
+        // 6    1m ly across
         GalaxyGroup, IntergroupSpace,
-        // 100k ly across
+        // 5    100k ly across
         Galaxy, DwarfGalaxy, IntergalacticSpace,
-        // 10k ly across
+        // 4    10k ly across
         SpiralArm, GalacticCore, GalacticHalo,
-        // 1k ly across
+        // 3    1k ly across
         StellarBelt,
-        // 100 ly across
+        // 2    100 ly across
         StellarBubble,
-        // 10 ly across
+        // 1    10 ly across
         StellarCloud,
-        // 1 ly across
+        // 0    1 ly across
         SolarSystem, InterstellarSpace,
-        // 1t km across / 0.1 ly / 60000 AU
+        // -1   1t km across / 0.1 ly / 60000 AU
         HillsCloud, OortCloudBodies,
-        // 100g km across / 6000 AU
+        // -2   100g km across / 6000 AU
         ScatteredDisk, HillsCloudBodies,
-        // 10g km across / 60 AU
+        // -3   10g km across / 60 AU
         OuterSolarSystem, ScatteredDiskBodies,
-        // 1g km across / 6 AU
+        // -4   1g km across / 6 AU
         InnerSolarSystem, OuterSystemOrbit, OuterSystemBody, KuiperBeltBodies,
-        // 100m km across / 0.6 AU
-        Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies
+        // -5   100m km across / 0.6 AU
+        Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies,
+        // -6   10m km across
+        // -7   1m km across / Earth SOI
+        OuterLunarSystem,
+        // -8   100k km across
+        InnerLunarSystem, OuterLunarOrbit, LunarBody, GasGiant,
+        // -9   10k km across
+        TerrestrialPlanet, InnerLunarOrbit,
+        // -10  1k km across
+        Land, Ocean
+        // -11  100 km across
+        // -12  10 km across
     }
 
+    public enum PlanetType
+    {
+        Terrestrial, GasGiant
+    }
     public enum StarSpectralClass
     {
         O, B, A, F, G, K, M, D
@@ -134,6 +160,7 @@ public class Terrain
 
 public enum PropKey
 {
+    PlanetType,
     SpectralClass,
     GalaxyType
 }

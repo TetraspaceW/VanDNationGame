@@ -24,12 +24,12 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.Universe:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Space, zoomable: true),
+                    new TerrainRule(Terrain.TerrainType.Filament, zoomable: true),
                     new TerrainRule(Terrain.TerrainType.Void)
                     });
-                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Energy) });
+                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.CMB) });
                 break;
-            case Terrain.TerrainType.Space:
+            case Terrain.TerrainType.Filament:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalaxySupercluster, zoomable: true),
                     new TerrainRule(Terrain.TerrainType.IntersuperclusterVoid),
@@ -49,25 +49,26 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.GalaxyGroup:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 5, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.1, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.S0.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 35, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.7, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.S.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 35, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.7, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.SB.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 20, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.4, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.E.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 5, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.1, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.Irr.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 250),
-                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 3250),
+                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 5),
+                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 75),
                 });
                 break;
+            case Terrain.TerrainType.DwarfGalaxy:
             case Terrain.TerrainType.Galaxy:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
@@ -179,10 +180,45 @@ class TerrainGenerator
             case Terrain.TerrainType.InnerSolarSystem:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.InnerSystemOrbit, weight: 75),
-                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: 2)
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, weight: 2, zoomable: true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.PlanetType, Terrain.PlanetType.Terrestrial.ToString()}
+                    })
                 });
                 var centralStar = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Star, props: terrain.props) });
                 AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies) }, centralStar, 5, false);
+                break;
+            case Terrain.TerrainType.InnerSystemBody:
+                switch (tile.scale)
+                {
+                    case -5:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemBody, zoomable: true, props: terrain.props) });
+                        break;
+                    case -6:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.OuterLunarSystem:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.OuterLunarOrbit, weight: 98),
+                    new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1)
+                });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
+                break;
+            case Terrain.TerrainType.InnerLunarSystem:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.InnerLunarOrbit, weight: 98),
+                    new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1)
+                });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
+                break;
+            case Terrain.TerrainType.TerrestrialPlanet:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Ocean, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.Land, weight: 25)
+                });
                 break;
         }
 
