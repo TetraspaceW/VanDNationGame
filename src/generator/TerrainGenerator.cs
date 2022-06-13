@@ -249,12 +249,73 @@ class TerrainGenerator
         return Tiles;
     }
 
+
     private void AddGalaxy(TileModel[,] tiles, TerrainRule[] rules, int radius, int hasCore = 0, bool hasArms = false)
     {
         var core = AddCenter(tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
-        AddCircle(tiles, rules, core, radius, true, (hasCore != 0) ? core : ((int, int)?)null);
+        if (hasArms)
+        {
+            AddArms(tiles, rules, core, radius, _random.NextDouble() > 0.5, (hasCore == 2) ? 2 : _random.Next(4, 7), hasCore == 2, (hasCore != 0) ? core : ((int, int)?)null);
+        }
+        else
+        {
+            AddCircle(tiles, rules, core, radius, true, (hasCore != 0) ? core : ((int, int)?)null);
+        }
     }
-
+    private void AddArms(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool counterclockwise, int numArms, bool barred, (int, int)? mask = null)
+    {
+        var (width, height) = Shape(tiles);
+        var (centerX, centerY) = center;
+        var turn = _random.NextDouble() * Math.PI * 2;
+        for (double j = 0; j < numArms; j++)
+        {
+            for (double i = 0; i < Math.PI * 2; i += Math.PI / 100)
+            {
+                double r = Math.Pow(2, i);
+                if (barred)
+                {
+                    r += 2;
+                }
+                double ang = i + 2 * Math.PI / numArms * j + turn;
+                var x = (int)Math.Round(centerX + (counterclockwise ? -r * Math.Cos(ang) : r * Math.Cos(ang)));
+                var y = (int)Math.Round(centerY + r * Math.Sin(ang));
+                if (r > radius || x >= width || x < 0 || y >= height || y < 0)
+                {
+                    break;
+                }
+                if (!mask.HasValue || mask.Value != (x, y))
+                {
+                    tiles[x, y] = RandomTileFromRule(rules);
+                }
+            }
+        }
+        if (barred)
+        {
+            for (double j = -1; j <= 1; j++)
+            {
+                double ang = turn + Math.PI/2;
+                var x1 = (counterclockwise ? -j * Math.Cos(ang) : j * Math.Cos(ang));
+                var y1 = j * Math.Sin(ang);
+                for (double i = -2; i < 2; i += 0.01)
+                {
+                    double r = i;
+                    double ang2 = turn;
+                    var x2 = centerX + (counterclockwise ? -r * Math.Cos(ang2) : r * Math.Cos(ang2));
+                    var y2 = centerY + r * Math.Sin(ang2);
+                    var x = (int)Math.Round(x1 + x2);
+                    var y = (int)Math.Round(y1 + y2);
+                    if (r > radius || x >= width || x < 0 || y >= height || y < 0)
+                    {
+                        break;
+                    }
+                    if (!mask.HasValue || mask.Value != (x, y))
+                    {
+                        tiles[x, y] = RandomTileFromRule(rules);
+                    }
+                }
+            }
+        }
+    }
     private void AddBorder(TileModel[,] tiles, TerrainRule[] rules)
     {
         var (width, height) = Shape(tiles);
