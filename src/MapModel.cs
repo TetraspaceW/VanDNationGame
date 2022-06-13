@@ -14,6 +14,12 @@ public class MapModel
         Tiles = generator.GenerateTerrain();
     }
 
+    public MapModel(TileModel parent, TileModel[,] tiles)
+    {
+        this.parent = parent;
+        this.Tiles = tiles;
+    }
+
     private void fillMapWith(Terrain.TerrainType terrainType)
     {
         for (int x = 0; x < 10; x++)

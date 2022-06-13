@@ -36,7 +36,6 @@ class TerrainGenRule
         }
 
         var (newX, newY) = possibleLocations[_random.Next(0, possibleLocations.Count)];
-        Godot.GD.Print("Placing tile of type ", rules[0].terrainType, " at coords ", (newX, newY));
         tiles[newX, newY] = RandomTileFromRule(parent, rules);
     }
 

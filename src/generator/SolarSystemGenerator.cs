@@ -10,9 +10,10 @@ class SolarSystemGenerator : CelestialGenerator
     public SolarSystemGenerator(TileModel tile, SpectralClass spectralClass)
     {
         // Object       | Size      | S     | Comparable map object
-        // -------------+-----------+-------+--------------------
-        // G-Class      | 1 Gm      | -7    |   
-        // O-Class      | 10 Gm     | -6    | 
+        // -------------+-----------+-------+----------------------
+        // M-Class      | 300 Mm    | -8×5  | 5 epiepiepistellar system tiles
+        // G-Class      | 1 Gm      | -7    | Epiepistellar system tile
+        // O-Class      | 10 Gm     | -6    | Epistellar system tile 
         //              | 100 Gm    | -5    | Inner system map tile
         // Supergiant   | 500 Gm    | -5×5  | 5 inner system tiles
 
@@ -53,6 +54,8 @@ class SolarSystemGenerator : CelestialGenerator
                 R = orbits[i - 1].distance * (1.1 + _random.Next(1, 11) * 0.1) + 0.1;
                 orbits[i] = new Orbit(R, star);
             }
+
+            Godot.GD.Print("Distance ", R, "AU; Type ", (orbits[i].body != null) ? orbits[i].body.bodyType.ToString() : "Empty");
         }
     }
 
@@ -67,21 +70,34 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    public TileModel[,] InnerSystemMap() // size -4
+    public TileModel[,] EpiepiepistellarSystemMap() // size -7, engulfed by G star
+    {
+        // Closest a planet can be to its star is 374 Mm / 3 tiles at this distance
+        // you might be thinking isn't this basically kissing the M class star?
+        // and yep, it totally is! M class stars are tepid
+        // you could probably touch one and you'd be fine
+
+        return null;
+    }
+    public TileModel[,] EpiepistellarSystemMap() // size -6, engulfed by O star
+    {
+        return null;
+    }
+
+    public TileModel[,] EpistellarSystemMap() // size -5
+    {
+        return null;
+    }
+
+    public TileModel[,] InnerSystemMap(TileModel parent) // size -4
     {
         var Tiles = new TileModel[10, 10];
-        TerrainGenRule.Fill(parent: tile, Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
-        var center = TerrainGenRule.AddCenter(parent: tile, Tiles, new[] {
+        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+        var center = TerrainGenRule.AddCenter(parent, Tiles, new[] {
             new TerrainRule(Terrain.TerrainType.Star, props: new Dictionary<PropKey, string>() {
                 {PropKey.SpectralClass, spectralClass.ToString()}
             })
         });
-
-        Godot.GD.Print(orbits.Length, " orbits generated around this star.");
-        foreach (Orbit orbit in orbits)
-        {
-            Godot.GD.Print("Distance ", orbit.distance, "AU; Type ", (orbit.body != null) ? orbit.body.bodyType.ToString() : "Empty");
-        }
 
         var i = 0;
         while (i < orbits.Length && orbits[i].distance < 6)
@@ -89,53 +105,78 @@ class SolarSystemGenerator : CelestialGenerator
             if (orbits[i].body != null && orbits[i].distance >= 0.6)
             {
                 var radius = (int)(orbits[i].distance / 0.6);
-                if (!IsSingleBody(orbits[i].body.bodyType))
-                {
-                    TerrainGenRule.AddCircle(parent: tile, Tiles,
-                    rules: new[] {
-                        new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies)
-                    }, center, radius, false);
-                }
-                else
-                {
-                    Terrain.PlanetType planetType = Terrain.PlanetType.Rockball;
-                    switch (orbits[i].body.bodyType)
-                    {
-                        case Body.Type.Chunk:
-                            planetType = Terrain.PlanetType.Rockball; break;
-                        case Body.Type.Terrestrial:
-                            planetType = Terrain.PlanetType.Arid; break;
-                        case Body.Type.GasGiant:
-                            planetType = Terrain.PlanetType.Jovian; break;
-                        case Body.Type.Superjovian:
-                            planetType = Terrain.PlanetType.Jovian; break;
-                    }
-
-                    TerrainGenRule.AddAtDistance(parent: tile, Tiles,
-                    rules: new[] {
-                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, true, props: new Dictionary<PropKey, string>() {
-                        { PropKey.PlanetType, planetType.ToString() }
-                    })},
-                    center,
-                    radius,
-                    mask: new List<Terrain.TerrainType> {
-                        Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.Star
-                    });
-                }
+                PlaceWorld(parent, orbits[i].body, radius, true, Tiles, center);
             }
             i++;
         }
         return Tiles;
     }
 
-    TileModel[,] OuterSystemMap() // size -3
+    private void PlaceWorld(TileModel parent, Body body, int distance, bool inner, TileModel[,] Tiles, (int, int) center)
     {
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance >= 6 && orbits[i].distance < 60)
+        Terrain.TerrainType terrainType;
+        if (!IsSingleBody(body.bodyType))
         {
-
+            terrainType = inner ? Terrain.TerrainType.AsteroidBeltBodies : Terrain.TerrainType.KuiperBeltBodies;
+            TerrainGenRule.AddCircle(parent, Tiles,
+            rules: new[] {
+                new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies)
+            }, center, distance, false);
         }
-        return null;
+        else
+        {
+            terrainType = inner ? Terrain.TerrainType.InnerSystemBody : Terrain.TerrainType.OuterSystemBody;
+            Terrain.PlanetType planetType = Terrain.PlanetType.Rockball;
+            switch (body.bodyType)
+            {
+                case Body.Type.Chunk:
+                    planetType = Terrain.PlanetType.Rockball; break;
+                case Body.Type.Terrestrial:
+                    planetType = Terrain.PlanetType.Arid; break;
+                case Body.Type.GasGiant:
+                    planetType = Terrain.PlanetType.Jovian; break;
+                case Body.Type.Superjovian:
+                    planetType = Terrain.PlanetType.Jovian; break;
+            }
+
+            TerrainGenRule.AddAtDistance(parent, Tiles,
+            rules: new[] {
+                new TerrainRule(Terrain.TerrainType.InnerSystemBody, true, props: new Dictionary<PropKey, string>() {
+                    { PropKey.PlanetType, planetType.ToString() }
+                })
+            },
+            center,
+            distance,
+            mask: new List<Terrain.TerrainType> {
+                Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.OuterSystemBody,
+                Terrain.TerrainType.Star, Terrain.TerrainType.InnerSolarSystem
+            });
+        }
+    }
+
+    public TileModel[,] OuterSystemMap() // size -3
+    {
+        var Tiles = new TileModel[10, 10];
+        TerrainGenRule.Fill(parent: tile, Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSystemOrbit) });
+        var center = TerrainGenRule.AddCenter(parent: tile, Tiles, new[] {
+            new TerrainRule(Terrain.TerrainType.InnerSolarSystem, true, props: new Dictionary<PropKey, string>() {
+                {PropKey.SpectralClass, spectralClass.ToString()}
+            })
+        });
+        var centerTile = Tiles[center.Item1, center.Item2];
+        centerTile.internalMap = new MapModel(centerTile, InnerSystemMap(centerTile));
+
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance < 60)
+        {
+            if (orbits[i].body != null && orbits[i].distance >= 6)
+            {
+                var radius = (int)(orbits[i].distance / 6);
+                PlaceWorld(tile, orbits[i].body, radius, false, Tiles, center);
+            }
+            i++;
+        }
+        return Tiles;
     }
 
     TileModel[,] ScatteredDiskMap() // size -2
@@ -170,14 +211,14 @@ class SolarSystemGenerator : CelestialGenerator
     {
         switch (spectralClass)
         {
-            case SpectralClass.O: return new Star(L: 200000.0, M: 40.0, age: 0.0055);
-            case SpectralClass.B: return new Star(L: 1000.0, M: 8.2, age: 0.0451);
-            case SpectralClass.A: return new Star(L: 23.0, M: 2.2, age: 0.75);
-            case SpectralClass.F: return new Star(L: 2.9, M: 1.31, age: 2.75);
-            case SpectralClass.G: return new Star(L: 0.79, M: 0.94, age: 5.5);
-            case SpectralClass.K: return new Star(L: 0.19, M: 0.66, age: 5.5);
-            case SpectralClass.M: return new Star(L: 0.003, M: 0.18, age: 5.5);
-            case SpectralClass.D: return new Star(L: 0.012, M: 0.575, age: 5.5);
+            case SpectralClass.O: return new Star(L: 100000.0, M: 50.0, age: 0.005);
+            case SpectralClass.B: return new Star(L: 1000.0, M: 10.0, age: 0.05);
+            case SpectralClass.A: return new Star(L: 20.0, M: 2.0, age: 1);
+            case SpectralClass.F: return new Star(L: 4.0, M: 1.5, age: 2);
+            case SpectralClass.G: return new Star(L: 1.0, M: 1.0, age: 5);
+            case SpectralClass.K: return new Star(L: 0.20, M: 0.7, age: 5);
+            case SpectralClass.M: return new Star(L: 0.01, M: 0.2, age: 5);
+            case SpectralClass.D: return new Star(L: 0.01, M: 1.0, age: 5);
             default: return new Star(L: 1.0, M: 1.0, age: 5.0);
         }
     }
@@ -200,7 +241,8 @@ class SolarSystemGenerator : CelestialGenerator
             this.star = star;
             this.distance = R;
 
-            inner = (R <= star.luminosity * 4);
+            var molten = (R <= Math.Sqrt(star.luminosity) * 0.025);
+            inner = (R <= Math.Sqrt(star.luminosity) * 4);
 
             var orbitRoll = _random.Next(1, 96);
             var T = 255.0 / Math.Sqrt(distance / Math.Sqrt(star.luminosity));
@@ -250,6 +292,9 @@ class SolarSystemGenerator : CelestialGenerator
                     body = new Body(Body.Type.Superjovian, T, this);
                 }
             }
+
+            body = molten ? null : body;
+
             star = null;
         }
     }

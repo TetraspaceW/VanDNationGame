@@ -170,18 +170,10 @@ class TerrainGenerator
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSolarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.OuterSolarSystem:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.OuterSystemOrbit, weight: 99 - 2.5),
-                    new TerrainRule(Terrain.TerrainType.OuterSystemBody, weight: 2.5)
-                });
-                AddBorder(Tiles, new[] { new TerrainRule(Terrain.TerrainType.KuiperBeltBodies) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSolarSystem, zoomable: true, props: terrain.props) });
-                break;
-            case Terrain.TerrainType.InnerSolarSystem:
-                SolarSystemGenerator.SpectralClass issStarType;
-                Enum.TryParse<SolarSystemGenerator.SpectralClass>(terrain.props[PropKey.SpectralClass], out issStarType);
-                var solarSystemGenerator = new SolarSystemGenerator(tile, issStarType);
-                Tiles = solarSystemGenerator.InnerSystemMap();
+                SolarSystemGenerator.SpectralClass ossStarType;
+                Enum.TryParse<SolarSystemGenerator.SpectralClass>(terrain.props[PropKey.SpectralClass], out ossStarType);
+                var solarSystemGenerator = new SolarSystemGenerator(tile, ossStarType);
+                Tiles = solarSystemGenerator.OuterSystemMap();
                 break;
             case Terrain.TerrainType.InnerSystemBody:
                 switch (tile.scale)
