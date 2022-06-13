@@ -39,7 +39,6 @@ class SolarSystemGenerator : CelestialGenerator
             numOrbits = _random.Next(1, 6);
         }
 
-        Godot.GD.Print("Generating ", numOrbits, " orbits around this star.");
         orbits = new Orbit[numOrbits];
         for (int i = 0; i < numOrbits; i++)
         {
@@ -54,8 +53,6 @@ class SolarSystemGenerator : CelestialGenerator
                 R = orbits[i - 1].distance * (1.1 + _random.Next(1, 11) * 0.1) + 0.1;
                 orbits[i] = new Orbit(R, star);
             }
-
-            Godot.GD.Print("Distance ", R, "AU; Type ", (orbits[i].body != null) ? orbits[i].body.bodyType.ToString() : "Empty");
         }
     }
 
