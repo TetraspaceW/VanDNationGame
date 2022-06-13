@@ -241,8 +241,13 @@ class TerrainGenerator
                 });
                 AddCircle(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Ocean, weight: oceanWeight),
-                    new TerrainRule(Terrain.TerrainType.Land, weight: landWeight)
+                    new TerrainRule(Terrain.TerrainType.Land, true, weight: landWeight)
                 }, planetaryCenter, 100, true);
+                break;
+            case Terrain.TerrainType.Land:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Land, true)
+                });
                 break;
         }
 

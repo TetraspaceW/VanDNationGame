@@ -22,10 +22,18 @@ public class ScaleUtil
                 // 10^40 Å = 1 light year
                 return NumberStringForScale(scale + 40) + " ym";
             }
-            else if (scale < -13)
+            else if (scale < -22)
             {
                 // 10^26 Å = 1 light year
                 return NumberStringForScale(scale + 26) + " Å";
+            }
+            else if (scale < -16)
+            {
+                return NumberStringForScale(scale + 19) + " mm";
+            }
+            else if (scale < -13)
+            {
+                return NumberStringForScale(scale + 16) + " m";
             }
             else if (scale < 0)
             {
