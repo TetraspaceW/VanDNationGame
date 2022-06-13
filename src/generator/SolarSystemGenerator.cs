@@ -141,7 +141,7 @@ class SolarSystemGenerator : CelestialGenerator
 
             TerrainGenRule.AddAtDistance(parent, Tiles,
             rules: new[] {
-                new TerrainRule(Terrain.TerrainType.InnerSystemBody, true, props: new Dictionary<PropKey, string>() {
+                new TerrainRule(Terrain.TerrainType.InnerSystemBody, inner, props: new Dictionary<PropKey, string>() {
                     { PropKey.PlanetType, planetType.ToString() }
                 })
             },
