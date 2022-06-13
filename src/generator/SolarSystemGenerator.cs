@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
 class CelestialGenerator { }
 class SolarSystemGenerator : CelestialGenerator
 {
+    SpectralClass spectralClass;
+    TileModel tile;
+    Orbit[] orbits;
     private readonly Random _random = new Random();
-    SolarSystemGenerator(TileModel tile, SpectralClass spectralClass)
+    public SolarSystemGenerator(TileModel tile, SpectralClass spectralClass)
     {
         // Object       | Size      | S     | Comparable map object
         // -------------+-----------+-------+--------------------
@@ -12,6 +16,8 @@ class SolarSystemGenerator : CelestialGenerator
         //              | 100 Gm    | -5    | Inner system map tile
         // Supergiant   | 500 Gm    | -5×5  | 5 inner system tiles
 
+        this.tile = tile;
+        this.spectralClass = spectralClass;
         Star star = StarData(spectralClass);
         int orbitsTableRoll = _random.Next(1, 11) + ((spectralClass == SpectralClass.K) ? 1 : 0) + ((spectralClass == SpectralClass.M) ? 3 : 0);
         int numOrbits = 0;
@@ -32,7 +38,8 @@ class SolarSystemGenerator : CelestialGenerator
             numOrbits = _random.Next(1, 6);
         }
 
-        Orbit[] orbits = new Orbit[numOrbits];
+        Godot.GD.Print("Generating ", numOrbits, " orbits around this star.");
+        orbits = new Orbit[numOrbits];
         for (int i = 0; i < numOrbits; i++)
         {
             double R;
@@ -49,16 +56,115 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    TileModel[,] InnerSystemMap() // size -4
+    private bool IsSingleBody(Body.Type bodyType)
     {
-        return null;
+        switch (bodyType)
+        {
+            case Body.Type.AsteroidBelt:
+                return false;
+            default:
+                return true;
+        }
+    }
+
+    public TileModel[,] InnerSystemMap() // size -4
+    {
+        var Tiles = new TileModel[10, 10];
+        TerrainGenRule.Fill(parent: tile, Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+        var center = TerrainGenRule.AddCenter(parent: tile, Tiles, new[] {
+            new TerrainRule(Terrain.TerrainType.Star, props: new Dictionary<PropKey, string>() {
+                {PropKey.SpectralClass, spectralClass.ToString()}
+            })
+        });
+
+        Godot.GD.Print(orbits.Length, " orbits generated around this star.");
+        foreach (Orbit orbit in orbits)
+        {
+            Godot.GD.Print("Distance ", orbit.distance, "AU; Type ", (orbit.body != null) ? orbit.body.bodyType.ToString() : "Empty");
+        }
+
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance < 6)
+        {
+            if (orbits[i].body != null && orbits[i].distance >= 0.6)
+            {
+                var radius = (int)(orbits[i].distance / 0.6);
+                if (!IsSingleBody(orbits[i].body.bodyType))
+                {
+                    TerrainGenRule.AddCircle(parent: tile, Tiles,
+                    rules: new[] {
+                        new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies)
+                    }, center, radius, false);
+                }
+                else
+                {
+                    Terrain.PlanetType planetType = Terrain.PlanetType.Rockball;
+                    switch (orbits[i].body.bodyType)
+                    {
+                        case Body.Type.Chunk:
+                            planetType = Terrain.PlanetType.Rockball; break;
+                        case Body.Type.Terrestrial:
+                            planetType = Terrain.PlanetType.Arid; break;
+                        case Body.Type.GasGiant:
+                            planetType = Terrain.PlanetType.Jovian; break;
+                        case Body.Type.Superjovian:
+                            planetType = Terrain.PlanetType.Jovian; break;
+                    }
+
+                    TerrainGenRule.AddAtDistance(parent: tile, Tiles,
+                    rules: new[] {
+                    new TerrainRule(Terrain.TerrainType.InnerSystemBody, true, props: new Dictionary<PropKey, string>() {
+                        { PropKey.PlanetType, planetType.ToString() }
+                    })},
+                    center,
+                    radius,
+                    mask: new List<Terrain.TerrainType> {
+                        Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.Star
+                    });
+                }
+            }
+            i++;
+        }
+        return Tiles;
     }
 
     TileModel[,] OuterSystemMap() // size -3
     {
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance >= 6 && orbits[i].distance < 60)
+        {
+
+        }
         return null;
     }
 
+    TileModel[,] ScatteredDiskMap() // size -2
+    {
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance >= 60 && orbits[i].distance < 600)
+        {
+
+        }
+        return null;
+    }
+    TileModel[,] HillsCloudMap() // size -1
+    {
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance >= 600 && orbits[i].distance < 6000)
+        {
+
+        }
+        return null;
+    }
+    TileModel[,] SolarSystemMap() // size 0
+    {
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance >= 6000 && orbits[i].distance < 60000)
+        {
+
+        }
+        return null;
+    }
 
     private Star StarData(SpectralClass spectralClass)
     {
@@ -91,6 +197,7 @@ class SolarSystemGenerator : CelestialGenerator
         public Star star;
         public Orbit(double R, Star star)
         {
+            this.star = star;
             this.distance = R;
 
             inner = (R <= star.luminosity * 4);
@@ -149,12 +256,14 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Body
     {
+
         public double temperature;
         public double radius;
         public double density;
         public double mass;
         public Orbit[] moons;
         private readonly Random _random = new Random();
+        public Type bodyType;
         public Body(Type bodyType, double T, Orbit orbit)
         {
             this.bodyType = bodyType;
@@ -195,7 +304,6 @@ class SolarSystemGenerator : CelestialGenerator
 
             orbit = null;
         }
-        public Type bodyType;
 
         public enum Type
         {
@@ -247,7 +355,6 @@ class PlanetGenerator
 {
     PlanetGenerator(PlanetType planetType)
     {
-
     }
 
     public enum PlanetType
