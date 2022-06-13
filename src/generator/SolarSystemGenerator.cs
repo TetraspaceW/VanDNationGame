@@ -97,11 +97,11 @@ class SolarSystemGenerator : CelestialGenerator
         });
 
         var i = 0;
-        while (i < orbits.Length && orbits[i].distance < 6)
+        while (i < orbits.Length && orbits[i].distance <= 3)
         {
-            if (orbits[i].body != null && orbits[i].distance >= 0.6)
+            if (orbits[i].body != null && orbits[i].distance > 0.3)
             {
-                var radius = (int)(orbits[i].distance / 0.6);
+                var radius = (int)Math.Round(orbits[i].distance / 0.6);
                 PlaceWorld(parent, orbits[i].body, radius, true, Tiles, center);
             }
             i++;
@@ -138,7 +138,7 @@ class SolarSystemGenerator : CelestialGenerator
 
             TerrainGenRule.AddAtDistance(parent, Tiles,
             rules: new[] {
-                new TerrainRule(Terrain.TerrainType.InnerSystemBody, inner, props: new Dictionary<PropKey, string>() {
+                new TerrainRule(terrainType, inner, props: new Dictionary<PropKey, string>() {
                     { PropKey.PlanetType, planetType.ToString() }
                 })
             },
@@ -164,11 +164,11 @@ class SolarSystemGenerator : CelestialGenerator
         centerTile.internalMap = new MapModel(centerTile, InnerSystemMap(centerTile));
 
         var i = 0;
-        while (i < orbits.Length && orbits[i].distance < 60)
+        while (i < orbits.Length && orbits[i].distance <= 30)
         {
-            if (orbits[i].body != null && orbits[i].distance >= 6)
+            if (orbits[i].body != null && orbits[i].distance > 3)
             {
-                var radius = (int)(orbits[i].distance / 6);
+                var radius = (int)(int)Math.Round(orbits[i].distance / 6);
                 PlaceWorld(tile, orbits[i].body, radius, false, Tiles, center);
             }
             i++;
