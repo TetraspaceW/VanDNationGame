@@ -76,8 +76,13 @@ public class Terrain
                 return "planets/" + props[PropKey.PlanetType].ToString().ToLower();
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
+            case TerrainType.EpistellarSolarSystem:
+            case TerrainType.EpiepistellarSolarSystem:
+            case TerrainType.EpiepiepistellarSolarSystem:
             case TerrainType.Star:
                 return "stars/star_" + props[PropKey.SpectralClass].ToString().ToLower();
+            case TerrainType.StarSurface:
+                return "stars/starstuff";
             case TerrainType.Land:
                 return "land";
             case TerrainType.Ocean:
@@ -123,9 +128,9 @@ public class Terrain
         Star, InnerSystemBody, AsteroidBeltBodies, EpistellarSolarSystem,
         // -6   10m km across
         // -7   1m km across / Earth SOI
-        OuterLunarSystem, EpiepistellarSolarsystem, StarSurface,
+        OuterLunarSystem, EpiepistellarSolarSystem, StarSurface,
         // -8   100k km across
-        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiEpiepiSolarSystem,
+        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem,
         // -9   10k km across
         TerrestrialPlanet,
         // -10  1k km across

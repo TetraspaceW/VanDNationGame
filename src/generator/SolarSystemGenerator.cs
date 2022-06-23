@@ -5,6 +5,7 @@ class SolarSystemGenerator : CelestialGenerator
 {
     SpectralClass spectralClass;
     TileModel tile;
+    Star star;
     Orbit[] orbits;
     private readonly Random _random = new Random();
     public SolarSystemGenerator(TileModel tile, SpectralClass spectralClass)
@@ -19,7 +20,7 @@ class SolarSystemGenerator : CelestialGenerator
 
         this.tile = tile;
         this.spectralClass = spectralClass;
-        Star star = StarData(spectralClass);
+        this.star = StarData(spectralClass);
         int orbitsTableRoll = _random.Next(1, 11) + ((spectralClass == SpectralClass.K) ? 1 : 0) + ((spectralClass == SpectralClass.M) ? 3 : 0);
         int numOrbits = 0;
         if (orbitsTableRoll <= 1)
@@ -58,13 +59,12 @@ class SolarSystemGenerator : CelestialGenerator
 
     private bool IsSingleBody(Body.Type bodyType)
     {
-        switch (bodyType)
-        {
-            case Body.Type.AsteroidBelt:
-                return false;
-            default:
-                return true;
-        }
+        return (bodyType != Body.Type.AsteroidBelt);
+    }
+
+    private bool IsPlanet(Body.Type bodyType)
+    {
+        return IsSingleBody(bodyType) && (bodyType != Body.Type.Chunk);
     }
 
     TileModel[,] SystemAreaMap(TileModel parent, Terrain.TerrainType systemArea)
@@ -74,8 +74,8 @@ class SolarSystemGenerator : CelestialGenerator
         Terrain.TerrainType centerPieceMaterial;
         bool centerIsZoomable = true;
         double innerRadiusAU;
-        bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
-        double outermostPlanetDistance = OutermostPlanetDistance();
+
+        double stellarRadius = star.radius * 0.00465;
 
         switch (systemArea)
         {
@@ -102,20 +102,83 @@ class SolarSystemGenerator : CelestialGenerator
                 smallBodiesMaterial = Terrain.TerrainType.KuiperBeltBodies;
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
-                centerPieceMaterial = Terrain.TerrainType.Star;
-                centerIsZoomable = false;
+                centerPieceMaterial = Terrain.TerrainType.EpistellarSolarSystem;
                 innerRadiusAU = 0.3;
+                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
+                break;
+            case Terrain.TerrainType.EpistellarSolarSystem:
+                centerPieceMaterial = Terrain.TerrainType.EpiepistellarSolarSystem;
+                innerRadiusAU = 0.03;
+                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
+                break;
+            case Terrain.TerrainType.EpiepistellarSolarSystem:
+                centerPieceMaterial = Terrain.TerrainType.EpiepiepistellarSolarSystem;
+                innerRadiusAU = 0.003;
+                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
+                break;
+            case Terrain.TerrainType.EpiepiepistellarSolarSystem:
+                centerPieceMaterial = Terrain.TerrainType.Star;
+                innerRadiusAU = 0.0003;
                 smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             default:
                 throw new Exception();
         }
 
+        if (stellarRadius > innerRadiusAU)
+        {
+            return GenerateEpiSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, innerRadiusAU);
+        }
+        else
+        {
+            return GenerateStandardSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, centerPieceMaterial, centerIsZoomable, innerRadiusAU);
+
+        }
+
+    }
+
+    public TileModel[,] GenerateEpiSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, double innerRadiusAU)
+    {
+        bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
+        double outermostPlanetDistance = OutermostPlanetDistance();
+        double stellarRadius = star.radius * 0.00465;
+
+        var Tiles = new TileModel[10, 10];
+
+        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
+        var center = TerrainGenRule.AddCenter(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
+        TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
+
+        TerrainGenRule.AddCircle(parent, Tiles, new[] {
+            new TerrainRule(Terrain.TerrainType.StarSurface, false, props: new Dictionary<PropKey, string>() {
+                {PropKey.SpectralClass, spectralClass.ToString()}
+            })
+        }, center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
+
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance <= innerRadiusAU * 10)
+        {
+            if (orbits[i].body != null && orbits[i].distance > innerRadiusAU)
+            {
+                var radius = (int)Math.Round(orbits[i].distance / (innerRadiusAU * 2));
+                PlaceWorld(parent, orbits[i].body, radius, systemArea, Tiles, center);
+            }
+            i++;
+        }
+        return Tiles;
+    }
+
+    public TileModel[,] GenerateStandardSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, Terrain.TerrainType centerPieceMaterial, bool centerIsZoomable, double innerRadiusAU)
+    {
+        bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
+        double outermostPlanetDistance = OutermostPlanetDistance();
+
         var Tiles = new TileModel[10, 10];
 
         // fill the solar system up with small bodies dust
         TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
 
+        // add the central tile of the solar system containing the next step in
         var center = TerrainGenRule.AddCenter(parent, Tiles, new[] {
             new TerrainRule(centerPieceMaterial, centerIsZoomable, props: new Dictionary<PropKey, string>() {
                 {PropKey.SpectralClass, spectralClass.ToString()}
@@ -209,8 +272,9 @@ class SolarSystemGenerator : CelestialGenerator
             center,
             distance,
             mask: new List<Terrain.TerrainType> {
-                Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.OuterSystemBody,
-                Terrain.TerrainType.Star, Terrain.TerrainType.InnerSolarSystem
+                Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.OuterSystemBody, Terrain.TerrainType.FarfarfarSystemBody, Terrain.TerrainType.FarfarSystemBody, Terrain.TerrainType.FarSystemBody,
+                Terrain.TerrainType.Star, Terrain.TerrainType.InnerSolarSystem, Terrain.TerrainType.OuterSolarSystem, Terrain.TerrainType.ScatteredDisk, Terrain.TerrainType.HillsCloud,
+                Terrain.TerrainType.StarSurface
             });
         }
     }
@@ -219,15 +283,15 @@ class SolarSystemGenerator : CelestialGenerator
     {
         switch (spectralClass)
         {
-            case SpectralClass.O: return new Star(L: 100000.0, M: 50.0, age: 0.005);
-            case SpectralClass.B: return new Star(L: 1000.0, M: 10.0, age: 0.05);
-            case SpectralClass.A: return new Star(L: 20.0, M: 2.0, age: 1);
-            case SpectralClass.F: return new Star(L: 4.0, M: 1.5, age: 2);
-            case SpectralClass.G: return new Star(L: 1.0, M: 1.0, age: 5);
-            case SpectralClass.K: return new Star(L: 0.20, M: 0.7, age: 5);
-            case SpectralClass.M: return new Star(L: 0.01, M: 0.2, age: 5);
-            case SpectralClass.D: return new Star(L: 0.01, M: 1.0, age: 5);
-            default: return new Star(L: 1, M: 1, age: 5);
+            case SpectralClass.O: return new Star(R: 10, L: 100000.0, M: 50.0, age: 0.005);
+            case SpectralClass.B: return new Star(R: 5, L: 1000.0, M: 10.0, age: 0.05);
+            case SpectralClass.A: return new Star(R: 1.7, L: 20.0, M: 2.0, age: 1);
+            case SpectralClass.F: return new Star(R: 1.3, L: 4.0, M: 1.5, age: 2);
+            case SpectralClass.G: return new Star(R: 1, L: 1.0, M: 1.0, age: 5);
+            case SpectralClass.K: return new Star(R: 0.8, L: 0.20, M: 0.7, age: 5);
+            case SpectralClass.M: return new Star(R: 0.3, L: 0.01, M: 0.2, age: 5);
+            case SpectralClass.D: return new Star(R: 0.01, L: 0.01, M: 1.0, age: 5);
+            default: return new Star(R: 1, L: 1, M: 1, age: 5);
         }
     }
 
@@ -382,12 +446,14 @@ class SolarSystemGenerator : CelestialGenerator
     class Star
     {
         private readonly Random _random = new Random();
+        public double radius;
         public double luminosity;
         public double mass;
         public int age;
         public int abundance;
-        public Star(double L, double M, double age)
+        public Star(double R, double L, double M, double age)
         {
+            this.radius = R;
             this.luminosity = L;
             this.mass = M;
             this.age = (int)age;
