@@ -59,6 +59,10 @@ public class Terrain
             case TerrainType.KuiperBeltBodies:
             case TerrainType.ScatteredDiskBodies:
                 return "kuiper";
+            case TerrainType.OortCloudObject:
+            case TerrainType.HillsCloudObject:
+            case TerrainType.ScatteredDiskObject:
+                return "kuiper_planet";
             case TerrainType.SolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
             case TerrainType.OuterSolarSystem:
@@ -111,11 +115,11 @@ public class Terrain
         // 0    1 ly across
         SolarSystem, InterstellarSpace,
         // -1   1t km across / 0.1 ly / 60000 AU
-        HillsCloud, OortCloudBodies,
+        HillsCloud, OortCloudBodies, OortCloudObject,
         // -2   100g km across / 6000 AU
-        ScatteredDisk, HillsCloudBodies,
+        ScatteredDisk, HillsCloudBodies, HillsCloudObject,
         // -3   10g km across / 60 AU
-        OuterSolarSystem, ScatteredDiskBodies,
+        OuterSolarSystem, ScatteredDiskBodies, ScatteredDiskObject,
         // -4   1g km across / 6 AU
         InnerSolarSystem, OuterSystemOrbit, OuterSystemBody, KuiperBeltBodies,
         // -5   100m km across / 0.6 AU

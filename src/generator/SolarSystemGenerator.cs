@@ -154,15 +154,31 @@ class SolarSystemGenerator : CelestialGenerator
         Terrain.TerrainType terrainType;
         if (!IsSingleBody(body.bodyType))
         {
-            terrainType = inner ? Terrain.TerrainType.AsteroidBeltBodies : Terrain.TerrainType.KuiperBeltBodies;
+            switch (systemDistance)
+            {
+                case Terrain.TerrainType.SolarSystem: terrainType = Terrain.TerrainType.OortCloudBodies; break;
+                case Terrain.TerrainType.HillsCloud: terrainType = Terrain.TerrainType.HillsCloudBodies; break;
+                case Terrain.TerrainType.ScatteredDisk: terrainType = Terrain.TerrainType.ScatteredDiskBodies; break;
+                case Terrain.TerrainType.OuterSolarSystem: terrainType = Terrain.TerrainType.KuiperBeltBodies; break;
+                case Terrain.TerrainType.InnerSolarSystem: terrainType = Terrain.TerrainType.AsteroidBeltBodies; break;
+                default: terrainType = Terrain.TerrainType.AsteroidBeltBodies; break;
+            }
             TerrainGenRule.AddCircle(parent, Tiles,
             rules: new[] {
-                new TerrainRule(Terrain.TerrainType.AsteroidBeltBodies)
+                new TerrainRule(terrainType)
             }, center, distance, false);
         }
         else
         {
-            terrainType = inner ? Terrain.TerrainType.InnerSystemBody : Terrain.TerrainType.OuterSystemBody;
+            switch (systemDistance)
+            {
+                case Terrain.TerrainType.SolarSystem: terrainType = Terrain.TerrainType.OortCloudObject; break;
+                case Terrain.TerrainType.HillsCloud: terrainType = Terrain.TerrainType.HillsCloudObject; break;
+                case Terrain.TerrainType.ScatteredDisk: terrainType = Terrain.TerrainType.ScatteredDiskObject; break;
+                case Terrain.TerrainType.OuterSolarSystem: terrainType = Terrain.TerrainType.OuterSystemBody; break;
+                case Terrain.TerrainType.InnerSolarSystem: terrainType = Terrain.TerrainType.InnerSystemBody; break;
+                default: terrainType = Terrain.TerrainType.InnerSystemBody; break;
+            }
             Terrain.PlanetType planetType = Terrain.PlanetType.Rockball;
             switch (body.bodyType)
             {
