@@ -3,13 +3,18 @@ using System.Collections.Generic;
 class TerrainGenRule
 {
     static private readonly Random _random = new Random();
-    static public (int, int) AddCenter(TileModel parent, TileModel[,] tiles, TerrainRule[] rules)
+    static public (int, int) ArbitraryCenter(TileModel[,] tiles)
     {
         var (width, height) = Shape(tiles);
 
         var centerX = (width % 2 == 0) ? width / 2 - _random.Next(0, 2) : width / 2;
         var centerY = (height % 2 == 0) ? height / 2 - _random.Next(0, 2) : height / 2;
 
+        return (centerX, centerY);
+    }
+    static public (int, int) AddCenter(TileModel parent, TileModel[,] tiles, TerrainRule[] rules)
+    {
+        var (centerX, centerY) = TerrainGenRule.ArbitraryCenter(tiles);
         tiles[centerX, centerY] = RandomTileFromRule(parent, rules);
         return (centerX, centerY);
     }

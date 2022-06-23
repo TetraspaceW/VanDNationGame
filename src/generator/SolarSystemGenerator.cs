@@ -71,7 +71,7 @@ class SolarSystemGenerator : CelestialGenerator
     {
         Terrain.TerrainType systemArea = parent.terrain.terrainType;
         Terrain.TerrainType fillMaterial = Terrain.TerrainType.SystemOrbit;
-        Terrain.TerrainType smallBodiesMaterial;
+        Terrain.TerrainType smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
         Terrain.TerrainType centerPieceMaterial;
         bool centerIsZoomable = true;
 
@@ -90,7 +90,6 @@ class SolarSystemGenerator : CelestialGenerator
                 smallBodiesMaterial = Terrain.TerrainType.HillsCloudBodies;
                 break;
             case Terrain.TerrainType.ScatteredDisk:
-                fillMaterial = Terrain.TerrainType.ScatteredDiskBodies;
                 centerPieceMaterial = Terrain.TerrainType.OuterSolarSystem;
                 smallBodiesMaterial = Terrain.TerrainType.ScatteredDiskBodies;
                 break;
@@ -100,19 +99,15 @@ class SolarSystemGenerator : CelestialGenerator
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.EpistellarSolarSystem;
-                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             case Terrain.TerrainType.EpistellarSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.EpiepistellarSolarSystem;
-                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             case Terrain.TerrainType.EpiepistellarSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.EpiepiepistellarSolarSystem;
-                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             case Terrain.TerrainType.EpiepiepistellarSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.Star;
-                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             default:
                 throw new Exception();
@@ -137,7 +132,7 @@ class SolarSystemGenerator : CelestialGenerator
         var Tiles = new TileModel[10, 10];
 
         TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
-        var center = TerrainGenRule.AddCenter(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
+        var center = TerrainGenRule.ArbitraryCenter(Tiles);
         TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
 
         TerrainGenRule.AddCircle(parent, Tiles, new[] {
