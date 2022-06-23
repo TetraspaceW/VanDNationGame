@@ -155,16 +155,8 @@ class SolarSystemGenerator : CelestialGenerator
             })
         }, center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
 
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance <= innerRadiusAU * 10)
-        {
-            if (orbits[i].body != null && orbits[i].distance > innerRadiusAU)
-            {
-                var radius = (int)Math.Round(orbits[i].distance / (innerRadiusAU * 2));
-                PlaceWorld(parent, orbits[i].body, radius, systemArea, Tiles, center);
-            }
-            i++;
-        }
+        PlaceWorlds(Tiles, parent, innerRadiusAU, systemArea, center);
+
         return Tiles;
     }
 
@@ -200,6 +192,13 @@ class SolarSystemGenerator : CelestialGenerator
             centerTile.internalMap = new MapModel(centerTile, SystemAreaMap(centerTile, centerPieceMaterial));
         }
 
+        PlaceWorlds(Tiles, parent, innerRadiusAU, systemArea, center);
+
+        return Tiles;
+    }
+
+    private void PlaceWorlds(TileModel[,] Tiles, TileModel parent, double innerRadiusAU, Terrain.TerrainType systemArea, (int, int) center)
+    {
         var i = 0;
         while (i < orbits.Length && orbits[i].distance <= innerRadiusAU * 10)
         {
@@ -210,7 +209,6 @@ class SolarSystemGenerator : CelestialGenerator
             }
             i++;
         }
-        return Tiles;
     }
 
     public TileModel[,] SolarSystemMap() // size 0
