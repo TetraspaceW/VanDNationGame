@@ -67,14 +67,15 @@ class SolarSystemGenerator : CelestialGenerator
         return IsSingleBody(bodyType) && (bodyType != Body.Type.Chunk);
     }
 
-    TileModel[,] SystemAreaMap(TileModel parent, Terrain.TerrainType systemArea)
+    TileModel[,] SystemAreaMap(TileModel parent)
     {
+        Terrain.TerrainType systemArea = parent.terrain.terrainType;
         Terrain.TerrainType fillMaterial = Terrain.TerrainType.SystemOrbit;
         Terrain.TerrainType smallBodiesMaterial;
         Terrain.TerrainType centerPieceMaterial;
         bool centerIsZoomable = true;
-        double innerRadiusAU;
 
+        double innerRadiusAU = (Math.Pow(10, parent.scale + 4) * 6.324) / 10 / 2;
         double stellarRadius = star.radius * 0.00465;
 
         switch (systemArea)
@@ -82,43 +83,35 @@ class SolarSystemGenerator : CelestialGenerator
             case Terrain.TerrainType.SolarSystem:
                 fillMaterial = Terrain.TerrainType.InterstellarSpace;
                 centerPieceMaterial = Terrain.TerrainType.HillsCloud;
-                innerRadiusAU = 3000.0;
                 smallBodiesMaterial = Terrain.TerrainType.InterstellarSpace;
                 break;
             case Terrain.TerrainType.HillsCloud:
                 centerPieceMaterial = Terrain.TerrainType.ScatteredDisk;
-                innerRadiusAU = 300.0;
                 smallBodiesMaterial = Terrain.TerrainType.HillsCloudBodies;
                 break;
             case Terrain.TerrainType.ScatteredDisk:
                 fillMaterial = Terrain.TerrainType.ScatteredDiskBodies;
                 centerPieceMaterial = Terrain.TerrainType.OuterSolarSystem;
-                innerRadiusAU = 30.0;
                 smallBodiesMaterial = Terrain.TerrainType.ScatteredDiskBodies;
                 break;
             case Terrain.TerrainType.OuterSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.InnerSolarSystem;
-                innerRadiusAU = 3.0;
                 smallBodiesMaterial = Terrain.TerrainType.KuiperBeltBodies;
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.EpistellarSolarSystem;
-                innerRadiusAU = 0.3;
                 smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             case Terrain.TerrainType.EpistellarSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.EpiepistellarSolarSystem;
-                innerRadiusAU = 0.03;
                 smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             case Terrain.TerrainType.EpiepistellarSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.EpiepiepistellarSolarSystem;
-                innerRadiusAU = 0.003;
                 smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             case Terrain.TerrainType.EpiepiepistellarSolarSystem:
                 centerPieceMaterial = Terrain.TerrainType.Star;
-                innerRadiusAU = 0.0003;
                 smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             default:
@@ -127,21 +120,19 @@ class SolarSystemGenerator : CelestialGenerator
 
         if (stellarRadius > innerRadiusAU)
         {
-            return GenerateEpiSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, innerRadiusAU);
+            return GenerateEpiSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, stellarRadius, innerRadiusAU);
         }
         else
         {
             return GenerateStandardSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, centerPieceMaterial, centerIsZoomable, innerRadiusAU);
-
         }
 
     }
 
-    public TileModel[,] GenerateEpiSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, double innerRadiusAU)
+    TileModel[,] GenerateEpiSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, double stellarRadius, double innerRadiusAU)
     {
         bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
         double outermostPlanetDistance = OutermostPlanetDistance();
-        double stellarRadius = star.radius * 0.00465;
 
         var Tiles = new TileModel[10, 10];
 
@@ -160,7 +151,7 @@ class SolarSystemGenerator : CelestialGenerator
         return Tiles;
     }
 
-    public TileModel[,] GenerateStandardSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, Terrain.TerrainType centerPieceMaterial, bool centerIsZoomable, double innerRadiusAU)
+    TileModel[,] GenerateStandardSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, Terrain.TerrainType centerPieceMaterial, bool centerIsZoomable, double innerRadiusAU)
     {
         bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
         double outermostPlanetDistance = OutermostPlanetDistance();
@@ -189,7 +180,7 @@ class SolarSystemGenerator : CelestialGenerator
         if (centerIsZoomable)
         {
             var centerTile = Tiles[center.Item1, center.Item2];
-            centerTile.internalMap = new MapModel(centerTile, SystemAreaMap(centerTile, centerPieceMaterial));
+            centerTile.internalMap = new MapModel(centerTile, SystemAreaMap(centerTile));
         }
 
         PlaceWorlds(Tiles, parent, innerRadiusAU, systemArea, center);
@@ -197,7 +188,7 @@ class SolarSystemGenerator : CelestialGenerator
         return Tiles;
     }
 
-    private void PlaceWorlds(TileModel[,] Tiles, TileModel parent, double innerRadiusAU, Terrain.TerrainType systemArea, (int, int) center)
+    void PlaceWorlds(TileModel[,] Tiles, TileModel parent, double innerRadiusAU, Terrain.TerrainType systemArea, (int, int) center)
     {
         var i = 0;
         while (i < orbits.Length && orbits[i].distance <= innerRadiusAU * 10)
@@ -213,7 +204,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     public TileModel[,] SolarSystemMap() // size 0
     {
-        return SystemAreaMap(tile, Terrain.TerrainType.SolarSystem);
+        return SystemAreaMap(tile);
     }
 
     private void PlaceWorld(TileModel parent, Body body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)

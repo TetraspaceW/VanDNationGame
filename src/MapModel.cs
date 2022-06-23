@@ -20,17 +20,6 @@ public class MapModel
         this.Tiles = tiles;
     }
 
-    private void fillMapWith(Terrain.TerrainType terrainType)
-    {
-        for (int x = 0; x < 10; x++)
-        {
-            for (int y = 0; y < 10; y++)
-            {
-                Tiles[x, y] = new TileModel(new Terrain(terrainType), parent, parent.scale - 1);
-            }
-        }
-    }
-
     public int randomNumber(int low, int high)
     {
         return _random.Next(low, high);
