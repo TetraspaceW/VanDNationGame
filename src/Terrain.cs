@@ -152,7 +152,8 @@ public class Terrain
     }
     public enum StarSpectralClass
     {
-        O, B, A, F, G, K, M, D
+        O, B, A, F, G, K, M, D,
+        MIII, KI
     }
 
     public enum GalaxyType

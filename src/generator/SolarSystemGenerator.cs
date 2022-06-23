@@ -275,6 +275,8 @@ class SolarSystemGenerator : CelestialGenerator
             case SpectralClass.K: return new Star(R: 0.8, L: 0.20, M: 0.7, age: 5);
             case SpectralClass.M: return new Star(R: 0.3, L: 0.01, M: 0.2, age: 5);
             case SpectralClass.D: return new Star(R: 0.01, L: 0.01, M: 1.0, age: 5);
+            case SpectralClass.MIII: return new Star(R: 50, L: 1000, M: 1.0, age: 10);
+            case SpectralClass.KI: return new Star(R: 500, L: 30000, M: 10.0, age: 1);
             default: return new Star(R: 1, L: 1, M: 1, age: 5);
         }
     }
@@ -296,7 +298,8 @@ class SolarSystemGenerator : CelestialGenerator
 
     public enum SpectralClass
     {
-        O, B, A, F, G, K, M, D
+        O, B, A, F, G, K, M, D,
+        MIII, KI
     }
 
 

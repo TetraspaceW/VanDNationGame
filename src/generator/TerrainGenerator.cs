@@ -147,6 +147,12 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.SolarSystem, weight: 5, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.D.ToString()}
                     }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.0001*1000000, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.KI.ToString()}
+                    }),
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.4*250, props: new Dictionary<PropKey, string>() {
+                        {PropKey.SpectralClass, Terrain.StarSpectralClass.MIII.ToString()}
+                    }),
                     new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 1895)
                 });
                 break;
