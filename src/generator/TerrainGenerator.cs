@@ -123,7 +123,7 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.StellarCloud:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.00001*1000000, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.00001, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.O.ToString()}
                     }),
                     new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.1, props: new Dictionary<PropKey, string>() {
