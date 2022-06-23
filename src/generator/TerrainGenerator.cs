@@ -161,18 +161,18 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -5:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
                         AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemBody, zoomable: true, props: terrain.props) });
                         break;
                     case -6:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
                         AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) });
                         break;
                 }
                 break;
             case Terrain.TerrainType.OuterLunarSystem:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.OuterLunarOrbit, weight: 98),
+                    new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
                         {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
                     })
@@ -181,7 +181,7 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.InnerLunarSystem:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.InnerLunarOrbit, weight: 98),
+                    new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
                         {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
                     })
@@ -217,9 +217,9 @@ class TerrainGenerator
                         landWeight = 3;
                         break;
                 }
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarOrbit) });
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
                 var planetaryCenter = AddCenter(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.InnerLunarOrbit)
+                    new TerrainRule(Terrain.TerrainType.LunarOrbit)
                 });
                 AddCircle(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Ocean, weight: oceanWeight),
@@ -280,7 +280,7 @@ class TerrainGenerator
         {
             for (double j = -1; j <= 1; j++)
             {
-                double ang = turn + Math.PI/2;
+                double ang = turn + Math.PI / 2;
                 var x1 = (counterclockwise ? -j * Math.Cos(ang) : j * Math.Cos(ang));
                 var y1 = j * Math.Sin(ang);
                 for (double i = -2; i < 2; i += 0.01)

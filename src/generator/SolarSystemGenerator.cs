@@ -69,11 +69,13 @@ class SolarSystemGenerator : CelestialGenerator
 
     TileModel[,] SystemAreaMap(TileModel parent, Terrain.TerrainType systemArea)
     {
-        Terrain.TerrainType fillMaterial;
+        Terrain.TerrainType fillMaterial = Terrain.TerrainType.SystemOrbit;
+        Terrain.TerrainType smallBodiesMaterial;
         Terrain.TerrainType centerPieceMaterial;
         bool centerIsZoomable = true;
         double innerRadiusAU;
         bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
+        double outermostPlanetDistance = OutermostPlanetDistance();
 
         switch (systemArea)
         {
@@ -81,27 +83,29 @@ class SolarSystemGenerator : CelestialGenerator
                 fillMaterial = Terrain.TerrainType.InterstellarSpace;
                 centerPieceMaterial = Terrain.TerrainType.HillsCloud;
                 innerRadiusAU = 3000.0;
+                smallBodiesMaterial = Terrain.TerrainType.InterstellarSpace;
                 break;
             case Terrain.TerrainType.HillsCloud:
-                fillMaterial = Terrain.TerrainType.HillsCloudBodies;
                 centerPieceMaterial = Terrain.TerrainType.ScatteredDisk;
                 innerRadiusAU = 300.0;
+                smallBodiesMaterial = Terrain.TerrainType.HillsCloudBodies;
                 break;
             case Terrain.TerrainType.ScatteredDisk:
                 fillMaterial = Terrain.TerrainType.ScatteredDiskBodies;
                 centerPieceMaterial = Terrain.TerrainType.OuterSolarSystem;
                 innerRadiusAU = 30.0;
+                smallBodiesMaterial = Terrain.TerrainType.ScatteredDiskBodies;
                 break;
             case Terrain.TerrainType.OuterSolarSystem:
-                fillMaterial = Terrain.TerrainType.OuterSystemOrbit;
                 centerPieceMaterial = Terrain.TerrainType.InnerSolarSystem;
                 innerRadiusAU = 3.0;
+                smallBodiesMaterial = Terrain.TerrainType.KuiperBeltBodies;
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
-                fillMaterial = Terrain.TerrainType.InnerSystemOrbit;
                 centerPieceMaterial = Terrain.TerrainType.Star;
                 centerIsZoomable = false;
                 innerRadiusAU = 0.3;
+                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
                 break;
             default:
                 throw new Exception();
@@ -109,7 +113,8 @@ class SolarSystemGenerator : CelestialGenerator
 
         var Tiles = new TileModel[10, 10];
 
-        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(fillMaterial) });
+        // fill the solar system up with small bodies dust
+        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
 
         var center = TerrainGenRule.AddCenter(parent, Tiles, new[] {
             new TerrainRule(centerPieceMaterial, centerIsZoomable, props: new Dictionary<PropKey, string>() {
@@ -122,6 +127,9 @@ class SolarSystemGenerator : CelestialGenerator
         {
             TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(Terrain.TerrainType.OortCloudBodies) }, center, 5, true, center);
         }
+
+        // remove the small bodies dust from any orbits that are cleared by outer planets
+        TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true, center);
 
         if (centerIsZoomable)
         {
@@ -172,9 +180,9 @@ class SolarSystemGenerator : CelestialGenerator
         {
             switch (systemDistance)
             {
-                case Terrain.TerrainType.SolarSystem: terrainType = Terrain.TerrainType.OortCloudObject; break;
-                case Terrain.TerrainType.HillsCloud: terrainType = Terrain.TerrainType.HillsCloudObject; break;
-                case Terrain.TerrainType.ScatteredDisk: terrainType = Terrain.TerrainType.ScatteredDiskObject; break;
+                case Terrain.TerrainType.SolarSystem: terrainType = Terrain.TerrainType.FarfarfarSystemBody; break;
+                case Terrain.TerrainType.HillsCloud: terrainType = Terrain.TerrainType.FarfarSystemBody; break;
+                case Terrain.TerrainType.ScatteredDisk: terrainType = Terrain.TerrainType.FarSystemBody; break;
                 case Terrain.TerrainType.OuterSolarSystem: terrainType = Terrain.TerrainType.OuterSystemBody; break;
                 case Terrain.TerrainType.InnerSolarSystem: terrainType = Terrain.TerrainType.InnerSystemBody; break;
                 default: terrainType = Terrain.TerrainType.InnerSystemBody; break;
@@ -219,8 +227,23 @@ class SolarSystemGenerator : CelestialGenerator
             case SpectralClass.K: return new Star(L: 0.20, M: 0.7, age: 5);
             case SpectralClass.M: return new Star(L: 0.01, M: 0.2, age: 5);
             case SpectralClass.D: return new Star(L: 0.01, M: 1.0, age: 5);
-            default: return new Star(L: 1.0, M: 1.0, age: 5.0);
+            default: return new Star(L: 1, M: 1, age: 5);
         }
+    }
+
+    private double OutermostPlanetDistance()
+    {
+        if (orbits.Length > 0)
+        {
+            for (int i = orbits.Length - 1; i >= 0; i--)
+            {
+                if (orbits[i].body != null && orbits[i].body.bodyType != Body.Type.AsteroidBelt && orbits[i].body.bodyType != Body.Type.Chunk)
+                {
+                    return orbits[i].distance;
+                }
+            }
+        }
+        return 0;
     }
 
     public enum SpectralClass

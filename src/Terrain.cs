@@ -23,10 +23,8 @@ public class Terrain
             case TerrainType.IntergalacticSpace:
             case TerrainType.GalacticHalo:
             case TerrainType.InterstellarSpace:
-            case TerrainType.OuterSystemOrbit:
-            case TerrainType.InnerSystemOrbit:
-            case TerrainType.OuterLunarOrbit:
-            case TerrainType.InnerLunarOrbit:
+            case TerrainType.SystemOrbit:
+            case TerrainType.LunarOrbit:
                 return "void";
             case TerrainType.CMB:
             case TerrainType.InteruniversalSpace:
@@ -59,15 +57,14 @@ public class Terrain
             case TerrainType.KuiperBeltBodies:
             case TerrainType.ScatteredDiskBodies:
                 return "kuiper";
-            case TerrainType.OortCloudObject:
-            case TerrainType.HillsCloudObject:
-            case TerrainType.ScatteredDiskObject:
-                return "kuiper_planet";
             case TerrainType.SolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
             case TerrainType.OuterSolarSystem:
             case TerrainType.InnerSolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToString().ToLower() + "_noletter";
+            case TerrainType.FarfarfarSystemBody:
+            case TerrainType.FarfarSystemBody:
+            case TerrainType.FarSystemBody:
             case TerrainType.OuterSystemBody:
                 return "outer_planet";
             case TerrainType.InnerSystemBody:
@@ -115,22 +112,22 @@ public class Terrain
         // 0    1 ly across
         SolarSystem, InterstellarSpace,
         // -1   1t km across / 0.1 ly / 60000 AU
-        HillsCloud, OortCloudBodies, OortCloudObject,
+        HillsCloud, OortCloudBodies, FarfarfarSystemBody, SystemOrbit,
         // -2   100g km across / 6000 AU
-        ScatteredDisk, HillsCloudBodies, HillsCloudObject,
+        ScatteredDisk, HillsCloudBodies, FarfarSystemBody,
         // -3   10g km across / 60 AU
-        OuterSolarSystem, ScatteredDiskBodies, ScatteredDiskObject,
+        OuterSolarSystem, ScatteredDiskBodies, FarSystemBody,
         // -4   1g km across / 6 AU
-        InnerSolarSystem, OuterSystemOrbit, OuterSystemBody, KuiperBeltBodies,
+        InnerSolarSystem, OuterSystemBody, KuiperBeltBodies,
         // -5   100m km across / 0.6 AU
-        Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies,
+        Star, InnerSystemBody, AsteroidBeltBodies, EpistellarSolarSystem,
         // -6   10m km across
         // -7   1m km across / Earth SOI
-        OuterLunarSystem, EpistellarSystemOrbit,
+        OuterLunarSystem, EpiepistellarSolarsystem, StarSurface,
         // -8   100k km across
-        InnerLunarSystem, OuterLunarOrbit, LunarBody, GasGiant, EpiepistellarSystemOrbit,
+        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiEpiepiSolarSystem,
         // -9   10k km across
-        TerrestrialPlanet, InnerLunarOrbit, EpiepiepistellarSystemOrbit,
+        TerrestrialPlanet,
         // -10  1k km across
         Land, Ocean
         // -11  100 km across
