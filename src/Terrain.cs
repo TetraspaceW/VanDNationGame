@@ -122,11 +122,11 @@ public class Terrain
         Star, InnerSystemOrbit, InnerSystemBody, AsteroidBeltBodies,
         // -6   10m km across
         // -7   1m km across / Earth SOI
-        OuterLunarSystem,
+        OuterLunarSystem, EpistellarSystemOrbit,
         // -8   100k km across
-        InnerLunarSystem, OuterLunarOrbit, LunarBody, GasGiant,
+        InnerLunarSystem, OuterLunarOrbit, LunarBody, GasGiant, EpiepistellarSystemOrbit,
         // -9   10k km across
-        TerrestrialPlanet, InnerLunarOrbit,
+        TerrestrialPlanet, InnerLunarOrbit, EpiepiepistellarSystemOrbit,
         // -10  1k km across
         Land, Ocean
         // -11  100 km across

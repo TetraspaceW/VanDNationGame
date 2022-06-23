@@ -67,50 +67,90 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    public TileModel[,] EpiepiepistellarSystemMap() // size -7, engulfed by G star
+    TileModel[,] SystemAreaMap(TileModel parent, Terrain.TerrainType systemArea)
     {
-        // Closest a planet can be to its star is 374 Mm / 3 tiles at this distance
-        // you might be thinking isn't this basically kissing the M class star?
-        // and yep, it totally is! M class stars are tepid
-        // you could probably touch one and you'd be fine
+        Terrain.TerrainType fillMaterial;
+        Terrain.TerrainType centerPieceMaterial;
+        bool centerIsZoomable = true;
+        double innerRadiusAU;
+        bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
 
-        return null;
-    }
-    public TileModel[,] EpiepistellarSystemMap() // size -6, engulfed by O star
-    {
-        return null;
-    }
+        switch (systemArea)
+        {
+            case Terrain.TerrainType.SolarSystem:
+                fillMaterial = Terrain.TerrainType.InterstellarSpace;
+                centerPieceMaterial = Terrain.TerrainType.HillsCloud;
+                innerRadiusAU = 3000.0;
+                break;
+            case Terrain.TerrainType.HillsCloud:
+                fillMaterial = Terrain.TerrainType.HillsCloudBodies;
+                centerPieceMaterial = Terrain.TerrainType.ScatteredDisk;
+                innerRadiusAU = 300.0;
+                break;
+            case Terrain.TerrainType.ScatteredDisk:
+                fillMaterial = Terrain.TerrainType.ScatteredDiskBodies;
+                centerPieceMaterial = Terrain.TerrainType.OuterSolarSystem;
+                innerRadiusAU = 30.0;
+                break;
+            case Terrain.TerrainType.OuterSolarSystem:
+                fillMaterial = Terrain.TerrainType.OuterSystemOrbit;
+                centerPieceMaterial = Terrain.TerrainType.InnerSolarSystem;
+                innerRadiusAU = 3.0;
+                break;
+            case Terrain.TerrainType.InnerSolarSystem:
+                fillMaterial = Terrain.TerrainType.InnerSystemOrbit;
+                centerPieceMaterial = Terrain.TerrainType.Star;
+                centerIsZoomable = false;
+                innerRadiusAU = 0.3;
+                break;
+            default:
+                throw new Exception();
+        }
 
-    public TileModel[,] EpistellarSystemMap() // size -5
-    {
-        return null;
-    }
-
-    public TileModel[,] InnerSystemMap(TileModel parent) // size -4
-    {
         var Tiles = new TileModel[10, 10];
-        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemOrbit) });
+
+        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(fillMaterial) });
+
         var center = TerrainGenRule.AddCenter(parent, Tiles, new[] {
-            new TerrainRule(Terrain.TerrainType.Star, props: new Dictionary<PropKey, string>() {
+            new TerrainRule(centerPieceMaterial, centerIsZoomable, props: new Dictionary<PropKey, string>() {
                 {PropKey.SpectralClass, spectralClass.ToString()}
             })
         });
 
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance <= 3)
+        // if it's the whole solar system view, add an Oort cloud with r = 5 tiles / 0.5 ly
+        if (isWholeSystem)
         {
-            if (orbits[i].body != null && orbits[i].distance > 0.3)
+            TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(Terrain.TerrainType.OortCloudBodies) }, center, 5, true, center);
+        }
+
+        if (centerIsZoomable)
+        {
+            var centerTile = Tiles[center.Item1, center.Item2];
+            centerTile.internalMap = new MapModel(centerTile, SystemAreaMap(centerTile, centerPieceMaterial));
+        }
+
+        var i = 0;
+        while (i < orbits.Length && orbits[i].distance <= innerRadiusAU * 10)
+        {
+            if (orbits[i].body != null && orbits[i].distance > innerRadiusAU)
             {
-                var radius = (int)Math.Round(orbits[i].distance / 0.6);
-                PlaceWorld(parent, orbits[i].body, radius, true, Tiles, center);
+                var radius = (int)Math.Round(orbits[i].distance / (innerRadiusAU * 2));
+                PlaceWorld(parent, orbits[i].body, radius, systemArea, Tiles, center);
             }
             i++;
         }
         return Tiles;
     }
 
-    private void PlaceWorld(TileModel parent, Body body, int distance, bool inner, TileModel[,] Tiles, (int, int) center)
+    public TileModel[,] SolarSystemMap() // size 0
     {
+        return SystemAreaMap(tile, Terrain.TerrainType.SolarSystem);
+    }
+
+    private void PlaceWorld(TileModel parent, Body body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
+    {
+        var inner = (systemDistance == Terrain.TerrainType.InnerSolarSystem);
+
         Terrain.TerrainType terrainType;
         if (!IsSingleBody(body.bodyType))
         {
@@ -149,59 +189,6 @@ class SolarSystemGenerator : CelestialGenerator
                 Terrain.TerrainType.Star, Terrain.TerrainType.InnerSolarSystem
             });
         }
-    }
-
-    public TileModel[,] OuterSystemMap() // size -3
-    {
-        var Tiles = new TileModel[10, 10];
-        TerrainGenRule.Fill(parent: tile, Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSystemOrbit) });
-        var center = TerrainGenRule.AddCenter(parent: tile, Tiles, new[] {
-            new TerrainRule(Terrain.TerrainType.InnerSolarSystem, true, props: new Dictionary<PropKey, string>() {
-                {PropKey.SpectralClass, spectralClass.ToString()}
-            })
-        });
-        var centerTile = Tiles[center.Item1, center.Item2];
-        centerTile.internalMap = new MapModel(centerTile, InnerSystemMap(centerTile));
-
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance <= 30)
-        {
-            if (orbits[i].body != null && orbits[i].distance > 3)
-            {
-                var radius = (int)(int)Math.Round(orbits[i].distance / 6);
-                PlaceWorld(tile, orbits[i].body, radius, false, Tiles, center);
-            }
-            i++;
-        }
-        return Tiles;
-    }
-
-    TileModel[,] ScatteredDiskMap() // size -2
-    {
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance >= 60 && orbits[i].distance < 600)
-        {
-
-        }
-        return null;
-    }
-    TileModel[,] HillsCloudMap() // size -1
-    {
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance >= 600 && orbits[i].distance < 6000)
-        {
-
-        }
-        return null;
-    }
-    TileModel[,] SolarSystemMap() // size 0
-    {
-        var i = 0;
-        while (i < orbits.Length && orbits[i].distance >= 6000 && orbits[i].distance < 60000)
-        {
-
-        }
-        return null;
     }
 
     private Star StarData(SpectralClass spectralClass)

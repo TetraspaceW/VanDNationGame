@@ -151,30 +151,12 @@ class TerrainGenerator
                 });
                 break;
             case Terrain.TerrainType.SolarSystem:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.InterstellarSpace)
-                });
-                var system = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HillsCloud, zoomable: true, props: terrain.props) });
-                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OortCloudBodies) }, system, 5, true, system);
-                break;
-            case Terrain.TerrainType.HillsCloud:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.HillsCloudBodies)
-                });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ScatteredDisk, zoomable: true, props: terrain.props) });
-                break;
-            case Terrain.TerrainType.ScatteredDisk:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.ScatteredDiskBodies)
-                });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterSolarSystem, zoomable: true, props: terrain.props) });
-                break;
-            case Terrain.TerrainType.OuterSolarSystem:
                 SolarSystemGenerator.SpectralClass ossStarType;
                 Enum.TryParse<SolarSystemGenerator.SpectralClass>(terrain.props[PropKey.SpectralClass], out ossStarType);
                 var solarSystemGenerator = new SolarSystemGenerator(tile, ossStarType);
-                Tiles = solarSystemGenerator.OuterSystemMap();
+                Tiles = solarSystemGenerator.SolarSystemMap();
                 break;
+
             case Terrain.TerrainType.InnerSystemBody:
                 switch (tile.scale)
                 {
