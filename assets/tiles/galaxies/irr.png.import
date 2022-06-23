@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Irr.png-5144aa2b18221fd97543397d8eb31192.stex"
+path="res://.import/irr.png-3aad4711617069155f936a657fab4d88.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/Irr.png"
-dest_files=[ "res://.import/Irr.png-5144aa2b18221fd97543397d8eb31192.stex" ]
+source_file="res://assets/tiles/galaxies/irr.png"
+dest_files=[ "res://.import/irr.png-3aad4711617069155f936a657fab4d88.stex" ]
 
 [params]
 

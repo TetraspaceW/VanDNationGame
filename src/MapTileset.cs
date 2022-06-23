@@ -15,7 +15,7 @@ public class MapTileset
             var id = tileset.GetLastUnusedTileId();
             tileset.CreateTile(id);
             tileset.TileSetName(id, image);
-            tileset.TileSetTexture(id, GD.Load<Texture>("res://assets/tiles/" + image + ".png"));
+            tileset.TileSetTexture(id, GD.Load<Texture>("res://assets/tiles/" + image.ToLower() + ".png"));
             tileset.TileSetRegion(id, new Rect2(0, 0, 64, 64));
         }
     }

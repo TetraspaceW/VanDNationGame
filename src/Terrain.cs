@@ -46,7 +46,7 @@ public class Terrain
             case TerrainType.StellarCloud:
                 return "stars_sparse";
             case TerrainType.Galaxy:
-                return "galaxies/" + props[PropKey.GalaxyType].ToString();
+                return "galaxies/" + props[PropKey.GalaxyType].ToString().ToLower();
             case TerrainType.DwarfGalaxy:
                 return "galaxies/dwarf_galaxy";
             case TerrainType.GalacticCore:
