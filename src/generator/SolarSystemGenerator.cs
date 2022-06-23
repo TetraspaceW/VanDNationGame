@@ -115,6 +115,7 @@ class SolarSystemGenerator : CelestialGenerator
 
         if (stellarRadius > innerRadiusAU)
         {
+            parent.SetTerrainType(Terrain.TerrainType.Star);
             return GenerateEpiSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, stellarRadius, innerRadiusAU);
         }
         else

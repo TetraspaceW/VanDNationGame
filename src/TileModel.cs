@@ -17,6 +17,12 @@ public class TileModel
         this.image = terrain.filenameForTileType();
     }
 
+    public void SetTerrainType(Terrain.TerrainType terrainType)
+    {
+        terrain.terrainType = terrainType;
+        image = terrain.filenameForTileType();
+    }
+
     public Texture imageForTileType()
     {
         return GD.Load<Texture>("res://assets/tiles/" + image + ".png");
