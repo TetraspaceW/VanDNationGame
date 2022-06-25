@@ -205,8 +205,6 @@ class SolarSystemGenerator : CelestialGenerator
 
     private void PlaceWorld(TileModel parent, Body body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
     {
-        var inner = (systemDistance == Terrain.TerrainType.InnerSolarSystem);
-
         Terrain.TerrainType terrainType;
         if (!IsSingleBody(body.bodyType))
         {
@@ -235,23 +233,21 @@ class SolarSystemGenerator : CelestialGenerator
                 case Terrain.TerrainType.InnerSolarSystem: terrainType = Terrain.TerrainType.InnerSystemBody; break;
                 default: terrainType = Terrain.TerrainType.InnerSystemBody; break;
             }
-            Terrain.PlanetType planetType = Terrain.PlanetType.Rockball;
+            Terrain.PlanetType planetType = Terrain.PlanetType.Terrestrial;
             switch (body.bodyType)
             {
-                case Body.Type.Chunk:
-                    planetType = Terrain.PlanetType.Rockball; break;
-                case Body.Type.Terrestrial:
-                    planetType = Terrain.PlanetType.Arid; break;
-                case Body.Type.GasGiant:
-                    planetType = Terrain.PlanetType.Jovian; break;
-                case Body.Type.Superjovian:
-                    planetType = Terrain.PlanetType.Jovian; break;
+                case Body.Type.Chunk: case Body.Type.Terrestrial: planetType = Terrain.PlanetType.Terrestrial; break;
+                case Body.Type.GasGiant: case Body.Type.Superjovian: planetType = Terrain.PlanetType.Jovian; break;
             }
 
             TerrainGenRule.AddAtDistance(parent, Tiles,
             rules: new[] {
-                new TerrainRule(terrainType, inner, props: new Dictionary<PropKey, string>() {
-                    { PropKey.PlanetType, planetType.ToString() }
+                new TerrainRule(terrainType, true, props: new Dictionary<PropKey, string>() {
+                    { PropKey.PlanetType, planetType.ToString() },
+                    { PropKey.PlanetIsLifeBearing, body.hasLife.ToString() },
+                    { PropKey.PlanetHydrosphereType, body.hydrosphere.ToString() },
+                    { PropKey.PlanetHydrosphereCoverage, body.hydrosphereCoverage.ToString() },
+                    { PropKey.PlanetRadius, body.radius.ToString() }
                 })
             },
             center,
@@ -303,6 +299,10 @@ class SolarSystemGenerator : CelestialGenerator
         MIII, KI
     }
 
+    public enum Hydrosphere
+    {
+        Liquid, IceSheet, None
+    }
 
     class Orbit
     {
@@ -384,14 +384,17 @@ class SolarSystemGenerator : CelestialGenerator
         public Orbit[] moons;
         private readonly Random _random = new Random();
         public Type bodyType;
+        public Hydrosphere hydrosphere;
+        public int hydrosphereCoverage;
+        public bool hasLife;
         public Body(Type bodyType, double T, Orbit orbit)
         {
             this.bodyType = bodyType;
             temperature = T;
 
-            var sizeRoll = _random.Next(1, 11);
-            var innerSizeRoll = _random.Next(1, 11);
-            var densityRoll = Math.Min(Math.Max(_random.Next(1, 11) + orbit.star.abundance, 1), 11);
+            var sizeRoll = d(10);
+            var innerSizeRoll = d(10);
+            var densityRoll = Math.Min(Math.Max(d(10) + orbit.star.abundance, 1), 11);
             switch (bodyType)
             {
                 case Type.Chunk:
@@ -422,7 +425,95 @@ class SolarSystemGenerator : CelestialGenerator
                     break;
             }
 
+            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, T);
+
+            hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
+
             orbit = null;
+        }
+
+        (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner, double T)
+        {
+            Hydrosphere hydrosphere = Hydrosphere.None;
+            int hydrosphereCoverage = 0;
+            if (inner)
+            {
+                if (T <= 245)
+                {
+                    hydrosphere = Hydrosphere.IceSheet;
+                }
+                else if (T <= 370)
+                {
+                    hydrosphere = Hydrosphere.Liquid;
+                }
+            }
+
+            if (hydrosphere != Hydrosphere.None)
+            {
+                var hydroRoll = d(10);
+                if (radius <= 2000)
+                {
+                    switch (hydroRoll)
+                    {
+                        case 1: case 2: case 3: case 4: case 5: break;
+                        case 6: case 7: hydrosphereCoverage += d(10); break;
+                        case 8: hydrosphereCoverage += d(10) + 10; break;
+                        case 9:
+                        case 10:
+                            hydrosphereCoverage += d(10, N: (hydroRoll - 8) * 5);
+                            hydrosphereCoverage += (hydroRoll - 9) * 10;
+                            hydrosphereCoverage = Math.Min(hydrosphereCoverage, 100);
+                            break;
+                    }
+                }
+                else if (radius <= 4000)
+                {
+                    switch (hydroRoll)
+                    {
+                        case 1: case 2: break;
+                        case 3: case 4: hydrosphereCoverage += d(10); break;
+                        case 5: case 6: case 7: case 8: case 9: hydrosphereCoverage += d(10) + (hydroRoll - 4) * 10; break;
+                        case 10:
+                            hydrosphereCoverage += d(10, N: 10) + 10;
+                            hydrosphereCoverage = Math.Min(hydrosphereCoverage, 100);
+                            break;
+                    }
+                }
+                else if (radius <= 7000)
+                {
+                    switch (hydroRoll)
+                    {
+                        case 1: break;
+                        case 2: hydrosphereCoverage += d(10, N: 2); break;
+                        case 3: case 4: case 5: case 6: case 7: case 8: hydrosphereCoverage += d(10) + (hydroRoll - 1) * 10; break;
+                        case 9: hydrosphereCoverage += d(10, N: 2) + 80; break;
+                        case 10: hydrosphereCoverage = 100; break;
+                    }
+                }
+                else
+                {
+                    switch (hydroRoll)
+                    {
+                        case 1: break;
+                        case 2: hydrosphereCoverage += d(10, N: 2); break;
+                        case 3: case 4: hydrosphereCoverage += d(10, N: 2) + (hydroRoll - 2) * 20; break;
+                        case 5: case 6: case 7: case 8: hydrosphereCoverage += d(10) + (hydroRoll + 1) * 10; break;
+                        case 9: case 10: hydrosphereCoverage = 100; break;
+                    }
+                }
+            }
+
+            return (hydrosphere, hydrosphereCoverage);
+        }
+
+        int d(int n, int N = 1)
+        {
+            var c = 0;
+            for (int i = 0; i < N; i++)
+            {
+                c += _random.Next(1, n + 1);
+            }
+            return c;
         }
 
         public enum Type
@@ -468,26 +559,5 @@ class SolarSystemGenerator : CelestialGenerator
                 this.abundance = -3;
             }
         }
-    }
-
-
-}
-
-class PlanetGenerator
-{
-    PlanetGenerator(PlanetType planetType)
-    {
-    }
-
-    public enum PlanetType
-    {
-        // Dwarf Terrestrial
-        Rockball, Arean, Meltball, Hebean, Promethean, Snowball,
-        // Terrestrial
-        Telluric, Arid, Tectonic, Oceanic,
-        // Helian
-        Helian, Panthallasic,
-        // Jovian
-        Jovian
     }
 }

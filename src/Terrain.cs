@@ -83,10 +83,14 @@ public class Terrain
                 return "stars/star_" + props[PropKey.SpectralClass].ToString().ToLower();
             case TerrainType.StarSurface:
                 return "stars/starstuff";
-            case TerrainType.Land:
+            case TerrainType.VerdantTerrain:
                 return "land";
             case TerrainType.Ocean:
                 return "ocean";
+            case TerrainType.IceSheet:
+                return "ice";
+            case TerrainType.BarrenTerrain:
+                return "barren";
             default:
                 return null;
         }
@@ -134,19 +138,16 @@ public class Terrain
         // -9   10k km across
         TerrestrialPlanet,
         // -10  1k km across
-        Land, Ocean
+        BarrenTerrain, VerdantTerrain, Ocean, IceSheet
         // -11  100 km across
         // -12  10 km across
     }
 
     public enum PlanetType
     {
-        // Dwarf Terrestrial
-        Rockball, Arean, Meltball, Hebean, Promethean, Snowball,
+        Chunk,
         // Terrestrial
-        Telluric, Arid, Tectonic, Oceanic,
-        // Helian
-        Helian, Panthallasic,
+        Terrestrial,
         // Jovian
         Jovian
     }
@@ -174,6 +175,7 @@ public class Terrain
 
 public enum PropKey
 {
+    PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing,
     PlanetType,
     SpectralClass,
     GalaxyType

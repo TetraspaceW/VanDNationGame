@@ -162,16 +162,24 @@ class TerrainGenerator
                 var solarSystemGenerator = new SolarSystemGenerator(tile, ossStarType);
                 Tiles = solarSystemGenerator.SolarSystemMap();
                 break;
+            case Terrain.TerrainType.FarfarfarSystemBody:
+            case Terrain.TerrainType.FarfarSystemBody:
+            case Terrain.TerrainType.FarSystemBody:
+            case Terrain.TerrainType.OuterSystemBody:
             case Terrain.TerrainType.InnerSystemBody:
                 switch (tile.scale)
                 {
-                    case -5:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerSystemBody, zoomable: true, props: terrain.props) });
-                        break;
                     case -6:
                         Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
                         AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) });
+                        break;
+                    case -7:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
+                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
+                        break;
+                    default:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
+                        AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) });
                         break;
                 }
                 break;
@@ -179,7 +187,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
+                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()}
                     })
                 });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
@@ -188,7 +196,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Rockball.ToString()}
+                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()}
                     })
                 });
                 if (PlanetIsTerrestrial(terrain.props[PropKey.PlanetType]))
@@ -201,39 +209,35 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
-                var (oceanWeight, landWeight) = (0, 1);
-                Terrain.PlanetType terrestrialPlanetType;
-                Enum.TryParse<Terrain.PlanetType>(terrain.props[PropKey.PlanetType], out terrestrialPlanetType);
-                switch (terrestrialPlanetType)
-                {
-                    case Terrain.PlanetType.Oceanic:
-                    case Terrain.PlanetType.Panthallasic:
-                        oceanWeight = 1;
-                        landWeight = 0;
-                        break;
-                    case Terrain.PlanetType.Tectonic:
-                    case Terrain.PlanetType.Promethean:
-                        oceanWeight = 3;
-                        landWeight = 1;
-                        break;
-                    case Terrain.PlanetType.Hebean:
-                    case Terrain.PlanetType.Arid:
-                        oceanWeight = 1;
-                        landWeight = 3;
-                        break;
-                }
+                int oceanWeight;
+                int.TryParse(terrain.props[PropKey.PlanetHydrosphereCoverage], out oceanWeight);
+
+                SolarSystemGenerator.Hydrosphere hydrosphere;
+                Enum.TryParse<SolarSystemGenerator.Hydrosphere>(terrain.props[PropKey.PlanetHydrosphereType], out hydrosphere);
+
+                bool isLifeBearing;
+                bool.TryParse(terrain.props[PropKey.PlanetIsLifeBearing], out isLifeBearing);
+
+                double planetaryRadius;
+                double.TryParse(terrain.props[PropKey.PlanetRadius], out planetaryRadius);
+                var planetaryTileSize = (int)Math.Round(planetaryRadius / 1000);
+
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
-                var planetaryCenter = AddCenter(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.LunarOrbit)
-                });
+                var planetaryCenter = TerrainGenRule.ArbitraryCenter(Tiles);
                 AddCircle(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Ocean, weight: oceanWeight),
-                    new TerrainRule(Terrain.TerrainType.Land, true, weight: landWeight)
-                }, planetaryCenter, 100, true);
+                    new TerrainRule(hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid ? Terrain.TerrainType.Ocean : Terrain.TerrainType.IceSheet, weight: oceanWeight),
+                    new TerrainRule(isLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight)
+                }, planetaryCenter, planetaryTileSize < 5 ? planetaryTileSize : 10, true);
                 break;
-            case Terrain.TerrainType.Land:
+
+            case Terrain.TerrainType.BarrenTerrain:
                 Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Land, true)
+                    new TerrainRule(Terrain.TerrainType.BarrenTerrain, true)
+                });
+                break;
+            case Terrain.TerrainType.VerdantTerrain:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.VerdantTerrain, true)
                 });
                 break;
         }
@@ -353,18 +357,9 @@ class TerrainGenerator
         switch (output)
         {
             case Terrain.PlanetType.Jovian:
-            case Terrain.PlanetType.Helian:
-            case Terrain.PlanetType.Panthallasic:
                 return false;
-            case Terrain.PlanetType.Rockball:
-            case Terrain.PlanetType.Meltball:
-            case Terrain.PlanetType.Hebean:
-            case Terrain.PlanetType.Promethean:
-            case Terrain.PlanetType.Snowball:
-            case Terrain.PlanetType.Telluric:
-            case Terrain.PlanetType.Arid:
-            case Terrain.PlanetType.Tectonic:
-            case Terrain.PlanetType.Oceanic:
+            case Terrain.PlanetType.Terrestrial:
+            case Terrain.PlanetType.Chunk:
                 return true;
         }
         return false;
