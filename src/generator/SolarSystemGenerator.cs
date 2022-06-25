@@ -57,14 +57,14 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    private bool IsSingleBody(Body.Type bodyType)
+    private bool IsSingleBody(World.Type bodyType)
     {
-        return (bodyType != Body.Type.AsteroidBelt);
+        return (bodyType != World.Type.AsteroidBelt);
     }
 
-    private bool IsPlanet(Body.Type bodyType)
+    private bool IsPlanet(World.Type bodyType)
     {
-        return IsSingleBody(bodyType) && (bodyType != Body.Type.Chunk);
+        return IsSingleBody(bodyType) && (bodyType != World.Type.Chunk);
     }
 
     TileModel[,] SystemAreaMap(TileModel parent)
@@ -76,7 +76,7 @@ class SolarSystemGenerator : CelestialGenerator
         bool centerIsZoomable = true;
 
         double innerRadiusAU = (Math.Pow(10, parent.scale + 4) * 6.324) / 10 / 2;
-        double stellarRadius = star.radius * 0.00465;
+        double centralBodyRadius = star.radius * 0.00465;
 
         switch (systemArea)
         {
@@ -113,10 +113,10 @@ class SolarSystemGenerator : CelestialGenerator
                 throw new Exception();
         }
 
-        if (stellarRadius > innerRadiusAU)
+        if (centralBodyRadius > innerRadiusAU)
         {
             parent.SetTerrainType(Terrain.TerrainType.Star);
-            return GenerateEpiSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, stellarRadius, innerRadiusAU);
+            return GenerateEpiSystem(parent, systemArea, fillMaterial, smallBodiesMaterial, centralBodyRadius, innerRadiusAU);
         }
         else
         {
@@ -203,7 +203,7 @@ class SolarSystemGenerator : CelestialGenerator
         return SystemAreaMap(tile);
     }
 
-    private void PlaceWorld(TileModel parent, Body body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
+    private void PlaceWorld(TileModel parent, World body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
     {
         Terrain.TerrainType terrainType;
         if (!IsSingleBody(body.bodyType))
@@ -236,8 +236,8 @@ class SolarSystemGenerator : CelestialGenerator
             Terrain.PlanetType planetType = Terrain.PlanetType.Terrestrial;
             switch (body.bodyType)
             {
-                case Body.Type.Chunk: case Body.Type.Terrestrial: planetType = Terrain.PlanetType.Terrestrial; break;
-                case Body.Type.GasGiant: case Body.Type.Superjovian: planetType = Terrain.PlanetType.Jovian; break;
+                case World.Type.Chunk: case World.Type.Terrestrial: planetType = Terrain.PlanetType.Terrestrial; break;
+                case World.Type.GasGiant: case World.Type.Superjovian: planetType = Terrain.PlanetType.Jovian; break;
             }
 
             TerrainGenRule.AddAtDistance(parent, Tiles,
@@ -284,7 +284,7 @@ class SolarSystemGenerator : CelestialGenerator
         {
             for (int i = orbits.Length - 1; i >= 0; i--)
             {
-                if (orbits[i].body != null && orbits[i].body.bodyType != Body.Type.AsteroidBelt && orbits[i].body.bodyType != Body.Type.Chunk)
+                if (orbits[i].body != null && orbits[i].body.bodyType != World.Type.AsteroidBelt && orbits[i].body.bodyType != World.Type.Chunk)
                 {
                     return orbits[i].distance;
                 }
@@ -306,7 +306,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Orbit
     {
-        public Body body;
+        public World body;
         public double distance;
         public bool inner = false;
         private readonly Random _random = new Random();
@@ -316,7 +316,7 @@ class SolarSystemGenerator : CelestialGenerator
             this.star = star;
             this.distance = R;
 
-            var molten = (R <= Math.Sqrt(star.luminosity) * 0.025);
+            var vaporised = (R <= Math.Sqrt(star.luminosity) * 0.025);
             inner = (R <= Math.Sqrt(star.luminosity) * 4);
 
             var orbitRoll = _random.Next(1, 96);
@@ -325,56 +325,61 @@ class SolarSystemGenerator : CelestialGenerator
             {
                 if (orbitRoll <= 18)
                 {
-                    body = new Body(Body.Type.AsteroidBelt, T, this);
+                    body = new World(World.Type.AsteroidBelt, T, this);
                 }
                 else if (orbitRoll <= 62)
                 {
-                    body = new Body(Body.Type.Terrestrial, T, this);
+                    body = new World(World.Type.Terrestrial, T, this);
                 }
                 else if (orbitRoll <= 71)
                 {
-                    body = new Body(Body.Type.Chunk, T, this);
+                    body = new World(World.Type.Chunk, T, this);
                 }
                 else if (orbitRoll <= 82)
                 {
-                    body = new Body(Body.Type.GasGiant, T, this);
+                    body = new World(World.Type.GasGiant, T, this);
                 }
                 else if (orbitRoll <= 87)
                 {
-                    body = new Body(Body.Type.Superjovian, T, this);
+                    body = new World(World.Type.Superjovian, T, this);
                 }
             }
             else
             {
                 if (orbitRoll <= 15)
                 {
-                    body = new Body(Body.Type.AsteroidBelt, T, this);
+                    body = new World(World.Type.AsteroidBelt, T, this);
                 }
                 else if (orbitRoll <= 23)
                 {
-                    body = new Body(Body.Type.Terrestrial, T, this);
+                    body = new World(World.Type.Terrestrial, T, this);
                 }
                 else if (orbitRoll <= 35)
                 {
-                    body = new Body(Body.Type.Chunk, T, this);
+                    body = new World(World.Type.Chunk, T, this);
                 }
                 else if (orbitRoll <= 74)
                 {
-                    body = new Body(Body.Type.GasGiant, T, this);
+                    body = new World(World.Type.GasGiant, T, this);
                 }
                 else if (orbitRoll <= 84)
                 {
-                    body = new Body(Body.Type.Superjovian, T, this);
+                    body = new World(World.Type.Superjovian, T, this);
                 }
             }
 
-            body = molten ? null : body;
+            body = vaporised ? null : body;
 
             star = null;
         }
+
+        public Orbit(double R, World body)
+        {
+            this.distance = R;
+        }
     }
 
-    class Body
+    class World
     {
 
         public double temperature;
@@ -387,10 +392,10 @@ class SolarSystemGenerator : CelestialGenerator
         public Hydrosphere hydrosphere;
         public int hydrosphereCoverage;
         public bool hasLife;
-        public Body(Type bodyType, double T, Orbit orbit)
+        public World(Type bodyType, double T, Orbit orbit)
         {
             this.bodyType = bodyType;
-            temperature = T;
+            this.temperature = T;
 
             var sizeRoll = d(10);
             var innerSizeRoll = d(10);
@@ -415,7 +420,6 @@ class SolarSystemGenerator : CelestialGenerator
                     density = orbit.inner ? (densityRoll * 0.1 + 0.3) : (densityRoll * 0.05 + 0.1);
                     break;
                 case Type.GasGiant:
-                case Type.Superjovian:
                     switch (sizeRoll <= 5)
                     {
                         case true: radius = innerSizeRoll * 300 + (sizeRoll + 4) * 3000; break;
@@ -423,26 +427,41 @@ class SolarSystemGenerator : CelestialGenerator
                     }
                     density = orbit.inner ? (densityRoll * 0.1 + 0.3) : (densityRoll * 0.05 + 0.1);
                     break;
+                case Type.Superjovian:
+                    radius = (sizeRoll - 0.5 * orbit.star.age) * 2000 + 60000;
+                    density = 0;
+                    break;
+
             }
 
-            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, T);
+            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner);
+
+            moons = GenerateMoons(orbit.inner, bodyType);
 
             hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
 
             orbit = null;
         }
 
-        (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner, double T)
+        public World(double R, double T, bool inner)
+        {
+            this.radius = R;
+            this.temperature = T;
+            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(inner);
+            hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
+        }
+
+        (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner)
         {
             Hydrosphere hydrosphere = Hydrosphere.None;
             int hydrosphereCoverage = 0;
             if (inner)
             {
-                if (T <= 245)
+                if (temperature <= 245)
                 {
                     hydrosphere = Hydrosphere.IceSheet;
                 }
-                else if (T <= 370)
+                else if (temperature <= 370)
                 {
                     hydrosphere = Hydrosphere.Liquid;
                 }
@@ -505,6 +524,104 @@ class SolarSystemGenerator : CelestialGenerator
 
             return (hydrosphere, hydrosphereCoverage);
         }
+
+        Orbit[] GenerateMoons(bool inner, Type parentType)
+        {
+            var numberOfMoons = 0;
+            var moonsRoll = d(10) + (inner ? 0 : 5);
+
+            switch (parentType)
+            {
+                case Type.Chunk:
+                    numberOfMoons = (moonsRoll >= 10) ? 1 : 0; break;
+                case Type.Terrestrial:
+                    switch (moonsRoll)
+                    {
+                        case 6: case 7: numberOfMoons = 1; break;
+                        case 8: case 9: numberOfMoons = d(2); break;
+                        case 10: case 11: case 12: case 13: numberOfMoons = d(5); break;
+                        case 14: case 15: numberOfMoons = d(10); break;
+                    }
+                    break;
+                case Type.GasGiant:
+                case Type.Superjovian:
+                    switch (moonsRoll)
+                    {
+                        case 1: case 2: case 3: case 4: case 5: numberOfMoons = d(5); break;
+                        case 6: case 7: numberOfMoons = d(10); break;
+                        case 8: case 9: numberOfMoons = d(10) + 5; break;
+                        case 10: case 11: case 12: case 13: numberOfMoons = d(10) + 10; break;
+                        case 14: case 15: numberOfMoons = d(10) + 20; break;
+                    }
+                    break;
+            }
+
+            var orbits = new Orbit[numberOfMoons];
+            for (int i = 0; i < numberOfMoons; i++)
+            {
+                var distanceRoll = d(9);
+                double distance = 0;
+                switch (distanceRoll)
+                {
+                    case 1: case 2: case 3: case 4: distance = d(10) * 0.5 + 1; break;
+                    case 5: case 6: distance = d(10) + 6; break;
+                    case 7: case 8: distance = d(10) * 3 + 16; break;
+                    case 9: distance = d(100) * 3 + 45; break;
+                }
+                orbits[i] = new Orbit(distance, this);
+
+                radius = 0;
+                switch (parentType)
+                {
+                    case Type.Chunk: radius = d(10) * 10; break;
+                    case Type.Terrestrial:
+                        var terrestrialMoonRoll = d(94);
+                        if (1 <= terrestrialMoonRoll && terrestrialMoonRoll <= 64)
+                        {
+                            radius = d(10) * 10;
+                        }
+                        else if (65 <= terrestrialMoonRoll && terrestrialMoonRoll <= 84)
+                        {
+                            radius = d(10) * 100;
+                        }
+                        else if (85 <= terrestrialMoonRoll && terrestrialMoonRoll <= 94)
+                        {
+                            radius = d(10) * 100 + 1000;
+                        }
+                        break;
+                    case Type.GasGiant:
+                    case Type.Superjovian:
+                        var ggMoonRoll = d(100);
+                        if (1 <= ggMoonRoll && ggMoonRoll <= 64)
+                        {
+                            radius = d(10) * 10;
+                        }
+                        else if (65 <= ggMoonRoll && ggMoonRoll <= 84)
+                        {
+                            radius = d(10) * 100;
+                        }
+                        else if (85 <= ggMoonRoll && ggMoonRoll <= 94)
+                        {
+                            radius = d(10) * 100 + 1000;
+                        }
+                        else if (95 <= ggMoonRoll && ggMoonRoll <= 99)
+                        {
+                            radius = d(10) * 200 + 2000;
+                        }
+                        else if (ggMoonRoll == 100)
+                        {
+                            radius = d(10) * 400 + 4000;
+                        }
+                        break;
+                }
+
+                orbits[i].body = new World(radius, temperature, inner);
+            }
+
+            return orbits;
+        }
+
+
 
         int d(int n, int N = 1)
         {

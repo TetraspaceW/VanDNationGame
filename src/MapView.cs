@@ -5,6 +5,7 @@ public class MapView : Area2D
     private CollisionShape2D collision;
     private MapModel Model;
     private TileMap Tiles;
+    private TileMap grid;
     private MapInfoTooltip tooltip;
     public override void _Ready()
     {
@@ -23,12 +24,16 @@ public class MapView : Area2D
         Tiles = new TileMap();
         Tiles.TileSet = CreateTileset();
         AddChild(Tiles);
+        grid = new TileMap();
+        grid.TileSet = CreateGridTileset();
+        AddChild(grid);
     }
 
     void UpdateTileAtLocation(TileModel newTile, int x, int y)
     {
         Model.Tiles[x, y] = newTile;
         Tiles.SetCell(x, y, Tiles.TileSet.FindTileByName(newTile.image));
+        grid.SetCell(x, y, grid.TileSet.FindTileByName("border"));
     }
 
     public void UpdateWholeMapTo(MapModel newModel)
@@ -69,9 +74,20 @@ public class MapView : Area2D
 
     Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);
 
-    public TileSet CreateTileset()
+    TileSet CreateTileset()
     {
         return (new MapTileset()).tileset;
+    }
+
+    TileSet CreateGridTileset()
+    {
+        var tileset = new TileSet();
+        var id = tileset.GetLastUnusedTileId();
+        tileset.CreateTile(id);
+        tileset.TileSetName(id, "border");
+        tileset.TileSetTexture(id, GD.Load<Texture>("res://assets/border.png"));
+        tileset.TileSetRegion(id, new Rect2(0, 0, 64, 64));
+        return tileset;
     }
 
     // Handling zooming in and out

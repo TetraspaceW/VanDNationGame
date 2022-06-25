@@ -225,7 +225,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
                 var planetaryCenter = TerrainGenRule.ArbitraryCenter(Tiles);
                 AddCircle(Tiles, new[] {
-                    new TerrainRule(hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid ? Terrain.TerrainType.Ocean : Terrain.TerrainType.IceSheet, weight: oceanWeight),
+                    new TerrainRule(hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid ? Terrain.TerrainType.Ocean : Terrain.TerrainType.IceSheet, hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid, weight: oceanWeight),
                     new TerrainRule(isLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight)
                 }, planetaryCenter, planetaryTileSize < 5 ? planetaryTileSize : 10, true);
                 break;
@@ -239,6 +239,22 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.VerdantTerrain, true)
                 });
+                break;
+            case Terrain.TerrainType.Ocean:
+                switch (tile.scale)
+                {
+                    case -25:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.HydrogenAtom, true, 2),
+                            new TerrainRule(Terrain.TerrainType.OxygenAtom, true, 1),
+                        });
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.Ocean, true)
+                        });
+                        break;
+                }
                 break;
         }
 

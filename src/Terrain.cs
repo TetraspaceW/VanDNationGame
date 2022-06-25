@@ -91,6 +91,10 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
+            case TerrainType.HydrogenAtom:
+                return "atom/hydrogen";
+            case TerrainType.OxygenAtom:
+                return "atom/oxygen";
             default:
                 return null;
         }
@@ -138,9 +142,37 @@ public class Terrain
         // -9   10k km across
         TerrestrialPlanet,
         // -10  1k km across
-        BarrenTerrain, VerdantTerrain, Ocean, IceSheet
+        BarrenTerrain, VerdantTerrain, Ocean, IceSheet,
         // -11  100 km across
         // -12  10 km across
+        // -13  1 km across
+        // -14  100 m across
+        // -15  10 m across
+        // -16  1 m across
+        // -17  10 cm across
+        // -18  1 cm across
+        // -19  1 mm across
+        // -20  100 um across
+        // -21  10 um across
+        // -22  1 um across
+        // -23  100 nm across
+        // -24  10 nm across
+        // -25  1 nm across
+        // -26  100 pm across
+        HydrogenAtom, OxygenAtom,
+        // -27  10 pm across
+        ElectronCloud,
+        // -28  1 pm across
+        // -29  100 fm across
+        // -30  10 fm across
+        Nucleus,
+        // -31  1 fm across
+        Proton, Neutron,
+        // -32  100 am across
+        GluonSea,
+        // -33  10 am across
+        // -34  1 am across
+        UpQuark, DownQuark
     }
 
     public enum PlanetType
@@ -160,6 +192,11 @@ public class Terrain
     public enum GalaxyType
     {
         E, S0, S, SB, Irr
+    }
+
+    public enum AtomElement
+    {
+        Hydrogen, Helium
     }
 
     public string _debugProps()
