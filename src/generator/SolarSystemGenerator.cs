@@ -403,7 +403,7 @@ class SolarSystemGenerator : CelestialGenerator
                     break;
                 case Type.Terrestrial:
                     sizeRoll += orbit.star.abundance;
-                    sizeRoll = Math.Min(Math.Max(sizeRoll, 0), 10);
+                    sizeRoll = Math.Min(Math.Max(sizeRoll, 1), 10);
                     switch (sizeRoll)
                     {
                         case 1: case 2: radius = innerSizeRoll * 100 + 2000; break;
