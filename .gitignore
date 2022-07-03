@@ -1,5 +1,6 @@
 *.exe
 *.pck
+.vs/
 
 # Godot-specific ignores
 .import/
