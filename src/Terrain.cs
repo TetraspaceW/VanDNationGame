@@ -102,6 +102,12 @@ public class Terrain
                 return "atom/proton";
             case TerrainType.Neutron:
                 return "atom/neutron";
+            case TerrainType.GluonSea:
+                return "atom/quark_gluon_sea";
+            case TerrainType.ValenceQuark:
+                return "atom/valence_quark_" + props[PropKey.QuarkColour].ToString().ToLower() + "_" + props[PropKey.QuarkFlavour].ToString().ToLower();
+            case TerrainType.Quark:
+                return "atom/quark_" + props[PropKey.QuarkColour].ToString().ToLower() + "_" + props[PropKey.QuarkFlavour].ToString().ToLower();
             default:
                 return null;
         }
@@ -176,10 +182,10 @@ public class Terrain
         // -31  1 fm across
         Proton, Neutron,
         // -32  100 am across
-        GluonSea, ValenceUpQuark, ValenceDownQuark,
+        GluonSea, ValenceQuark,
         // -33  10 am across
         // -34  1 am across
-        UpQuark, DownQuark
+        Quark
     }
 
     public enum PlanetType
@@ -209,7 +215,7 @@ public class Terrain
         Antired, Antigreen, Antiblue
     }
 
-    public enum QuarkType
+    public enum QuarkFlavour
     {
         Up, Down, Strange, Charm, Top, Bottom
     }
@@ -227,7 +233,7 @@ public class Terrain
 
 public enum PropKey
 {
-    QuarkColour,
+    QuarkColour, QuarkFlavour,
     AtomElement,
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing,
     PlanetType,
