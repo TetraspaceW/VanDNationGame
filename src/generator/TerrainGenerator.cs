@@ -275,7 +275,7 @@ class TerrainGenerator
                             new TerrainRule(Terrain.TerrainType.Neutron, true)
                             },
                             nucleusCenter,
-                            (int)Math.Round(Math.Pow(massNumber, 1 / 3) * 0.6),
+                            (int)(Math.Pow(massNumber, 1.0 / 3.0) * 0.6),
                             true
                             );
                         break;
