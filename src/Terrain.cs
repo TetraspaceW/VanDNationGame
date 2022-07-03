@@ -25,6 +25,7 @@ public class Terrain
             case TerrainType.InterstellarSpace:
             case TerrainType.SystemOrbit:
             case TerrainType.LunarOrbit:
+            case TerrainType.IntermolecularSpace:
                 return "void";
             case TerrainType.CMB:
             case TerrainType.InteruniversalSpace:
@@ -44,7 +45,7 @@ public class Terrain
             case TerrainType.StellarCloud:
                 return "stars_sparse";
             case TerrainType.Galaxy:
-                return "galaxies/" + props[PropKey.GalaxyType].ToString().ToLower();
+                return "galaxies/" + props[PropKey.GalaxyType].ToString();
             case TerrainType.DwarfGalaxy:
                 return "galaxies/dwarf_galaxy";
             case TerrainType.GalacticCore:
@@ -159,7 +160,7 @@ public class Terrain
         // -24  10 nm across
         // -25  1 nm across
         // -26  100 pm across
-        HydrogenAtom, OxygenAtom,
+        HydrogenAtom, OxygenAtom, IntermolecularSpace,
         // -27  10 pm across
         ElectronCloud,
         // -28  1 pm across
