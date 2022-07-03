@@ -575,23 +575,23 @@ class SolarSystemGenerator : CelestialGenerator
                 }
                 orbits[i] = new Orbit(distance, this);
 
-                radius = 0;
+                var lunarRadius = 0;
                 switch (parentType)
                 {
-                    case Type.Chunk: radius = d(10) * 10; break;
+                    case Type.Chunk: lunarRadius = d(10) * 10; break;
                     case Type.Terrestrial:
                         var terrestrialMoonRoll = d(94);
                         if (1 <= terrestrialMoonRoll && terrestrialMoonRoll <= 64)
                         {
-                            radius = d(10) * 10;
+                            lunarRadius = d(10) * 10;
                         }
                         else if (65 <= terrestrialMoonRoll && terrestrialMoonRoll <= 84)
                         {
-                            radius = d(10) * 100;
+                            lunarRadius = d(10) * 100;
                         }
                         else if (85 <= terrestrialMoonRoll && terrestrialMoonRoll <= 94)
                         {
-                            radius = d(10) * 100 + 1000;
+                            lunarRadius = d(10) * 100 + 1000;
                         }
                         break;
                     case Type.GasGiant:
@@ -599,28 +599,28 @@ class SolarSystemGenerator : CelestialGenerator
                         var ggMoonRoll = d(100);
                         if (1 <= ggMoonRoll && ggMoonRoll <= 64)
                         {
-                            radius = d(10) * 10;
+                            lunarRadius = d(10) * 10;
                         }
                         else if (65 <= ggMoonRoll && ggMoonRoll <= 84)
                         {
-                            radius = d(10) * 100;
+                            lunarRadius = d(10) * 100;
                         }
                         else if (85 <= ggMoonRoll && ggMoonRoll <= 94)
                         {
-                            radius = d(10) * 100 + 1000;
+                            lunarRadius = d(10) * 100 + 1000;
                         }
                         else if (95 <= ggMoonRoll && ggMoonRoll <= 99)
                         {
-                            radius = d(10) * 200 + 2000;
+                            lunarRadius = d(10) * 200 + 2000;
                         }
                         else if (ggMoonRoll == 100)
                         {
-                            radius = d(10) * 400 + 4000;
+                            lunarRadius = d(10) * 400 + 4000;
                         }
                         break;
                 }
 
-                orbits[i].body = new World(radius, temperature, inner);
+                orbits[i].body = new World(lunarRadius, temperature, inner);
             }
 
             return orbits;
