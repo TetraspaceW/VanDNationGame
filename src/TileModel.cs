@@ -7,6 +7,7 @@ public class TileModel
     public bool zoomable;
     public int scale;
     public string image;
+    public Resources resources;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
     {
@@ -15,6 +16,7 @@ public class TileModel
         this.scale = scale;
         this.zoomable = zoomable;
         this.image = terrain.filenameForTileType();
+        this.resources = GetResources(terrain, scale);
     }
 
     public void SetTerrainType(Terrain.TerrainType terrainType)
@@ -26,5 +28,10 @@ public class TileModel
     public Texture imageForTileType()
     {
         return GD.Load<Texture>("res://assets/tiles/" + image + ".png");
+    }
+
+    public Resources GetResources(Terrain terrain, int scale)
+    {
+        return new Resources();
     }
 }

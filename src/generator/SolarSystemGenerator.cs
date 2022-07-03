@@ -57,6 +57,11 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
+    public TileModel[,] SolarSystemMap() // size 0
+    {
+        return SystemAreaMap(tile);
+    }
+
     private bool IsSingleBody(World.Type bodyType)
     {
         return (bodyType != World.Type.AsteroidBelt);
@@ -198,11 +203,6 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    public TileModel[,] SolarSystemMap() // size 0
-    {
-        return SystemAreaMap(tile);
-    }
-
     private void PlaceWorld(TileModel parent, World body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
     {
         Terrain.TerrainType terrainType;
@@ -284,7 +284,7 @@ class SolarSystemGenerator : CelestialGenerator
         {
             for (int i = orbits.Length - 1; i >= 0; i--)
             {
-                if (orbits[i].body != null && orbits[i].body.bodyType != World.Type.AsteroidBelt && orbits[i].body.bodyType != World.Type.Chunk)
+                if (orbits[i].body != null && IsPlanet(orbits[i].body.bodyType))
                 {
                     return orbits[i].distance;
                 }
