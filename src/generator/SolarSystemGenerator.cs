@@ -439,7 +439,7 @@ class SolarSystemGenerator : CelestialGenerator
 
             }
 
-            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsPlanet(bodyType));
+            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsTerrestrial(bodyType));
 
             moons = GenerateMoons(orbit.inner, bodyType);
 
@@ -460,7 +460,7 @@ class SolarSystemGenerator : CelestialGenerator
         {
             Hydrosphere hydrosphere = Hydrosphere.None;
             int hydrosphereCoverage = 0;
-            if (inner)
+            if (inner && terrestrial)
             {
                 if (temperature <= 245)
                 {
