@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 class TerrainGenerator
 {
@@ -244,9 +245,9 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -25:
-                        Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.HydrogenAtom, true, 2),
-                            new TerrainRule(Terrain.TerrainType.OxygenAtom, true, 1),
+                        Tiles = StructureFill(Tiles, Structure.WATER.RotateAll(1).Concat(Structure.HYDROXIDE.RotateAll(0.0000001)).Concat(Structure.HYDRONIUM.RotateAll(0.0000001)).ToArray()
+                            , 0.5, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                         });
                         break;
                     default:
@@ -352,6 +353,12 @@ class TerrainGenerator
     private void Fill(TileModel[,] tiles, TerrainRule[] rules)
     {
         TerrainGenRule.Fill(parent: tile, tiles, rules);
+    }
+
+
+    private TileModel[,] StructureFill(TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
+    {
+        return TerrainGenRule.StructureFill(parent: tile, tiles, rules, chanceNone, baseFill);
     }
 
     private void AddCircle(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool filled, (int, int)? mask = null)

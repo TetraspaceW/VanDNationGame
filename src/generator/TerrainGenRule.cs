@@ -98,6 +98,54 @@ class TerrainGenRule
 
         return null;
     }
+    static public Structure RandomStructureFromRule(TileModel parent, StructureRule[] rules, double chanceNone)
+    {
+        double weightSum = 0;
+        foreach (var rule in rules)
+        {
+            weightSum += rule.weight;
+        }
 
+        var rand = _random.NextDouble() * weightSum / chanceNone;
+        foreach (var rule in rules)
+        {
+            rand -= rule.weight;
+            if (rand < 0)
+            {
+                return rule.structure;
+            }
+        }
+
+        return null;
+    }
+
+    static public TileModel[,] StructureFill(TileModel parent, TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
+    {
+        var (width, height) = Shape(tiles);
+        tiles = new TileModel[width, height];
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                Structure thing = RandomStructureFromRule(parent, rules, chanceNone);
+                if (thing != null)
+                {
+                    tiles = thing.AttemptPlace(parent, tiles, x, y);
+                }
+            }
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (tiles[x, y] == null)
+                {
+                    tiles[x, y] = RandomTileFromRule(parent, baseFill);
+                }
+            }
+        }
+        return tiles;
+    }
     static private (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
 }
