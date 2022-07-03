@@ -92,10 +92,12 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
-            case TerrainType.HydrogenAtom:
-                return "atom/hydrogen";
-            case TerrainType.OxygenAtom:
-                return "atom/oxygen";
+            case TerrainType.Atom:
+                return "atom/" + props[PropKey.AtomElement].ToString().ToLower();
+            case TerrainType.ElectronCloud:
+                return "atom/electron_cloud";
+            case TerrainType.Nucleus:
+                return "atom/nucleus";
             default:
                 return null;
         }
@@ -160,7 +162,7 @@ public class Terrain
         // -24  10 nm across
         // -25  1 nm across
         // -26  100 pm across
-        HydrogenAtom, OxygenAtom, IntermolecularSpace,
+        Atom, IntermolecularSpace,
         // -27  10 pm across
         ElectronCloud,
         // -28  1 pm across
@@ -220,6 +222,8 @@ public class Terrain
 
 public enum PropKey
 {
+    QuarkColour,
+    AtomElement,
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing,
     PlanetType,
     SpectralClass,

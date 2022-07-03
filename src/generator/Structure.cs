@@ -1,9 +1,14 @@
-﻿class Structure
+﻿using System.Collections.Generic;
+class Structure
 {
     public TerrainRule[,][] rules;
 
-    private static readonly TerrainRule[] hydr = new[] { new TerrainRule(Terrain.TerrainType.HydrogenAtom, true, 1) };
-    private static readonly TerrainRule[] oxyg = new[] { new TerrainRule(Terrain.TerrainType.OxygenAtom, true, 1) };
+    private static readonly TerrainRule[] hydr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()}
+    })};
+    private static readonly TerrainRule[] oxyg = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()}
+    })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
     public static readonly Structure WATER = new Structure(new TerrainRule[,][] {
         { null, molc, null, null },

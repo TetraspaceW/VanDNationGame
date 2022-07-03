@@ -62,14 +62,19 @@ class SolarSystemGenerator : CelestialGenerator
         return SystemAreaMap(tile);
     }
 
-    private bool IsSingleBody(World.Type bodyType)
+    private static bool IsSingleBody(World.Type bodyType)
     {
         return (bodyType != World.Type.AsteroidBelt);
     }
 
-    private bool IsPlanet(World.Type bodyType)
+    private static bool IsPlanet(World.Type bodyType)
     {
         return IsSingleBody(bodyType) && (bodyType != World.Type.Chunk);
+    }
+
+    private static bool IsTerrestrial(World.Type bodyType)
+    {
+        return IsSingleBody(bodyType) && (bodyType != World.Type.GasGiant) && (bodyType != World.Type.Superjovian);
     }
 
     TileModel[,] SystemAreaMap(TileModel parent)
@@ -434,7 +439,7 @@ class SolarSystemGenerator : CelestialGenerator
 
             }
 
-            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner);
+            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsPlanet(bodyType));
 
             moons = GenerateMoons(orbit.inner, bodyType);
 
@@ -447,11 +452,11 @@ class SolarSystemGenerator : CelestialGenerator
         {
             this.radius = R;
             this.temperature = T;
-            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(inner);
+            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(inner, true);
             hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
         }
 
-        (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner)
+        (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner, bool terrestrial)
         {
             Hydrosphere hydrosphere = Hydrosphere.None;
             int hydrosphereCoverage = 0;

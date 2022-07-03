@@ -257,6 +257,10 @@ class TerrainGenerator
                         break;
                 }
                 break;
+            case Terrain.TerrainType.Atom:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                break;
         }
 
         return Tiles;
