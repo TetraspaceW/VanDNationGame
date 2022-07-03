@@ -98,6 +98,10 @@ public class Terrain
                 return "atom/electron_cloud";
             case TerrainType.Nucleus:
                 return "atom/nucleus";
+            case TerrainType.Proton:
+                return "atom/proton";
+            case TerrainType.Neutron:
+                return "atom/neutron";
             default:
                 return null;
         }
@@ -161,7 +165,7 @@ public class Terrain
         // -23  100 nm across
         // -24  10 nm across
         // -25  1 nm across
-        // -26  100 pm across
+        // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace,
         // -27  10 pm across
         ElectronCloud,
@@ -180,11 +184,7 @@ public class Terrain
 
     public enum PlanetType
     {
-        Chunk,
-        // Terrestrial
-        Terrestrial,
-        // Jovian
-        Jovian
+        Chunk, Terrestrial, Jovian
     }
     public enum StarSpectralClass
     {
@@ -207,6 +207,11 @@ public class Terrain
     {
         Red, Green, Blue,
         Antired, Antigreen, Antiblue
+    }
+
+    public enum QuarkType
+    {
+        Up, Down, Strange, Charm, Top, Bottom
     }
 
     public string _debugProps()

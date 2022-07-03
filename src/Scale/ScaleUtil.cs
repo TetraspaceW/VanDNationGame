@@ -17,10 +17,15 @@ public class ScaleUtil
                 // let's get a little silly
                 return NumberStringForScale(scale + 51) + " lₚ";
             }
+            else if (scale < -31)
+            {
+                // 10^40 ym = 1 light year
+                return NumberStringForScale(scale + 40) + " ym";
+            }
             else if (scale < -26)
             {
-                // 10^40 Å = 1 light year
-                return NumberStringForScale(scale + 40) + " ym";
+                // 10^31 fm = 1 light year
+                return NumberStringForScale(scale + 31) + " fm";
             }
             else if (scale < -22)
             {

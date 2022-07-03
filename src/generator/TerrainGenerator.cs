@@ -261,6 +261,64 @@ class TerrainGenerator
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 break;
+            case Terrain.TerrainType.Nucleus:
+                switch (tile.scale)
+                {
+                    case -30:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                        var nucleusCenter = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+
+                        double massNumber = AtomGenerator.GetMassNumber(terrain);
+
+                        AddCircle(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.Proton, true),
+                            new TerrainRule(Terrain.TerrainType.Neutron, true)
+                            },
+                            nucleusCenter,
+                            (int)Math.Round(Math.Pow(massNumber, 1 / 3) * 0.6),
+                            true
+                            );
+                        break;
+
+                    default:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.Proton:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
+
+                var protonColours = new List<Terrain.QuarkColour> { Terrain.QuarkColour.Red, Terrain.QuarkColour.Green, Terrain.QuarkColour.Blue };
+                protonColours.OrderBy(a => _random.Next()).ToList();
+
+                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceUpQuark, true, props: new Dictionary<PropKey, string>() {
+                    {PropKey.QuarkColour, protonColours[0].ToString()}
+                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceUpQuark, Terrain.TerrainType.ValenceDownQuark });
+                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceUpQuark, true, props: new Dictionary<PropKey, string>() {
+                    {PropKey.QuarkColour, protonColours[1].ToString()}
+                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceUpQuark, Terrain.TerrainType.ValenceDownQuark });
+                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceDownQuark, true, props: new Dictionary<PropKey, string>() {
+                    {PropKey.QuarkColour, protonColours[2].ToString()}
+                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceUpQuark, Terrain.TerrainType.ValenceDownQuark });
+                break;
+
+            case Terrain.TerrainType.Neutron:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
+
+                var neutronColours = new List<Terrain.QuarkColour> { Terrain.QuarkColour.Red, Terrain.QuarkColour.Green, Terrain.QuarkColour.Blue };
+                neutronColours.OrderBy(a => _random.Next()).ToList();
+
+                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceUpQuark, true, props: new Dictionary<PropKey, string>() {
+                    {PropKey.QuarkColour, neutronColours[0].ToString()}
+                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceUpQuark, Terrain.TerrainType.ValenceDownQuark });
+                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceDownQuark, true, props: new Dictionary<PropKey, string>() {
+                    {PropKey.QuarkColour, neutronColours[1].ToString()}
+                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceUpQuark, Terrain.TerrainType.ValenceDownQuark });
+                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceDownQuark, true, props: new Dictionary<PropKey, string>() {
+                    {PropKey.QuarkColour, neutronColours[2].ToString()}
+                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceUpQuark, Terrain.TerrainType.ValenceDownQuark });
+                break;
         }
 
         return Tiles;
@@ -358,7 +416,10 @@ class TerrainGenerator
     {
         TerrainGenRule.Fill(parent: tile, tiles, rules);
     }
-
+    private void AddOneRandomly(TileModel[,] tiles, TerrainRule[] rules, List<Terrain.TerrainType> mask)
+    {
+        TerrainGenRule.AddOneRandomly(parent: tile, tiles, rules, mask);
+    }
 
     private TileModel[,] StructureFill(TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
     {

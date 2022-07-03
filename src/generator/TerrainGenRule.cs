@@ -44,6 +44,26 @@ class TerrainGenRule
         tiles[newX, newY] = RandomTileFromRule(parent, rules);
     }
 
+    static public void AddOneRandomly(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, List<Terrain.TerrainType> mask)
+    {
+        var (width, height) = Shape(tiles);
+        List<(int, int)> possibleLocations = new List<(int, int)>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (tiles[x, y] == null || !mask.Contains(tiles[x, y].terrain.terrainType))
+                {
+                    possibleLocations.Add((x, y));
+                }
+            }
+        }
+
+        var (newX, newY) = possibleLocations[_random.Next(0, possibleLocations.Count)];
+        tiles[newX, newY] = RandomTileFromRule(parent, rules);
+    }
+
     static public void Fill(TileModel parent, TileModel[,] tiles, TerrainRule[] rules)
     {
         var (width, height) = Shape(tiles);

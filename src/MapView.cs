@@ -9,7 +9,10 @@ public class MapView : Area2D
     private MapInfoTooltip tooltip;
     public override void _Ready()
     {
-        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+        // universe start
+        // TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+        // ocean start
+        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Ocean), null, -10, zoomable: true);
         Model = new MapModel(tile);
         tile.internalMap = Model;
         CreateTooltip();
