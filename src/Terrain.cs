@@ -45,7 +45,7 @@ public class Terrain
             case TerrainType.StellarCloud:
                 return "stars_sparse";
             case TerrainType.Galaxy:
-                return "galaxies/" + props[PropKey.GalaxyType].ToString();
+                return "galaxies/" + props[PropKey.GalaxyType].ToString().ToLower();
             case TerrainType.DwarfGalaxy:
                 return "galaxies/dwarf_galaxy";
             case TerrainType.GalacticCore:
@@ -170,7 +170,7 @@ public class Terrain
         // -31  1 fm across
         Proton, Neutron,
         // -32  100 am across
-        GluonSea,
+        GluonSea, ValenceUpQuark, ValenceDownQuark,
         // -33  10 am across
         // -34  1 am across
         UpQuark, DownQuark
@@ -197,7 +197,14 @@ public class Terrain
 
     public enum AtomElement
     {
-        Hydrogen, Helium
+        Hydrogen, Helium,
+        Lithium, Beryllium, Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon
+    }
+
+    public enum QuarkColour
+    {
+        Red, Green, Blue,
+        Antired, Antigreen, Antiblue
     }
 
     public string _debugProps()
