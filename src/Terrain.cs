@@ -115,7 +115,60 @@ public class Terrain
 
     public enum TerrainType
     {
-        // 10   10g ly across
+        // 41
+        BeyondBubble,
+        // 40
+        MonocosmCohort,
+        // 39
+        // 38 / w+1st archverse level
+        Monocosm,
+        // 37 / wth archverse level
+        Omniverse, Godverse,
+        // 36
+        Ultraverse,
+        // 35
+        ArchverseChain,
+        // 34   8th archverse level
+        Yottaverse,
+        // 33
+        ZettaverseCohort,
+        // 32
+        // 31   7th archverse level
+        Zettaverse,
+        // 30
+        ExaverseCohort,
+        // 29
+        // 28   6th archverse level
+        Exaverse,
+        // 27
+        PetaverseCohort,
+        // 26
+        // 25   5th archverse level
+        Petaverse,
+        // 24
+        TeraverseCohort,
+        // 23
+        // 22   4th archverse level
+        Teraverse,
+        // 21
+        GigaverseCohort,
+        // 20 
+        // 19   3rd archverse level
+        Gigaverse,
+        // 18
+        MegaverseCohort,
+        // 17
+        // 16   2nd archverse level
+        Megaverse,
+        // 15
+        MultiverseCohort,
+        // 14
+        // 13   1st archverse level
+        Multiverse,
+        // 12
+        UniverseCohort,
+        // 11
+        // 10   10g ly across / 0th archverse level
         Universe, InteruniversalSpace,
         // 9    1g ly across
         Filament, Void, CMB, Defect,
