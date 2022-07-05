@@ -3,10 +3,15 @@ class AtomGenerator
 {
     public static double GetMassNumber(Terrain terrain)
     {
-        double massNumber;
         Terrain.AtomElement nucleusElement;
         Enum.TryParse<Terrain.AtomElement>(terrain.props[PropKey.AtomElement], out nucleusElement);
 
+        return AtomGenerator.ElementMassNumber(nucleusElement);
+    }
+
+    public static double ElementMassNumber(Terrain.AtomElement nucleusElement)
+    {
+        double massNumber;
         switch (nucleusElement)
         {
             case Terrain.AtomElement.Hydrogen: massNumber = 1.008; break;
@@ -19,6 +24,14 @@ class AtomGenerator
             case Terrain.AtomElement.Oxygen: massNumber = 16.0; break;
             case Terrain.AtomElement.Fluorine: massNumber = 18.998; break;
             case Terrain.AtomElement.Neon: massNumber = 20.18; break;
+            case Terrain.AtomElement.Sodium: massNumber = 22.99; break;
+            case Terrain.AtomElement.Magnesium: massNumber = 24.305; break;
+            case Terrain.AtomElement.Aluminium: massNumber = 26.982; break;
+            case Terrain.AtomElement.Silicon: massNumber = 28.085; break;
+            case Terrain.AtomElement.Phosphorus: massNumber = 30.974; break;
+            case Terrain.AtomElement.Sulfur: massNumber = 32.06; break;
+            case Terrain.AtomElement.Chlorine: massNumber = 35.45; break;
+            case Terrain.AtomElement.Argon: massNumber = 39.95; break;
             default: massNumber = 1.0; break;
         }
         return massNumber;

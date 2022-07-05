@@ -309,6 +309,102 @@ class SolarSystemGenerator : CelestialGenerator
         Liquid, IceSheet, None
     }
 
+    class Atmosphere
+    {
+        private readonly Random _random = new Random();
+        List<G> gasesPresent;
+
+        public Atmosphere(double temperature, double mass, double radius)
+        {
+            var gravity = mass / Math.Pow((radius / 6380), 2);
+            var escapeVelocity = Math.Sqrt(19600 * gravity * radius) / 11200;
+
+            var atmosphereRoll = _random.Next(1, 10);
+            if (temperature <= 50)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.H2 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.He }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.H2, G.He }; break;
+                    case 9: gasesPresent = new List<G> { G.Ne }; break;
+                }
+            }
+            else if (temperature > 50 && temperature <= 150)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CH4 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.H2, G.He, G.N2 }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.N2, G.CO }; break;
+                    case 9: gasesPresent = new List<G> { G.H2, G.He }; break;
+                }
+            }
+            else if (temperature > 150 && temperature <= 400)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CO2 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.CO2 }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.N2, G.CH4 }; break;
+                    case 9: gasesPresent = (temperature > 240) ? new List<G> { G.CO2, G.CH4, G.NH3 } : new List<G> { G.H2, G.He }; break;
+                }
+            }
+            else if (temperature > 400)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CO2 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.CO2 }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.NO2, G.SO2 }; break;
+                    case 9: gasesPresent = new List<G> { G.SO2 }; break;
+                }
+            }
+
+        }
+
+        private enum G
+        {
+            H2, He,
+            CH4, NH3, Water,
+            Ne, N2, CO,
+            NitrogenMonoxide, Oxygen, HydrogenSulphide,
+            Argon, CO2, NO2,
+            SO2
+        }
+
+        double MolecularWeight(G gas)
+        {
+            var H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
+            var He = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium);
+            var C = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon);
+            var Ne = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Neon);
+            var N = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen);
+            var O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
+            var S = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur);
+            var Ar = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Argon);
+            switch (gas)
+            {
+                case G.H2: return H * 2;
+                case G.He: return He;
+                case G.CH4: return C + H * 4;
+                case G.NH3: return N + H * 3;
+                case G.Water: return H * 2 + O;
+                case G.Ne: return Ne;
+                case G.N2: return N;
+                case G.CO: return C + O;
+                case G.NitrogenMonoxide: return N + O;
+                case G.Oxygen: return O * 2;
+                case G.HydrogenSulphide: return H * 2 + S;
+                case G.Argon: return Ar;
+                case G.CO2: return C + O * 2;
+                case G.NO2: return N + O * 2;
+                case G.SO2: return S + O * 2;
+                default: return 0;
+            }
+        }
+    }
+
     class Orbit
     {
         public World body;
