@@ -1,3 +1,4 @@
+
 public class ScaleUtil
 {
     public int scale;
@@ -7,61 +8,32 @@ public class ScaleUtil
     }
 
     string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion", " octillion", " nonillion", };
+    (int, string)[] units = {
+            (-51, "lp"),
+            (-40, "ym"), (-37, "zm"), (-34, "am"), (-31, "fm"), (-26, "Å"), (-22, "um"), (-19, "mm"), (-16, "m"),
+            (-13, "km"), (0, "ly"),
+            (int.MaxValue, null)
+    };
 
     public string TextForScale()
     {
-        try
+        string scaleString = "10^" + scale + " ly";
+        for (int i = 0; i < units.Length - 1; i++)
         {
-            if (scale < -40)
+            if (scale >= units[i].Item1 && scale < units[i + 1].Item1)
             {
-                // let's get a little silly
-                return NumberStringForScale(scale + 51) + " lₚ";
-            }
-            else if (scale < -31)
-            {
-                // 10^40 ym = 1 light year
-                return NumberStringForScale(scale + 40) + " ym";
-            }
-            else if (scale < -26)
-            {
-                // 10^31 fm = 1 light year
-                return NumberStringForScale(scale + 31) + " fm";
-            }
-            else if (scale < -22)
-            {
-                // 10^26 Å = 1 light year
-                return NumberStringForScale(scale + 26) + " Å";
-            }
-            else if (scale < -19)
-            {
-                return NumberStringForScale(scale + 22) + " um";
-            }
-            else if (scale < -16)
-            {
-                return NumberStringForScale(scale + 19) + " mm";
-            }
-            else if (scale < -13)
-            {
-                return NumberStringForScale(scale + 16) + " m";
-            }
-            else if (scale < 0)
-            {
-                // 10^13 km = 1 light year
-                return NumberStringForScale(scale + 13) + " km";
-            }
-            else
-            {
-                return NumberStringForScale(scale) + " ly";
+                string numberString = NumberStringForScale(scale - units[i].Item1);
+                if (numberString != null)
+                {
+                    scaleString = numberString + " " + units[i].Item2;
+                }
             }
         }
-        catch
-        {
-            return "10^" + scale + " ly";
-        }
+        return scaleString;
     }
 
     private string NumberStringForScale(int value)
     {
-        return "1" + new string('0', value % 3) + numberNames[(value / 3)];
+        return (value / 3) < numberNames.Length ? "1" + new string('0', value % 3) + numberNames[(value / 3)] : null;
     }
 }
