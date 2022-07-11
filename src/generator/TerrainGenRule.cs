@@ -2,13 +2,12 @@ using System;
 using System.Collections.Generic;
 class TerrainGenRule
 {
-    static private readonly Random _random = new Random();
     static public (int, int) ArbitraryCenter(TileModel[,] tiles)
     {
         var (width, height) = Shape(tiles);
 
-        var centerX = (width % 2 == 0) ? width / 2 - _random.Next(0, 2) : width / 2;
-        var centerY = (height % 2 == 0) ? height / 2 - _random.Next(0, 2) : height / 2;
+        var centerX = (width % 2 == 0) ? width / 2 - RND.Next(0, 2) : width / 2;
+        var centerY = (height % 2 == 0) ? height / 2 - RND.Next(0, 2) : height / 2;
 
         return (centerX, centerY);
     }
@@ -40,7 +39,7 @@ class TerrainGenRule
             }
         }
 
-        var (newX, newY) = possibleLocations[_random.Next(0, possibleLocations.Count)];
+        var (newX, newY) = possibleLocations[RND.Next(0, possibleLocations.Count)];
         tiles[newX, newY] = RandomTileFromRule(parent, rules);
     }
 
@@ -60,7 +59,7 @@ class TerrainGenRule
             }
         }
 
-        var (newX, newY) = possibleLocations[_random.Next(0, possibleLocations.Count)];
+        var (newX, newY) = possibleLocations[RND.Next(0, possibleLocations.Count)];
         tiles[newX, newY] = RandomTileFromRule(parent, rules);
     }
 
@@ -106,7 +105,7 @@ class TerrainGenRule
             weightSum += rule.weight;
         }
 
-        var rand = _random.NextDouble() * weightSum;
+        var rand = RND.NextDouble() * weightSum;
         foreach (var rule in rules)
         {
             rand -= rule.weight;
@@ -126,7 +125,7 @@ class TerrainGenRule
             weightSum += rule.weight;
         }
 
-        var rand = _random.NextDouble() * weightSum / chanceNone;
+        var rand = RND.NextDouble() * weightSum / chanceNone;
         foreach (var rule in rules)
         {
             rand -= rule.weight;

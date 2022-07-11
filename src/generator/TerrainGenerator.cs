@@ -5,7 +5,6 @@ using System.Linq;
 class TerrainGenerator
 {
     TileModel tile;
-    private readonly Random _random = new Random();
     public TerrainGenerator(TileModel insideTile)
     {
         this.tile = insideTile;
@@ -290,7 +289,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
 
                 var protonColours = new List<Terrain.QuarkColour> { Terrain.QuarkColour.Red, Terrain.QuarkColour.Green, Terrain.QuarkColour.Blue };
-                protonColours.OrderBy(a => _random.Next()).ToList();
+                protonColours.OrderBy(a => RND.Next()).ToList();
 
                 AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
                     {PropKey.QuarkColour, protonColours[0].ToString()},
@@ -312,7 +311,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
 
                 var neutronColours = new List<Terrain.QuarkColour> { Terrain.QuarkColour.Red, Terrain.QuarkColour.Green, Terrain.QuarkColour.Blue };
-                neutronColours.OrderBy(a => _random.Next()).ToList();
+                neutronColours.OrderBy(a => RND.Next()).ToList();
 
                 AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
                     {PropKey.QuarkColour, neutronColours[0].ToString()},
@@ -354,7 +353,7 @@ class TerrainGenerator
         var core = AddCenter(tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
         if (hasArms)
         {
-            AddArms(tiles, rules, core, radius, _random.NextDouble() > 0.5, (hasCore == 2) ? 2 : _random.Next(4, 7), hasCore == 2, (hasCore != 0) ? core : ((int, int)?)null);
+            AddArms(tiles, rules, core, radius, RND.NextDouble() > 0.5, (hasCore == 2) ? 2 : RND.Next(4, 7), hasCore == 2, (hasCore != 0) ? core : ((int, int)?)null);
         }
         else
         {
@@ -365,7 +364,7 @@ class TerrainGenerator
     {
         var (width, height) = Shape(tiles);
         var (centerX, centerY) = center;
-        var turn = _random.NextDouble() * Math.PI * 2;
+        var turn = RND.NextDouble() * Math.PI * 2;
         for (double j = 0; j < numArms; j++)
         {
             for (double i = 0; i < Math.PI * 2; i += Math.PI / 100)
