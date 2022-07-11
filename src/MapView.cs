@@ -135,7 +135,7 @@ public class MapView : Area2D
         {
             Tile.parent.parent.internalMap = new MapModel(Tile.parent.parent);
             MapModel grandparentMap = Tile.parent.parent.internalMap;
-            grandparentMap.Tiles[grandparentMap.randomNumber(0, 10), grandparentMap.randomNumber(0, 10)] = Tile.parent;
+            grandparentMap.Tiles[RND.d(10) - 1, RND.d(10) - 1] = Tile.parent;
         }
         UpdateWholeMapTo(Tile.parent.parent.internalMap);
     }
