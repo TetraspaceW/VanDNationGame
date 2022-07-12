@@ -74,9 +74,7 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
 
-                Terrain.GalaxyType galaxyType;
-                Enum.TryParse<Terrain.GalaxyType>(terrain.props[PropKey.GalaxyType], out galaxyType);
-                switch (galaxyType)
+                switch (Enum.Parse(typeof(Terrain.GalaxyType), terrain.props[PropKey.GalaxyType]))
                 {
                     case Terrain.GalaxyType.E:
                         AddGalaxy(Tiles, new[] {
@@ -157,9 +155,7 @@ class TerrainGenerator
                 });
                 break;
             case Terrain.TerrainType.SolarSystem:
-                SolarSystemGenerator.SpectralClass ossStarType;
-                Enum.TryParse<SolarSystemGenerator.SpectralClass>(terrain.props[PropKey.SpectralClass], out ossStarType);
-                var solarSystemGenerator = new SolarSystemGenerator(tile, ossStarType);
+                var solarSystemGenerator = new SolarSystemGenerator(tile, (SolarSystemGenerator.SpectralClass)Enum.Parse(typeof(SolarSystemGenerator.SpectralClass), terrain.props[PropKey.SpectralClass]));
                 Tiles = solarSystemGenerator.SolarSystemMap();
                 break;
             case Terrain.TerrainType.FarfarfarSystemBody:
@@ -213,17 +209,13 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
-                int oceanWeight;
-                int.TryParse(terrain.props[PropKey.PlanetHydrosphereCoverage], out oceanWeight);
+                int oceanWeight = int.Parse(terrain.props[PropKey.PlanetHydrosphereCoverage]);
 
-                SolarSystemGenerator.Hydrosphere hydrosphere;
-                Enum.TryParse<SolarSystemGenerator.Hydrosphere>(terrain.props[PropKey.PlanetHydrosphereType], out hydrosphere);
+                SolarSystemGenerator.Hydrosphere hydrosphere = (SolarSystemGenerator.Hydrosphere)Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), terrain.props[PropKey.PlanetHydrosphereType]);
 
-                bool isLifeBearing;
-                bool.TryParse(terrain.props[PropKey.PlanetIsLifeBearing], out isLifeBearing);
+                bool isLifeBearing = bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]);
 
-                double planetaryRadius;
-                double.TryParse(terrain.props[PropKey.PlanetRadius], out planetaryRadius);
+                double planetaryRadius = double.Parse(terrain.props[PropKey.PlanetRadius]);
                 var planetaryTileSize = (int)Math.Round(planetaryRadius / 1000);
 
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
@@ -467,9 +459,7 @@ class TerrainGenerator
 
     private bool PlanetIsTerrestrial(string planetType)
     {
-        Terrain.PlanetType output;
-        Enum.TryParse<Terrain.PlanetType>(planetType, out output);
-        switch (output)
+        switch (Enum.Parse(typeof(Terrain.PlanetType), planetType))
         {
             case Terrain.PlanetType.Jovian:
                 return false;
