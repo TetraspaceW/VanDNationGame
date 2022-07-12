@@ -305,7 +305,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     public enum Hydrosphere
     {
-        Liquid, IceSheet, None
+        Liquid, IceSheet, Crustal, None
     }
 
     class Atmosphere
@@ -572,7 +572,7 @@ class SolarSystemGenerator : CelestialGenerator
             {
                 atmosphere = new Atmosphere(temperature, mass, radius);
                 hydrosphereCoverage = atmosphere.pressure == 0 ? 0 : hydrosphereCoverage;
-                hydrosphere = hydrosphereCoverage == 0 ? Hydrosphere.None : hydrosphere;
+                hydrosphere = (hydrosphereCoverage == 0 && hydrosphere != Hydrosphere.Crustal) ? Hydrosphere.None : hydrosphere;
             }
 
             moons = GenerateMoons(orbit.inner, bodyType);
@@ -596,15 +596,10 @@ class SolarSystemGenerator : CelestialGenerator
             int hydrosphereCoverage = 0;
             if (inner && terrestrial)
             {
-                if (temperature <= 245)
-                {
-                    hydrosphere = Hydrosphere.IceSheet;
-                }
-                else if (temperature <= 370)
-                {
-                    hydrosphere = Hydrosphere.Liquid;
-                }
+                if (temperature <= 245) { hydrosphere = Hydrosphere.IceSheet; }
+                else if (temperature <= 370) { hydrosphere = Hydrosphere.Liquid; }
             }
+            else if (terrestrial) { hydrosphere = Hydrosphere.Crustal; }
 
             if (hydrosphere != Hydrosphere.None)
             {
@@ -616,12 +611,7 @@ class SolarSystemGenerator : CelestialGenerator
                         case 1: case 2: case 3: case 4: case 5: break;
                         case 6: case 7: hydrosphereCoverage += d(10); break;
                         case 8: hydrosphereCoverage += d(10) + 10; break;
-                        case 9:
-                        case 10:
-                            hydrosphereCoverage += d(10, N: (hydroRoll - 8) * 5);
-                            hydrosphereCoverage += (hydroRoll - 9) * 10;
-                            hydrosphereCoverage = Math.Min(hydrosphereCoverage, 100);
-                            break;
+                        case 9: case 10: hydrosphereCoverage += Math.Min(d(10, N: (hydroRoll - 8) * 5) + (hydroRoll - 9) * 10, 100); break;
                     }
                 }
                 else if (radius <= 4000)
@@ -631,10 +621,7 @@ class SolarSystemGenerator : CelestialGenerator
                         case 1: case 2: break;
                         case 3: case 4: hydrosphereCoverage += d(10); break;
                         case 5: case 6: case 7: case 8: case 9: hydrosphereCoverage += d(10) + (hydroRoll - 4) * 10; break;
-                        case 10:
-                            hydrosphereCoverage += d(10, N: 10) + 10;
-                            hydrosphereCoverage = Math.Min(hydrosphereCoverage, 100);
-                            break;
+                        case 10: hydrosphereCoverage += Math.Min(d(10, N: 10) + 10, 100); break;
                     }
                 }
                 else if (radius <= 7000)
@@ -661,7 +648,7 @@ class SolarSystemGenerator : CelestialGenerator
                 }
             }
 
-            hydrosphere = hydrosphereCoverage == 0 ? Hydrosphere.None : hydrosphere;
+            hydrosphere = (hydrosphereCoverage == 0 && hydrosphere != Hydrosphere.Crustal) ? Hydrosphere.None : hydrosphere;
 
             return (hydrosphere, hydrosphereCoverage);
         }

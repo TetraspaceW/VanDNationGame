@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System;
 public class Terrain
 {
     public TerrainType terrainType;
@@ -74,7 +75,18 @@ public class Terrain
             case TerrainType.TerrestrialPlanet:
             case TerrainType.GasGiant:
             case TerrainType.LunarBody:
-                return "planets/" + props[PropKey.PlanetType].ToString().ToLower();
+                var planetFileName = "planets/" + props[PropKey.PlanetType].ToString().ToLower();
+
+                switch (Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), props[PropKey.PlanetHydrosphereType]))
+                {
+                    case SolarSystemGenerator.Hydrosphere.Liquid: planetFileName += "_ocean"; break;
+                    case SolarSystemGenerator.Hydrosphere.IceSheet: planetFileName += "_ice"; break;
+                    case SolarSystemGenerator.Hydrosphere.Crustal: planetFileName += "_outer"; break;
+                }
+
+                planetFileName += bool.Parse(props[PropKey.PlanetIsLifeBearing]) ? "_life" : "";
+
+                return planetFileName;
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
             case TerrainType.EpistellarSolarSystem:

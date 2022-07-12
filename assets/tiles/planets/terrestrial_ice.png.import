@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/tectonic.png-f21a78e52305a5314bca7c5bc4cf4197.stex"
+path="res://.import/terrestrial_ice.png-fc1af28637d0e8b688a47430db18d143.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/planets/tectonic.png"
-dest_files=[ "res://.import/tectonic.png-f21a78e52305a5314bca7c5bc4cf4197.stex" ]
+source_file="res://assets/tiles/planets/terrestrial_ice.png"
+dest_files=[ "res://.import/terrestrial_ice.png-fc1af28637d0e8b688a47430db18d143.stex" ]
 
 [params]
 

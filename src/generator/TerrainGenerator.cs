@@ -187,7 +187,9 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()}
+                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()},
+                        {PropKey.PlanetIsLifeBearing, false.ToString()},
+                        {PropKey.PlanetHydrosphereType, SolarSystemGenerator.Hydrosphere.None.ToString()}
                     })
                 });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
@@ -196,7 +198,9 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()}
+                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()},
+                        {PropKey.PlanetIsLifeBearing, false.ToString()},
+                        {PropKey.PlanetHydrosphereType, SolarSystemGenerator.Hydrosphere.None.ToString()}
                     })
                 });
                 if (PlanetIsTerrestrial(terrain.props[PropKey.PlanetType]))

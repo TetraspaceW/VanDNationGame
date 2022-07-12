@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/meltball.png-9779f59d0911a0744e314f6c598b13db.stex"
+path="res://.import/terrestrial_ocean_life.png-73a8483f74927a2aa7ccec9cd530c8a2.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/planets/meltball.png"
-dest_files=[ "res://.import/meltball.png-9779f59d0911a0744e314f6c598b13db.stex" ]
+source_file="res://assets/tiles/planets/terrestrial_ocean_life.png"
+dest_files=[ "res://.import/terrestrial_ocean_life.png-73a8483f74927a2aa7ccec9cd530c8a2.stex" ]
 
 [params]
 
