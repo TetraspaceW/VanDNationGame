@@ -65,7 +65,7 @@ class TerrainGenerator
                         {PropKey.GalaxyType, Terrain.GalaxyType.Irr.ToString()}
                     }),
                     new TerrainRule(Terrain.TerrainType.DwarfGalaxy, zoomable: true, weight: 5),
-                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.IntergalacticSpace, weight: 75),
                 });
                 break;
             case Terrain.TerrainType.DwarfGalaxy:
