@@ -106,12 +106,13 @@ public class MapView : Area2D
 
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
             {
-                GD.Print("Entering tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
                 ZoomInToInternalMap(Tile);
+                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
             {
                 ZoomOutToExternalMap(Tile);
+                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.parent.parent.terrain.terrainType, (", " + Tile.parent.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
         }
     }
