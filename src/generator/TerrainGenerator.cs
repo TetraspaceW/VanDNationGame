@@ -64,11 +64,18 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.1, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.Irr.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 5),
+                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, zoomable: true, weight: 5),
                     new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 75),
                 });
                 break;
             case Terrain.TerrainType.DwarfGalaxy:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
+                });
+                AddCenter(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
+                });
+                break;
             case Terrain.TerrainType.Galaxy:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
