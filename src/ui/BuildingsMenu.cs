@@ -16,7 +16,7 @@ class BuildingReqs
     }
 }
 
-enum BuildingType
+class BuildingType
 {
-
+    string name;
 }

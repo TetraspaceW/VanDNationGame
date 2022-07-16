@@ -1,26 +1,53 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using System.Linq;
 
 class Technology
 {
     public string name;
-    List<string> requirements;
+    public List<string> requirements;
     [JsonConstructor] Technology(string name, List<string> requirements) { this.name = name; this.requirements = requirements; }
 }
 
 class TechTree
 {
-    List<string> unlocked;
+    public static List<TreeTechnology> techTree = new TechTreeLoader().techs;
 
-    public static List<Technology> techTree = new TechTreeLoader().techs;
+    public class TreeTechnology
+    {
+        public Technology techDef;
+        public int? x;
+        public int? y;
+        public TreeTechnology(Technology tech) { this.techDef = tech; }
+    }
 
     class TechTreeLoader
     {
-        public List<Technology> techs;
+        public List<TreeTechnology> techs;
         public TechTreeLoader()
         {
             var techFile = System.IO.File.ReadAllText("./src/technology/techs.json");
-            this.techs = JsonConvert.DeserializeObject<List<Technology>>(techFile);
+            var importedTechs = (JsonConvert.DeserializeObject<List<Technology>>(techFile)).Select((tech) => new TreeTechnology(tech)).ToList();
+
+            for (int i = 0; i < importedTechs.Count(); i++)
+            {
+                if (importedTechs[i].x == null)
+                {
+                    GetTechX(importedTechs[i], importedTechs);
+                }
+            }
+        }
+
+        private void GetTechX(TreeTechnology tech, List<TreeTechnology> techs)
+        {
+            var newX = tech.techDef.requirements.Select((req) =>
+            {
+                var indexToCheck = techs.FindIndex((it) => it.techDef.name == req);
+                if (techs[indexToCheck].x == null) { GetTechX(techs[indexToCheck], techs); }
+                return techs[indexToCheck].x;
+            }).Append(0).Max() + 1;
+            Godot.GD.Print("Setting x position of technology ", tech.techDef.name, " to ", newX);
+            tech.x = newX;
         }
     }
 }
