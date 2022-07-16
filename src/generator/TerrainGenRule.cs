@@ -174,8 +174,8 @@ class TerrainGenRule
 
         int tileLength = rules[0].structure.rules.GetLength(0);
         int tileHeight = rules[0].structure.rules.GetLength(1);
-        int tileStartX = -_random.Next(0, tileLength);
-        int tileStartY = -_random.Next(0, tileHeight);
+        int tileStartX = -RND.Next(0, tileLength);
+        int tileStartY = -RND.Next(0, tileHeight);
 
         for (int x = tileStartX; x < width + tileLength; x += tileLength)
         {
