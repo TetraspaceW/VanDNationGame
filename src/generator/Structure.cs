@@ -9,6 +9,9 @@ class Structure
     private static readonly TerrainRule[] oxyg = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()}
     })};
+    private static readonly TerrainRule[] silc = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Silicon.ToString()}
+    })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
     public static readonly Structure WATER = new Structure(new TerrainRule[,][] {
         { null, molc, null, null },
@@ -25,6 +28,9 @@ class Structure
         { null, molc, hydr, molc, null },
         { molc, hydr, oxyg, hydr, molc },
         { null, molc, molc, molc, null }, });
+    public static readonly Structure SILICA = new Structure(new TerrainRule[,][] {
+        { silc, oxyg },
+        { oxyg, molc }, });
 
     public Structure(TerrainRule[,][] rules)
     {
