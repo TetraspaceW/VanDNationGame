@@ -170,20 +170,12 @@ class TerrainGenerator
             case Terrain.TerrainType.FarSystemBody:
             case Terrain.TerrainType.OuterSystemBody:
             case Terrain.TerrainType.InnerSystemBody:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
                 switch (tile.scale)
                 {
-                    case -6:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) });
-                        break;
-                    case -7:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
-                        break;
-                    default:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
-                        AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) });
-                        break;
+                    case -6: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }); break;
+                    case -7: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }); break;
+                    default: AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }); break;
                 }
                 break;
             case Terrain.TerrainType.OuterLunarSystem:
@@ -264,28 +256,25 @@ class TerrainGenerator
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.Nucleus:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 switch (tile.scale)
                 {
                     case -30:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                         var nucleusCenter = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
 
                         double massNumber = AtomGenerator.GetMassNumber(terrain);
 
                         AddCircle(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.Proton, true),
-                            new TerrainRule(Terrain.TerrainType.Neutron, true)
+                                new TerrainRule(Terrain.TerrainType.Proton, true),
+                                new TerrainRule(Terrain.TerrainType.Neutron, true)
                             },
                             nucleusCenter,
                             (int)(Math.Pow(massNumber, 1.0 / 3.0) * 0.6),
                             true
-                            );
+                        );
                         break;
 
-                    default:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
-                        break;
+                    default: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) }); break;
                 }
                 break;
             case Terrain.TerrainType.Proton:
@@ -295,16 +284,13 @@ class TerrainGenerator
                 Tiles = new NucleonGenerator(tile, Terrain.QuarkFlavour.Up, Terrain.QuarkFlavour.Down, Terrain.QuarkFlavour.Down).GenerateNucleon();
                 break;
             case Terrain.TerrainType.ValenceQuark:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
                 switch (tile.scale)
                 {
                     case -34:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) });
-                        break;
+                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }); break;
                     default:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) });
-                        break;
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) }); break;
                 }
                 break;
         }
@@ -430,13 +416,9 @@ class TerrainGenerator
     {
         switch (Enum.Parse(typeof(Terrain.PlanetType), planetType))
         {
-            case Terrain.PlanetType.Jovian:
-                return false;
-            case Terrain.PlanetType.Terrestrial:
-            case Terrain.PlanetType.Chunk:
-                return true;
+            default: case Terrain.PlanetType.Jovian: return false;
+            case Terrain.PlanetType.Terrestrial: case Terrain.PlanetType.Chunk: return true;
         }
-        return false;
     }
 
 }
