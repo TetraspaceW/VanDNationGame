@@ -125,7 +125,7 @@ class TerrainGenRule
             weightSum += rule.weight;
         }
 
-        var rand = RND.NextDouble() * weightSum / chanceNone;
+        var rand = RND.NextDouble() * weightSum / (1.0-chanceNone);
         foreach (var rule in rules)
         {
             rand -= rule.weight;
@@ -150,6 +150,48 @@ class TerrainGenRule
                 if (thing != null)
                 {
                     tiles = thing.AttemptPlace(parent, tiles, x, y);
+                }
+            }
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (tiles[x, y] == null)
+                {
+                    tiles[x, y] = RandomTileFromRule(parent, baseFill);
+                }
+            }
+        }
+        return tiles;
+    }
+
+    static public TileModel[,] StructureTile(TileModel parent, TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
+    {
+        var (width, height) = Shape(tiles);
+        tiles = new TileModel[width, height];
+
+        int tileLength = rules[0].structure.rules.GetLength(0);
+        int tileHeight = rules[0].structure.rules.GetLength(1);
+        int tileStartX = -RND.Next(0, tileLength);
+        int tileStartY = -RND.Next(0, tileHeight);
+
+        for (int x = tileStartX; x < width + tileLength; x += tileLength)
+        {
+            for (int y = tileStartY; y < height + tileHeight; y += tileHeight)
+            {
+                Structure thing = RandomStructureFromRule(parent, rules, 0);
+                if (thing != null)
+                {
+                    if (thing.rules.GetLength(0) != tileLength || thing.rules.GetLength(0) != tileHeight)
+                    {
+                        throw new ArgumentException("Rules must be the same dimensions");
+                    }
+                    else
+                    {
+                        tiles = thing.AttemptPlace(parent, tiles, x, y);
+                    }
                 }
             }
         }

@@ -226,14 +226,36 @@ class TerrainGenerator
                 break;
 
             case Terrain.TerrainType.BarrenTerrain:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.BarrenTerrain, true)
-                });
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Structure.SILICA, 1) }
+                            , new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                        });
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.BarrenTerrain, true)
+                        });
+                        break;
+                }
                 break;
             case Terrain.TerrainType.VerdantTerrain:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.VerdantTerrain, true)
-                });
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Structure.SILICA, 1) }
+                            , new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                        });
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.VerdantTerrain, true)
+                        });
+                        break;
+                }
                 break;
             case Terrain.TerrainType.Ocean:
                 switch (tile.scale)
@@ -398,6 +420,10 @@ class TerrainGenerator
     private TileModel[,] StructureFill(TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
     {
         return TerrainGenRule.StructureFill(parent: tile, tiles, rules, chanceNone, baseFill);
+    }
+    private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
+    {
+        return TerrainGenRule.StructureTile(parent: tile, tiles, rules, baseFill);
     }
 
     private void AddCircle(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool filled, (int, int)? mask = null)
