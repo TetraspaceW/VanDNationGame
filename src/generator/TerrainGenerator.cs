@@ -5,7 +5,6 @@ using System.Linq;
 class TerrainGenerator
 {
     TileModel tile;
-    private readonly Random _random = new Random();
     public TerrainGenerator(TileModel insideTile)
     {
         this.tile = insideTile;
@@ -65,19 +64,24 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.Galaxy, zoomable: true, 0.1, props: new Dictionary<PropKey, string>() {
                         {PropKey.GalaxyType, Terrain.GalaxyType.Irr.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, weight: 5),
-                    new TerrainRule(Terrain.TerrainType.IntergroupSpace, weight: 75),
+                    new TerrainRule(Terrain.TerrainType.DwarfGalaxy, zoomable: true, weight: 5),
+                    new TerrainRule(Terrain.TerrainType.IntergalacticSpace, weight: 75),
                 });
                 break;
             case Terrain.TerrainType.DwarfGalaxy:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
+                });
+                AddCenter(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
+                });
+                break;
             case Terrain.TerrainType.Galaxy:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
 
-                Terrain.GalaxyType galaxyType;
-                Enum.TryParse<Terrain.GalaxyType>(terrain.props[PropKey.GalaxyType], out galaxyType);
-                switch (galaxyType)
+                switch (Enum.Parse(typeof(Terrain.GalaxyType), terrain.props[PropKey.GalaxyType]))
                 {
                     case Terrain.GalaxyType.E:
                         AddGalaxy(Tiles, new[] {
@@ -158,9 +162,7 @@ class TerrainGenerator
                 });
                 break;
             case Terrain.TerrainType.SolarSystem:
-                SolarSystemGenerator.SpectralClass ossStarType;
-                Enum.TryParse<SolarSystemGenerator.SpectralClass>(terrain.props[PropKey.SpectralClass], out ossStarType);
-                var solarSystemGenerator = new SolarSystemGenerator(tile, ossStarType);
+                var solarSystemGenerator = new SolarSystemGenerator(tile, (SolarSystemGenerator.SpectralClass)Enum.Parse(typeof(SolarSystemGenerator.SpectralClass), terrain.props[PropKey.SpectralClass]));
                 Tiles = solarSystemGenerator.SolarSystemMap();
                 break;
             case Terrain.TerrainType.FarfarfarSystemBody:
@@ -188,7 +190,9 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()}
+                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()},
+                        {PropKey.PlanetIsLifeBearing, false.ToString()},
+                        {PropKey.PlanetHydrosphereType, SolarSystemGenerator.Hydrosphere.None.ToString()}
                     })
                 });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
@@ -197,7 +201,9 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.LunarOrbit, weight: 98),
                     new TerrainRule(Terrain.TerrainType.LunarBody, weight: 1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()}
+                        {PropKey.PlanetType, Terrain.PlanetType.Chunk.ToString()},
+                        {PropKey.PlanetIsLifeBearing, false.ToString()},
+                        {PropKey.PlanetHydrosphereType, SolarSystemGenerator.Hydrosphere.None.ToString()}
                     })
                 });
                 if (PlanetIsTerrestrial(terrain.props[PropKey.PlanetType]))
@@ -210,17 +216,13 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
-                int oceanWeight;
-                int.TryParse(terrain.props[PropKey.PlanetHydrosphereCoverage], out oceanWeight);
+                int oceanWeight = int.Parse(terrain.props[PropKey.PlanetHydrosphereCoverage]);
 
-                SolarSystemGenerator.Hydrosphere hydrosphere;
-                Enum.TryParse<SolarSystemGenerator.Hydrosphere>(terrain.props[PropKey.PlanetHydrosphereType], out hydrosphere);
+                SolarSystemGenerator.Hydrosphere hydrosphere = (SolarSystemGenerator.Hydrosphere)Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), terrain.props[PropKey.PlanetHydrosphereType]);
 
-                bool isLifeBearing;
-                bool.TryParse(terrain.props[PropKey.PlanetIsLifeBearing], out isLifeBearing);
+                bool isLifeBearing = bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]);
 
-                double planetaryRadius;
-                double.TryParse(terrain.props[PropKey.PlanetRadius], out planetaryRadius);
+                double planetaryRadius = double.Parse(terrain.props[PropKey.PlanetRadius]);
                 var planetaryTileSize = (int)Math.Round(planetaryRadius / 1000);
 
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
@@ -309,49 +311,11 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.Proton:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
-
-                var protonColours = new List<Terrain.QuarkColour> { Terrain.QuarkColour.Red, Terrain.QuarkColour.Green, Terrain.QuarkColour.Blue };
-                protonColours.OrderBy(a => _random.Next()).ToList();
-
-                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
-                    {PropKey.QuarkColour, protonColours[0].ToString()},
-                    {PropKey.QuarkFlavour, Terrain.QuarkFlavour.Up.ToString()}
-                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceQuark });
-
-                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
-                    {PropKey.QuarkColour, protonColours[1].ToString()},
-                    {PropKey.QuarkFlavour, Terrain.QuarkFlavour.Up.ToString()}
-                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceQuark });
-
-                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
-                    {PropKey.QuarkColour, protonColours[2].ToString()},
-                    {PropKey.QuarkFlavour, Terrain.QuarkFlavour.Down.ToString()}
-                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceQuark });
+                Tiles = new NucleonGenerator(tile, Terrain.QuarkFlavour.Up, Terrain.QuarkFlavour.Up, Terrain.QuarkFlavour.Down).GenerateNucleon();
                 break;
-
             case Terrain.TerrainType.Neutron:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
-
-                var neutronColours = new List<Terrain.QuarkColour> { Terrain.QuarkColour.Red, Terrain.QuarkColour.Green, Terrain.QuarkColour.Blue };
-                neutronColours.OrderBy(a => _random.Next()).ToList();
-
-                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
-                    {PropKey.QuarkColour, neutronColours[0].ToString()},
-                    {PropKey.QuarkFlavour, Terrain.QuarkFlavour.Up.ToString()}
-                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceQuark });
-
-                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
-                    {PropKey.QuarkColour, neutronColours[1].ToString()},
-                    {PropKey.QuarkFlavour, Terrain.QuarkFlavour.Down.ToString()}
-                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceQuark });
-
-                AddOneRandomly(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: new Dictionary<PropKey, string>() {
-                    {PropKey.QuarkColour, neutronColours[2].ToString()},
-                    {PropKey.QuarkFlavour, Terrain.QuarkFlavour.Down.ToString()}
-                }) }, new List<Terrain.TerrainType> { Terrain.TerrainType.ValenceQuark });
+                Tiles = new NucleonGenerator(tile, Terrain.QuarkFlavour.Up, Terrain.QuarkFlavour.Down, Terrain.QuarkFlavour.Down).GenerateNucleon();
                 break;
-
             case Terrain.TerrainType.ValenceQuark:
                 switch (tile.scale)
                 {
@@ -376,7 +340,7 @@ class TerrainGenerator
         var core = AddCenter(tiles, new[] { new TerrainRule(Terrain.TerrainType.GalacticCore) });
         if (hasArms)
         {
-            AddArms(tiles, rules, core, radius, _random.NextDouble() > 0.5, (hasCore == 2) ? 2 : _random.Next(4, 7), hasCore == 2, (hasCore != 0) ? core : ((int, int)?)null);
+            AddArms(tiles, rules, core, radius, RND.NextDouble() > 0.5, (hasCore == 2) ? 2 : RND.Next(4, 7), hasCore == 2, (hasCore != 0) ? core : ((int, int)?)null);
         }
         else
         {
@@ -387,7 +351,7 @@ class TerrainGenerator
     {
         var (width, height) = Shape(tiles);
         var (centerX, centerY) = center;
-        var turn = _random.NextDouble() * Math.PI * 2;
+        var turn = RND.NextDouble() * Math.PI * 2;
         for (double j = 0; j < numArms; j++)
         {
             for (double i = 0; i < Math.PI * 2; i += Math.PI / 100)
@@ -490,9 +454,7 @@ class TerrainGenerator
 
     private bool PlanetIsTerrestrial(string planetType)
     {
-        Terrain.PlanetType output;
-        Enum.TryParse<Terrain.PlanetType>(planetType, out output);
-        switch (output)
+        switch (Enum.Parse(typeof(Terrain.PlanetType), planetType))
         {
             case Terrain.PlanetType.Jovian:
                 return false;

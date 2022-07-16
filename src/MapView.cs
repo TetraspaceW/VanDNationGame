@@ -63,7 +63,7 @@ public class MapView : Area2D
             }
         }
 
-        tooltip.setScaleLabelText(new ScaleUtil(Model.parent.scale).TextForScale());
+        tooltip.setScaleLabelText(ScaleUtil.TextForScale(Model.parent.scale));
         MoveChild(tooltip, GetChildCount());
 
         camera.SetMapSize(width, height);
@@ -108,12 +108,13 @@ public class MapView : Area2D
 
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
             {
-                GD.Print("Entering tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
                 ZoomInToInternalMap(Tile);
+                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
             {
                 ZoomOutToExternalMap(Tile);
+                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.parent.parent.terrain.terrainType, (", " + Tile.parent.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
         }
     }
@@ -137,7 +138,7 @@ public class MapView : Area2D
         {
             Tile.parent.parent.internalMap = new MapModel(Tile.parent.parent);
             MapModel grandparentMap = Tile.parent.parent.internalMap;
-            grandparentMap.Tiles[grandparentMap.randomNumber(0, 10), grandparentMap.randomNumber(0, 10)] = Tile.parent;
+            grandparentMap.Tiles[RND.Next(0, 10), RND.Next(0, 10)] = Tile.parent;
         }
         UpdateWholeMapTo(Tile.parent.parent.internalMap);
     }

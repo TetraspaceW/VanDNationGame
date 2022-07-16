@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/telluric.png-901bdc55cfa6febb0a1588ae84dde11c.stex"
+path="res://.import/terrestrial_ocean.png-13040862071b080f51b562ee1df3fadd.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/planets/telluric.png"
-dest_files=[ "res://.import/telluric.png-901bdc55cfa6febb0a1588ae84dde11c.stex" ]
+source_file="res://assets/tiles/planets/terrestrial_ocean.png"
+dest_files=[ "res://.import/terrestrial_ocean.png-13040862071b080f51b562ee1df3fadd.stex" ]
 
 [params]
 

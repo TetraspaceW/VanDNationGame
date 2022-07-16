@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/helian.png-6ec467428e4fd898f93ecbd1ce324a60.stex"
+path="res://.import/terrestrial_outer.png-1622f1889480e285c093c2b024f0b90a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/planets/helian.png"
-dest_files=[ "res://.import/helian.png-6ec467428e4fd898f93ecbd1ce324a60.stex" ]
+source_file="res://assets/tiles/planets/terrestrial_outer.png"
+dest_files=[ "res://.import/terrestrial_outer.png-1622f1889480e285c093c2b024f0b90a.stex" ]
 
 [params]
 

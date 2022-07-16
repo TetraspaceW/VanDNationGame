@@ -7,7 +7,6 @@ class SolarSystemGenerator : CelestialGenerator
     TileModel tile;
     Star star;
     Orbit[] orbits;
-    private readonly Random _random = new Random();
     public SolarSystemGenerator(TileModel tile, SpectralClass spectralClass)
     {
         // Object       | Size      | S     | Comparable map object
@@ -21,23 +20,23 @@ class SolarSystemGenerator : CelestialGenerator
         this.tile = tile;
         this.spectralClass = spectralClass;
         this.star = StarData(spectralClass);
-        int orbitsTableRoll = _random.Next(1, 11) + ((spectralClass == SpectralClass.K) ? 1 : 0) + ((spectralClass == SpectralClass.M) ? 3 : 0);
+        int orbitsTableRoll = RND.d(10) + ((spectralClass == SpectralClass.K) ? 1 : 0) + ((spectralClass == SpectralClass.M) ? 3 : 0);
         int numOrbits = 0;
         if (orbitsTableRoll <= 1)
         {
-            numOrbits = _random.Next(1, 11) + 10;
+            numOrbits = RND.d(10) + 10;
         }
         else if (orbitsTableRoll <= 5)
         {
-            numOrbits = _random.Next(1, 11) + 5;
+            numOrbits = RND.d(10) + 5;
         }
         else if (orbitsTableRoll <= 7)
         {
-            numOrbits = _random.Next(1, 11);
+            numOrbits = RND.d(10);
         }
         else if (orbitsTableRoll <= 9)
         {
-            numOrbits = _random.Next(1, 6);
+            numOrbits = RND.d(5);
         }
 
         orbits = new Orbit[numOrbits];
@@ -46,12 +45,12 @@ class SolarSystemGenerator : CelestialGenerator
             double R;
             if (i == 0)
             {
-                R = Math.Pow(star.mass, 2) * 0.05 * _random.Next(1, 11);
+                R = Math.Pow(star.mass, 2) * 0.05 * RND.d(10);
                 orbits[i] = new Orbit(R, star);
             }
             else
             {
-                R = orbits[i - 1].distance * (1.1 + _random.Next(1, 11) * 0.1) + 0.1;
+                R = orbits[i - 1].distance * (1.1 + RND.d(10) * 0.1) + 0.1;
                 orbits[i] = new Orbit(R, star);
             }
         }
@@ -306,7 +305,128 @@ class SolarSystemGenerator : CelestialGenerator
 
     public enum Hydrosphere
     {
-        Liquid, IceSheet, None
+        Liquid, IceSheet, Crustal, None
+    }
+
+    class Atmosphere
+    {
+        List<G> gasesPresent = new List<G>();
+        public double pressure = 0;
+
+        public Atmosphere(double temperature, double mass, double radius)
+        {
+            var gravity = mass / Math.Pow((radius / 6380), 2);
+            var escapeVelocity = Math.Sqrt(19600 * gravity * radius) / 11200;
+
+            var mwr = 0.02783 * temperature / Math.Pow(escapeVelocity, 2);
+
+            var atmosphereRoll = RND.d(9);
+            if (temperature <= 50)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.H2 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.He }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.H2, G.He }; break;
+                    case 9: gasesPresent = new List<G> { G.Ne }; break;
+                }
+            }
+            else if (temperature > 50 && temperature <= 150)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CH4 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.H2, G.He, G.N2 }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.N2, G.CO }; break;
+                    case 9: gasesPresent = new List<G> { G.H2, G.He }; break;
+                }
+            }
+            else if (temperature > 150 && temperature <= 400)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CO2 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.CO2 }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.N2, G.CH4 }; break;
+                    case 9: gasesPresent = (temperature > 240) ? new List<G> { G.CO2, G.CH4, G.NH3 } : new List<G> { G.H2, G.He }; break;
+                }
+            }
+            else if (temperature > 400)
+            {
+                switch (atmosphereRoll)
+                {
+                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CO2 }; break;
+                    case 5: case 6: gasesPresent = new List<G> { G.CO2 }; break;
+                    case 7: case 8: gasesPresent = new List<G> { G.NO2, G.SO2 }; break;
+                    case 9: gasesPresent = new List<G> { G.SO2 }; break;
+                }
+            }
+
+            var gasesRemoved = 0;
+            gasesPresent = gasesPresent.FindAll((gas) =>
+            {
+                bool gasRemains = MolecularWeight(gas) >= mwr;
+                gasesRemoved += gasRemains ? 0 : 1;
+                return gasRemains;
+            });
+
+            if (gasesPresent.Count >= 0)
+            {
+                pressure = mass * RND.d(10);
+                switch (RND.d(10) + (gasesRemoved > 0 ? -1 : 0))
+                {
+                    case 0: case 1: case 2: pressure *= 0.01; break;
+                    case 3: case 4: pressure *= 0.1; break;
+                    case 5: case 6: case 7: pressure *= 0.2; break;
+                    case 8: pressure *= 0.5; break;
+                    case 9: pressure *= 2; break;
+                    case 10: pressure *= 20; break;
+                }
+            }
+            else
+            {
+                pressure = 0;
+            }
+        }
+
+        public bool HasCO2()
+        {
+            return gasesPresent.Exists((gas) => { return gas == G.CO2; });
+        }
+
+        private enum G
+        {
+            H2, He,
+            CH4, NH3,
+            Ne, N2, CO,
+            CO2, NO2,
+            SO2
+        }
+
+        double MolecularWeight(G gas)
+        {
+            var H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
+            var He = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium);
+            var C = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon);
+            var Ne = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Neon);
+            var N = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen);
+            var O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
+            var S = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur);
+            switch (gas)
+            {
+                case G.H2: return H * 2;
+                case G.He: return He;
+                case G.CH4: return C + H * 4;
+                case G.NH3: return N + H * 3;
+                case G.Ne: return Ne;
+                case G.N2: return N;
+                case G.CO: return C + O;
+                case G.CO2: return C + O * 2;
+                case G.NO2: return N + O * 2;
+                case G.SO2: return S + O * 2;
+                default: return 0;
+            }
+        }
     }
 
     class Orbit
@@ -314,7 +434,6 @@ class SolarSystemGenerator : CelestialGenerator
         public World body;
         public double distance;
         public bool inner = false;
-        private readonly Random _random = new Random();
         public Star star;
         public Orbit(double R, Star star)
         {
@@ -324,7 +443,7 @@ class SolarSystemGenerator : CelestialGenerator
             var vaporised = (R <= Math.Sqrt(star.luminosity) * 0.025);
             inner = (R <= Math.Sqrt(star.luminosity) * 4);
 
-            var orbitRoll = _random.Next(1, 96);
+            var orbitRoll = RND.d(95);
             var T = 255.0 / Math.Sqrt(distance / Math.Sqrt(star.luminosity));
             if (inner)
             {
@@ -392,8 +511,8 @@ class SolarSystemGenerator : CelestialGenerator
         public double density;
         public double mass;
         public Orbit[] moons;
-        private readonly Random _random = new Random();
         public Type bodyType;
+        public Atmosphere atmosphere;
         public Hydrosphere hydrosphere;
         public int hydrosphereCoverage;
         public bool hasLife;
@@ -434,16 +553,31 @@ class SolarSystemGenerator : CelestialGenerator
                     break;
                 case Type.Superjovian:
                     radius = (sizeRoll - 0.5 * orbit.star.age) * 2000 + 60000;
-                    density = 0;
+                    switch (d(10))
+                    {
+                        case 1: case 2: case 3: case 4: mass = d(10) * 50 + 500; break;
+                        case 5: case 6: case 7: mass = d(10) * 100 + 1000; break;
+                        case 8: case 9: mass = d(10) * 100 + 2000; break;
+                        case 10: mass = d(10) * 100 + 300; break;
+                    }
+                    density = mass / Math.Pow(radius / 6380, 3);
                     break;
-
             }
+
+            mass = Math.Pow(radius / 6380, 3) * density;
 
             (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsTerrestrial(bodyType));
 
+            if (SolarSystemGenerator.IsTerrestrial(bodyType))
+            {
+                atmosphere = new Atmosphere(temperature, mass, radius);
+                hydrosphereCoverage = atmosphere.pressure == 0 ? 0 : hydrosphereCoverage;
+                hydrosphere = (hydrosphereCoverage == 0 && hydrosphere != Hydrosphere.Crustal) ? Hydrosphere.None : hydrosphere;
+            }
+
             moons = GenerateMoons(orbit.inner, bodyType);
 
-            hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
+            hasLife = hydrosphere == Hydrosphere.Liquid && atmosphere.HasCO2() && d(10) <= 3;
 
             orbit = null;
         }
@@ -462,15 +596,10 @@ class SolarSystemGenerator : CelestialGenerator
             int hydrosphereCoverage = 0;
             if (inner && terrestrial)
             {
-                if (temperature <= 245)
-                {
-                    hydrosphere = Hydrosphere.IceSheet;
-                }
-                else if (temperature <= 370)
-                {
-                    hydrosphere = Hydrosphere.Liquid;
-                }
+                if (temperature <= 245) { hydrosphere = Hydrosphere.IceSheet; }
+                else if (temperature <= 370) { hydrosphere = Hydrosphere.Liquid; }
             }
+            else if (terrestrial) { hydrosphere = Hydrosphere.Crustal; }
 
             if (hydrosphere != Hydrosphere.None)
             {
@@ -482,12 +611,7 @@ class SolarSystemGenerator : CelestialGenerator
                         case 1: case 2: case 3: case 4: case 5: break;
                         case 6: case 7: hydrosphereCoverage += d(10); break;
                         case 8: hydrosphereCoverage += d(10) + 10; break;
-                        case 9:
-                        case 10:
-                            hydrosphereCoverage += d(10, N: (hydroRoll - 8) * 5);
-                            hydrosphereCoverage += (hydroRoll - 9) * 10;
-                            hydrosphereCoverage = Math.Min(hydrosphereCoverage, 100);
-                            break;
+                        case 9: case 10: hydrosphereCoverage += Math.Min(d(10, N: (hydroRoll - 8) * 5) + (hydroRoll - 9) * 10, 100); break;
                     }
                 }
                 else if (radius <= 4000)
@@ -497,10 +621,7 @@ class SolarSystemGenerator : CelestialGenerator
                         case 1: case 2: break;
                         case 3: case 4: hydrosphereCoverage += d(10); break;
                         case 5: case 6: case 7: case 8: case 9: hydrosphereCoverage += d(10) + (hydroRoll - 4) * 10; break;
-                        case 10:
-                            hydrosphereCoverage += d(10, N: 10) + 10;
-                            hydrosphereCoverage = Math.Min(hydrosphereCoverage, 100);
-                            break;
+                        case 10: hydrosphereCoverage += Math.Min(d(10, N: 10) + 10, 100); break;
                     }
                 }
                 else if (radius <= 7000)
@@ -526,6 +647,8 @@ class SolarSystemGenerator : CelestialGenerator
                     }
                 }
             }
+
+            hydrosphere = (hydrosphereCoverage == 0 && hydrosphere != Hydrosphere.Crustal) ? Hydrosphere.None : hydrosphere;
 
             return (hydrosphere, hydrosphereCoverage);
         }
@@ -575,23 +698,23 @@ class SolarSystemGenerator : CelestialGenerator
                 }
                 orbits[i] = new Orbit(distance, this);
 
-                radius = 0;
+                var lunarRadius = 0;
                 switch (parentType)
                 {
-                    case Type.Chunk: radius = d(10) * 10; break;
+                    case Type.Chunk: lunarRadius = d(10) * 10; break;
                     case Type.Terrestrial:
                         var terrestrialMoonRoll = d(94);
                         if (1 <= terrestrialMoonRoll && terrestrialMoonRoll <= 64)
                         {
-                            radius = d(10) * 10;
+                            lunarRadius = d(10) * 10;
                         }
                         else if (65 <= terrestrialMoonRoll && terrestrialMoonRoll <= 84)
                         {
-                            radius = d(10) * 100;
+                            lunarRadius = d(10) * 100;
                         }
                         else if (85 <= terrestrialMoonRoll && terrestrialMoonRoll <= 94)
                         {
-                            radius = d(10) * 100 + 1000;
+                            lunarRadius = d(10) * 100 + 1000;
                         }
                         break;
                     case Type.GasGiant:
@@ -599,43 +722,36 @@ class SolarSystemGenerator : CelestialGenerator
                         var ggMoonRoll = d(100);
                         if (1 <= ggMoonRoll && ggMoonRoll <= 64)
                         {
-                            radius = d(10) * 10;
+                            lunarRadius = d(10) * 10;
                         }
                         else if (65 <= ggMoonRoll && ggMoonRoll <= 84)
                         {
-                            radius = d(10) * 100;
+                            lunarRadius = d(10) * 100;
                         }
                         else if (85 <= ggMoonRoll && ggMoonRoll <= 94)
                         {
-                            radius = d(10) * 100 + 1000;
+                            lunarRadius = d(10) * 100 + 1000;
                         }
                         else if (95 <= ggMoonRoll && ggMoonRoll <= 99)
                         {
-                            radius = d(10) * 200 + 2000;
+                            lunarRadius = d(10) * 200 + 2000;
                         }
                         else if (ggMoonRoll == 100)
                         {
-                            radius = d(10) * 400 + 4000;
+                            lunarRadius = d(10) * 400 + 4000;
                         }
                         break;
                 }
 
-                orbits[i].body = new World(radius, temperature, inner);
+                orbits[i].body = new World(lunarRadius, temperature, inner);
             }
 
             return orbits;
         }
 
-
-
         int d(int n, int N = 1)
         {
-            var c = 0;
-            for (int i = 0; i < N; i++)
-            {
-                c += _random.Next(1, n + 1);
-            }
-            return c;
+            return RND.d(n, N);
         }
 
         public enum Type
@@ -646,7 +762,6 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Star
     {
-        private readonly Random _random = new Random();
         public double radius;
         public double luminosity;
         public double mass;
@@ -659,7 +774,7 @@ class SolarSystemGenerator : CelestialGenerator
             this.mass = M;
             this.age = (int)age;
 
-            var abundanceRoll = _random.Next(1, 11) + _random.Next(1, 11) + this.age;
+            var abundanceRoll = RND.d(10, N: 2) + this.age;
             if (abundanceRoll <= 9)
             {
                 this.abundance = 2;

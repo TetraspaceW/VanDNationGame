@@ -2,7 +2,6 @@ using System;
 public class MapModel
 {
     public TileModel[,] Tiles;
-    private readonly Random _random = new Random();
     public TileModel parent;
 
     public MapModel(TileModel parent)
@@ -18,10 +17,5 @@ public class MapModel
     {
         this.parent = parent;
         this.Tiles = tiles;
-    }
-
-    public int randomNumber(int low, int high)
-    {
-        return _random.Next(low, high);
     }
 }
