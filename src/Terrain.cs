@@ -301,7 +301,7 @@ public enum PropKey
 {
     QuarkColour, QuarkFlavour,
     AtomElement,
-    PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing,
+    PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
     PlanetType,
     SpectralClass,
     SpecialStar,

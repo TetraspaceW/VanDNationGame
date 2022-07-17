@@ -251,7 +251,8 @@ class SolarSystemGenerator : CelestialGenerator
                     { PropKey.PlanetIsLifeBearing, body.hasLife.ToString() },
                     { PropKey.PlanetHydrosphereType, body.hydrosphere.ToString() },
                     { PropKey.PlanetHydrosphereCoverage, body.hydrosphereCoverage.ToString() },
-                    { PropKey.PlanetRadius, body.radius.ToString() }
+                    { PropKey.PlanetRadius, body.radius.ToString() },
+                    { PropKey.PlanetTemperature, (body.temperature - 273.15).ToString() }
                 })
             },
             center,
@@ -566,18 +567,22 @@ class SolarSystemGenerator : CelestialGenerator
 
             mass = Math.Pow(radius / 6380, 3) * density;
 
-            (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsTerrestrial(bodyType));
-
             if (SolarSystemGenerator.IsTerrestrial(bodyType))
             {
+                (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsTerrestrial(bodyType));
+
                 atmosphere = new Atmosphere(temperature, mass, radius);
                 hydrosphereCoverage = atmosphere.pressure == 0 ? 0 : hydrosphereCoverage;
                 hydrosphere = (hydrosphereCoverage == 0 && hydrosphere != Hydrosphere.Crustal) ? Hydrosphere.None : hydrosphere;
+
+                hasLife = hydrosphere == Hydrosphere.Liquid && atmosphere.HasCO2() && d(10) <= 3;
+            }
+            else
+            {
+                (hydrosphere, hydrosphereCoverage) = (Hydrosphere.None, 0);
             }
 
             moons = GenerateMoons(orbit.inner, bodyType);
-
-            hasLife = hydrosphere == Hydrosphere.Liquid && atmosphere.HasCO2() && d(10) <= 3;
 
             orbit = null;
         }
