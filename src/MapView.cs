@@ -22,6 +22,10 @@ public class MapView : Area2D
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
         CreateTileMap();
         UpdateWholeMapTo(Model);
+
+        var s = TechTree.techTree; // load tech tree from file
+
+        UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
     }
 
     void CreateTileMap()

@@ -39,8 +39,12 @@ class TerrainGenRule
             }
         }
 
-        var (newX, newY) = possibleLocations[RND.Next(0, possibleLocations.Count)];
-        tiles[newX, newY] = RandomTileFromRule(parent, rules);
+        if (possibleLocations.Count > 0)
+        {
+            var (newX, newY) = possibleLocations[RND.Next(0, possibleLocations.Count)];
+            tiles[newX, newY] = RandomTileFromRule(parent, rules);
+        }
+        else { AddAtDistance(parent, tiles, rules, center, radius + 1, mask); }
     }
 
     static public void AddOneRandomly(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, List<Terrain.TerrainType> mask)
@@ -125,7 +129,7 @@ class TerrainGenRule
             weightSum += rule.weight;
         }
 
-        var rand = RND.NextDouble() * weightSum / (1.0-chanceNone);
+        var rand = RND.NextDouble() * weightSum / (1.0 - chanceNone);
         foreach (var rule in rules)
         {
             rand -= rule.weight;
