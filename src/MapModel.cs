@@ -21,25 +21,21 @@ public class MapModel
 
     public TileModel FindHabitablePlanet()
     {
-        string isLifeBearingStr;
-        if (parent.terrain.terrainType == Terrain.TerrainType.VerdantTerrain)
-        {
-            return parent;
-        }
+        if (parent.terrain.terrainType == Terrain.TerrainType.VerdantTerrain) { return parent; }
         else
         {
             foreach (var tile in Tiles)
             {
-
-
                 TileModel foundHabitablePlanet = null;
                 if (tile.zoomable && tile.scale >= -10)
                 {
-                    if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out isLifeBearingStr) && !bool.Parse(isLifeBearingStr)) { return null; }
-                    if (tile.internalMap == null)
-                    {
-                        tile.internalMap = new MapModel(tile);
-                    }
+                    string dicts;
+                    if (parent.terrain.terrainType == Terrain.TerrainType.DwarfGalaxy) { return null; }
+                    if (parent.terrain.props.TryGetValue(PropKey.GalaxyType, out dicts) && dicts != "S") { return null; }
+                    if (parent.terrain.props.TryGetValue(PropKey.SpectralClass, out dicts) && dicts != "G") { return null; }
+                    if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out dicts) && !bool.Parse(dicts)) { return null; }
+
+                    if (tile.internalMap == null) { tile.internalMap = new MapModel(tile); }
                     foundHabitablePlanet = tile.internalMap.FindHabitablePlanet();
                 }
 
