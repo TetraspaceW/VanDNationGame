@@ -38,13 +38,13 @@ public class Terrain
             case TerrainType.GalaxySupercluster:
             case TerrainType.SpiralArm:
             case TerrainType.StellarBelt:
-                return "dense_stars";
+                return "star_clusters/dense_stars";
             case TerrainType.GalaxyCluster:
             case TerrainType.StellarBubble:
-                return "stars";
+                return "star_clusters/stars" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToString().ToLower() : "");
             case TerrainType.GalaxyGroup:
             case TerrainType.StellarCloud:
-                return "stars_sparse";
+                return "star_clusters/stars_sparse" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToString().ToLower() : "");
             case TerrainType.Galaxy:
                 return "galaxies/" + props[PropKey.GalaxyType].ToString().ToLower();
             case TerrainType.DwarfGalaxy:
@@ -304,5 +304,6 @@ public enum PropKey
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing,
     PlanetType,
     SpectralClass,
+    SpecialStar,
     GalaxyType
 }

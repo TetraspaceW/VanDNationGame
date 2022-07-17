@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/stars_sparse.png-3ba713aff68447b54204afebdead90dc.stex"
+path="res://.import/stars_sparse_a.png-f75db6d43be2e199f70e5e759dd1d5e0.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/stars_sparse.png"
-dest_files=[ "res://.import/stars_sparse.png-3ba713aff68447b54204afebdead90dc.stex" ]
+source_file="res://assets/tiles/star_clusters/stars_sparse_a.png"
+dest_files=[ "res://.import/stars_sparse_a.png-f75db6d43be2e199f70e5e759dd1d5e0.stex" ]
 
 [params]
 
