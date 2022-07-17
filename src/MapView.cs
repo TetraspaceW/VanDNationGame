@@ -24,6 +24,8 @@ public class MapView : Area2D
         UpdateWholeMapTo(Model);
 
         var s = TechTree.techTree; // load tech tree from file
+
+        UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
     }
 
     void CreateTileMap()
