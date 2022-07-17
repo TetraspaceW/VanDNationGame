@@ -17,10 +17,7 @@ public class ScaleUtil
             if (scale >= units[i].Item1 && scale < units[i + 1].Item1)
             {
                 string numberString = NumberStringForScale(scale - units[i].Item1);
-                if (numberString != null)
-                {
-                    scaleString = numberString + " " + units[i].Item2;
-                }
+                if (numberString != null) { scaleString = numberString + " " + units[i].Item2; }
             }
         }
         return scaleString;

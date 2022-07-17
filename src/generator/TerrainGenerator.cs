@@ -312,7 +312,7 @@ class TerrainGenerator
                     case -34:
                         AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }); break;
                     default:
-                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) }); break;
+                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
                 }
                 break;
         }

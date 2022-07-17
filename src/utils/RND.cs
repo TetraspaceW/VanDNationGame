@@ -2,7 +2,7 @@ using System;
 
 class RND
 {
-    private static readonly Random _random = new Random();
+    private static readonly Random _random = new Random(0);
     public static int d(int n, int N = 1)
     {
         var c = 0;
