@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex"
+path="res://.import/nitrogen.png-fa31cdcba46bbbc9a221c86c65f92cea.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/S.png"
-dest_files=[ "res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex" ]
+source_file="res://assets/tiles/atom/nitrogen.png"
+dest_files=[ "res://.import/nitrogen.png-fa31cdcba46bbbc9a221c86c65f92cea.stex" ]
 
 [params]
 

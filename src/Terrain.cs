@@ -104,6 +104,8 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
+            case TerrainType.Nucleotide:
+                return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToString().ToLower() + "_" + props[PropKey.NucleicBackbone].ToString().ToLower() + props[PropKey.Rotation].ToString().ToLower();
             case TerrainType.Atom:
                 return "atom/" + props[PropKey.AtomElement].ToString().ToLower();
             case TerrainType.ElectronCloud:
@@ -236,6 +238,7 @@ public class Terrain
         // -23  100 nm across
         // -24  10 nm across
         // -25  1 nm across
+        Nucleotide,
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace,
         // -27  10 pm across
@@ -250,7 +253,10 @@ public class Terrain
         GluonSea, ValenceQuark,
         // -33  10 am across
         // -34  1 am across
-        Quark
+        Quark,
+        // N/A
+        StructureTile,
+        Sandbox
     }
 
     public enum PlanetType
@@ -299,8 +305,11 @@ public class Terrain
 
 public enum PropKey
 {
+    Rotation,
+    StructureType, StructureShiftX, StructureShiftY,
     QuarkColour, QuarkFlavour,
     AtomElement,
+    Nucleobase, NucleicBackbone,
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
     PlanetType,
     SpectralClass,

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex"
+path="res://.import/phosphorus.png-740fc2e809cb25a054e88b95690241a9.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/S.png"
-dest_files=[ "res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex" ]
+source_file="res://assets/tiles/atom/phosphorus.png"
+dest_files=[ "res://.import/phosphorus.png-740fc2e809cb25a054e88b95690241a9.stex" ]
 
 [params]
 

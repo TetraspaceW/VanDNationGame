@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex"
+path="res://.import/cytosine_dna2.png-6c2f691df7ec5affc8d57b0f8b2d257c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/S.png"
-dest_files=[ "res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex" ]
+source_file="res://assets/tiles/biomolecules/nucleotides/cytosine_dna2.png"
+dest_files=[ "res://.import/cytosine_dna2.png-6c2f691df7ec5affc8d57b0f8b2d257c.stex" ]
 
 [params]
 

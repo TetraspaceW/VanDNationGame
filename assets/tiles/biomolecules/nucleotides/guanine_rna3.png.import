@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex"
+path="res://.import/guanine_rna3.png-68929bbc5fb8aac1179a305a62c6702f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/S.png"
-dest_files=[ "res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex" ]
+source_file="res://assets/tiles/biomolecules/nucleotides/guanine_rna3.png"
+dest_files=[ "res://.import/guanine_rna3.png-68929bbc5fb8aac1179a305a62c6702f.stex" ]
 
 [params]
 

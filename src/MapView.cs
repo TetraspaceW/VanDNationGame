@@ -1,4 +1,6 @@
 using Godot;
+using System.Collections.Generic;
+
 public class MapView : Area2D
 {
     private CameraBuddy camera;
@@ -10,7 +12,8 @@ public class MapView : Area2D
     public override void _Ready()
     {
         // universe start
-        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+        //TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Sandbox), null, 10, zoomable: true);
         Model = new MapModel(tile);
         tile.internalMap = Model;
         CreateTooltip();
@@ -21,7 +24,7 @@ public class MapView : Area2D
 
         var s = TechTree.techTree; // load tech tree from file
 
-        UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
+        //UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
     }
 
     void CreateTileMap()

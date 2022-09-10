@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex"
+path="res://.import/thymine_dna1.png-0475b7f26b82d3d9dc4c3fd6e18e3ce1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/S.png"
-dest_files=[ "res://.import/S.png-1170564aeae7364cb8dedf82a33fb478.stex" ]
+source_file="res://assets/tiles/biomolecules/nucleotides/thymine_dna1.png"
+dest_files=[ "res://.import/thymine_dna1.png-0475b7f26b82d3d9dc4c3fd6e18e3ce1.stex" ]
 
 [params]
 

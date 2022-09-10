@@ -191,7 +191,7 @@ class TerrainGenerator
                         }),
                     }, new List<Terrain.TerrainType>());
                 }
-                
+
                 break;
             case Terrain.TerrainType.SolarSystem:
                 var solarSystemGenerator = new SolarSystemGenerator(tile, (SolarSystemGenerator.SpectralClass)Enum.Parse(typeof(SolarSystemGenerator.SpectralClass), terrain.props[PropKey.SpectralClass]));
@@ -305,6 +305,45 @@ class TerrainGenerator
                         break;
                 }
                 break;
+            case Terrain.TerrainType.Nucleotide:
+                TerrainRule[] nucleobase;
+                int rotation = int.Parse(terrain.props[PropKey.Rotation]);
+                switch (terrain.props[PropKey.Nucleobase])
+                {
+                    case "adenine":
+                        nucleobase = Structure.CreateStructureTile("adenine", 1, 2, rotation);
+                        break;
+                    case "guanine":
+                        nucleobase = Structure.CreateStructureTile("guanine", 1, 2, rotation);
+                        break;
+                    case "thymine":
+                        nucleobase = Structure.CreateStructureTile("thymine", 2, 4, rotation);
+                        break;
+                    case "cytosine":
+                        nucleobase = Structure.CreateStructureTile("cytosine", 2, 4, rotation);
+                        break;
+                    default:
+                        nucleobase = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+                            { PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString() }
+                        }) };
+                        break;
+                }
+                Structure backbone = Structure.NULL;
+                switch (terrain.props[PropKey.NucleicBackbone])
+                {
+                    case "RNA":
+                        backbone = Structure.RNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
+                        break;
+                    case "DNA":
+                    default:
+                        backbone = Structure.DNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
+                        break;
+                }
+                Tiles = PlaceStructure(Tiles, new[] { new StructureRule(backbone) },
+                           0, 0, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                       }, rotation);
+                break;
             case Terrain.TerrainType.Atom:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
@@ -347,7 +386,75 @@ class TerrainGenerator
                         AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
                 }
                 break;
+            case Terrain.TerrainType.Sandbox:
+                TerrainRule adenine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "adenine"},
+                        {PropKey.NucleicBackbone, "DNA"},
+                        {PropKey.Rotation, "0"}
+                    });
+                TerrainRule guanine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "guanine"},
+                        {PropKey.NucleicBackbone, "DNA"},
+                        {PropKey.Rotation, "0"}
+                    });
+                TerrainRule thymine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "thymine"},
+                        {PropKey.NucleicBackbone, "DNA"},
+                        {PropKey.Rotation, "2"}
+                    });
+                TerrainRule cytosine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "cytosine"},
+                        {PropKey.NucleicBackbone, "DNA"},
+                        {PropKey.Rotation, "2"}
+                    });
+                Structure adth = new Structure(new TerrainRule[,][] {
+                    { new[] { adenine }, new[] { thymine } }
+                });
+                Structure guacy = new Structure(new TerrainRule[,][] {
+                    { new[] { guanine }, new[] { cytosine } }
+                });
+
+
+                Tiles = StructureTile(Tiles, new StructureRule[] {
+                    new StructureRule(adth, 1),
+                    new StructureRule(adth.Rotate(2), 1),
+                    new StructureRule(guacy, 1),
+                    new StructureRule(guacy.Rotate(2), 1)
+                    },
+                    new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                });
+                /*Fill(Tiles, new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "adenine"},
+                        {PropKey.NucleicBackbone, "DNA"}
+                    }).rotateAll().Concat(
+                    new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "adenine"},
+                        {PropKey.NucleicBackbone, "RNA"}
+                    }).rotateAll()).Concat(
+                    new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "guanine"},
+                        {PropKey.NucleicBackbone, "DNA"}
+                    }).rotateAll()).Concat(
+                    new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "guanine"},
+                        {PropKey.NucleicBackbone, "RNA"}
+                    }).rotateAll()).Concat(
+                    new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "thymine"},
+                        {PropKey.NucleicBackbone, "DNA"}
+                    }).rotateAll()).Concat(
+                    new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "cytosine"},
+                        {PropKey.NucleicBackbone, "DNA"}
+                    }).rotateAll()).Concat(
+                    new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+                        {PropKey.Nucleobase, "cytosine"},
+                        {PropKey.NucleicBackbone, "RNA"}
+                    }).rotateAll()).ToArray());*/
+
+                break;
         }
+
 
         return Tiles;
     }
@@ -456,6 +563,11 @@ class TerrainGenerator
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
         return TerrainGenRule.StructureTile(parent: tile, tiles, rules, baseFill);
+    }
+
+    private TileModel[,] PlaceStructure(TileModel[,] tiles, StructureRule[] rules, int initX, int initY, TerrainRule[] baseFill, int rotate = 0)
+    {
+        return TerrainGenRule.PlaceStructure(parent: tile, tiles, rules, initX, initY, baseFill, rotate);
     }
 
     private void AddCircle(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool filled, (int, int)? mask = null)
