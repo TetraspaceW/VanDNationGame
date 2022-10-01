@@ -1,7 +1,71 @@
 [
     {
-        "name": "Nanotechnology",
+        "name": "Computing",
         "requirements": []
+    },
+    {
+        "name": "Telecommunications",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Satellites",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Guidance Systems",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Lasers",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Composites",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Stealth",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Robotics",
+        "requirements": [
+            "Guidance Systems",
+            "Composites"
+        ]
+    },
+    {
+        "name": "Artificial Intelligence",
+        "requirements": [
+            "Guidance Systems",
+            "Telecommunications"
+        ]
+    },
+    {
+        "name": "Nuclear Fusion",
+        "requirements": [
+            "Lasers",
+            "Composites"
+        ]
+    },
+    {
+        "name": "Nanotechnology",
+        "requirements": [
+            "Artificial Intelligence",
+            "Robotics"
+        ]
     },
     {
         "name": "Genetic Modification",
@@ -24,7 +88,8 @@
     {
         "name": "Hypersonic Flight",
         "requirements": [
-            "Nanotechnology"
+            "Nanotechnology",
+            "Nuclear Fusion"
         ]
     },
     {
