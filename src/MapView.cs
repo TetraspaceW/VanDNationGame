@@ -27,8 +27,10 @@ public class MapView : Area2D
 
     void CreateTileMap()
     {
+        var mapTileset = new MapTileset();
+
         Tiles = new TileMap();
-        Tiles.TileSet = CreateTileset();
+        Tiles.TileSet = mapTileset.tileset;
         AddChild(Tiles);
 
         grid = new TileMap();
@@ -36,7 +38,7 @@ public class MapView : Area2D
         AddChild(grid);
 
         BuildingTiles = new TileMap();
-        Tiles.TileSet = CreateBuildingTileset();
+        BuildingTiles.TileSet = mapTileset.buildingTileset;
         AddChild(BuildingTiles);
     }
 
@@ -84,16 +86,6 @@ public class MapView : Area2D
     }
 
     Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);
-
-    TileSet CreateTileset()
-    {
-        return (new MapTileset()).tileset;
-    }
-
-    TileSet CreateBuildingTileset()
-    {
-        return (new MapTileset()).buildingTileset;
-    }
 
     TileSet CreateGridTileset()
     {

@@ -8,8 +8,8 @@ public class MapTileset
     public TileSet buildingTileset;
     public MapTileset()
     {
-        tileset = GetTilesetWithImages("tiles");
-        buildingTileset = GetTilesetWithImages("buildings");
+        this.tileset = GetTilesetWithImages("/tiles");
+        // this.buildingTileset = GetTilesetWithImages("/buildings");
     }
 
     TileSet GetTilesetWithImages(string folder)
@@ -34,7 +34,7 @@ public class MapTileset
 
         List<String> filesInFolder = new List<string>();
         var dir = new Directory();
-        dir.Open("res://assets/" + folder);
+        dir.Open("res://assets" + folder);
         dir.ListDirBegin(true, true);
         while (true)
         {
