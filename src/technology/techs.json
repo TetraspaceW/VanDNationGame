@@ -2,5 +2,63 @@
     {
         "name": "Nanotechnology",
         "requirements": []
+    },
+    {
+        "name": "Genetic Modification",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Utility Fog",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Diamondoid Computing",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Hypersonic Flight",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Nanoassembly",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Mind Uploads",
+        "requirements": [
+            "Utility Fog",
+            "Diamondoid Computing"
+        ]
+    },
+    {
+        "name": "Climate Control",
+        "requirements": [
+            "Diamondoid Computing",
+            "Hypersonic Flight"
+        ]
+    },
+    {
+        "name": "Space Elevator",
+        "requirements": [
+            "Hypersonic Flight",
+            "Nanoassembly"
+        ]
+    },
+    {
+        "name": "Starflight",
+        "requirements": [
+            "Mind Uploads",
+            "Space Elevator"
+        ]
     }
 ]
