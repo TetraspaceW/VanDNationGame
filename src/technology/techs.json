@@ -95,7 +95,8 @@
     {
         "name": "Nanoassembly",
         "requirements": [
-            "Nanotechnology"
+            "Nanotechnology",
+            "Nuclear Fusion"
         ]
     },
     {
