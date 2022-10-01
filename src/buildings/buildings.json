@@ -2,6 +2,9 @@
     {
         "name": "Airport",
         "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
         "cost": {
             "resource": "Raw",
             "amount": 10
@@ -14,6 +17,9 @@
     {
         "name": "Spaceport",
         "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
         "cost": {
             "resource": "Raw",
             "amount": 100
@@ -26,6 +32,12 @@
     {
         "name": "Space Elevator",
         "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain",
+            "BarrenTerrain",
+            "IceSheet",
+            "Ocean"
+        ],
         "cost": {
             "resource": "Metamaterials",
             "amount": 100
@@ -38,6 +50,9 @@
     {
         "name": "Mine",
         "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
         "cost": {
             "resource": "Raw",
             "amount": 10
@@ -51,6 +66,10 @@
     {
         "name": "Nanofactory",
         "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain",
+            "Ocean"
+        ],
         "cost": {
             "resource": "Raw",
             "amount": 100
