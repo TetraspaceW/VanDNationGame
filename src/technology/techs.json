@@ -126,5 +126,12 @@
             "Mind Uploads",
             "Space Elevator"
         ]
+    },
+    {
+        "name": "Planetary Megastructures",
+        "requirements": [
+            "Starflight",
+            "Climate Control"
+        ]
     }
 ]
