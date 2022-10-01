@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Airport",
+        "size": -10,
+        "cost": {
+            "resource": "Raw",
+            "amount": 10
+        },
+        "technology": "Computing",
+        "transport": {
+            "range": -9
+        }
+    },
+    {
+        "name": "Spaceport",
+        "size": -10,
+        "cost": {
+            "resource": "Raw",
+            "amount": 100
+        },
+        "technology": "Satellites",
+        "transport": {
+            "range": -5
+        }
+    },
+    {
+        "name": "Space Elevator",
+        "size": -10,
+        "cost": {
+            "resource": "Metamaterials",
+            "amount": 100
+        },
+        "technology": "Space Elevator",
+        "transport": {
+            "range": -3
+        }
+    },
+    {
+        "name": "Mine",
+        "size": -10,
+        "cost": {
+            "resource": "Raw",
+            "amount": 10
+        },
+        "technology": "Computing",
+        "extraction": {
+            "resource": "Raw",
+            "rate": 10
+        }
+    },
+    {
+        "name": "Nanofactory",
+        "size": -10,
+        "cost": {
+            "resource": "Raw",
+            "amount": 100
+        },
+        "technology": "Nanoassembly",
+        "process": {
+            "input": "Raw",
+            "output": "Metamaterials",
+            "amount": 0.1,
+            "rate": 1
+        }
+    }
+]

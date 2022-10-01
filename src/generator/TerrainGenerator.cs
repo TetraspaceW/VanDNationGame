@@ -150,16 +150,7 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.StellarCloud:
-                Fill(Tiles, new[] {/*
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.00001, props: new Dictionary<PropKey, string>() {
-                        {PropKey.SpectralClass, Terrain.StarSpectralClass.O.ToString()}
-                    }),
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.1, props: new Dictionary<PropKey, string>() {
-                        {PropKey.SpectralClass, Terrain.StarSpectralClass.B.ToString()}
-                    }),
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.7, props: new Dictionary<PropKey, string>() {
-                        {PropKey.SpectralClass, Terrain.StarSpectralClass.A.ToString()}
-                    }),*/
+                Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 2, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.F.ToString()}
                     }),
@@ -174,13 +165,7 @@ class TerrainGenerator
                     }),
                     new TerrainRule(Terrain.TerrainType.SolarSystem, weight: 5, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.D.ToString()}
-                    }),/*
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.0001, props: new Dictionary<PropKey, string>() {
-                        {PropKey.SpectralClass, Terrain.StarSpectralClass.KI.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 0.4, props: new Dictionary<PropKey, string>() {
-                        {PropKey.SpectralClass, Terrain.StarSpectralClass.MIII.ToString()}
-                    }),*/
                     new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 1895)
                 });
                 if (terrain.props.ContainsKey(PropKey.SpecialStar))
@@ -191,7 +176,7 @@ class TerrainGenerator
                         }),
                     }, new List<Terrain.TerrainType>());
                 }
-                
+
                 break;
             case Terrain.TerrainType.SolarSystem:
                 var solarSystemGenerator = new SolarSystemGenerator(tile, (SolarSystemGenerator.SpectralClass)Enum.Parse(typeof(SolarSystemGenerator.SpectralClass), terrain.props[PropKey.SpectralClass]));

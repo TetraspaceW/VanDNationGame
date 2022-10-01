@@ -1,0 +1,18 @@
+[
+    {
+        "player": true,
+        "techsKnown": [
+            "Computing",
+            "Telecommunications",
+            "Satellites",
+            "Guidance Systems",
+            "Lasers",
+            "Composites",
+            "Stealth",
+            "Robotics",
+            "Artificial Intelligence",
+            "Nuclear Fusion",
+            "Nanotechnology"
+        ]
+    }
+]
