@@ -6,6 +6,7 @@ public class MapView : Area2D
     private MapModel Model;
     private TileMap Tiles;
     private TileMap grid;
+    private TileMap BuildingTiles;
     private MapInfoTooltip tooltip;
     public override void _Ready()
     {
@@ -29,15 +30,20 @@ public class MapView : Area2D
         Tiles = new TileMap();
         Tiles.TileSet = CreateTileset();
         AddChild(Tiles);
+
         grid = new TileMap();
         grid.TileSet = CreateGridTileset();
         AddChild(grid);
+
+        BuildingTiles = new TileMap();
+        Tiles.TileSet = CreateBuildingTileset();
+        AddChild(BuildingTiles);
     }
 
     void UpdateTileAtLocation(TileModel newTile, int x, int y)
     {
         Model.Tiles[x, y] = newTile;
-        Tiles.SetCell(x, y, Tiles.TileSet.FindTileByName(newTile.image));
+        Tiles.SetCell(x, y, Tiles.TileSet.FindTileByName("tiles/" + newTile.image));
         grid.SetCell(x, y, grid.TileSet.FindTileByName("border"));
     }
 
@@ -82,6 +88,11 @@ public class MapView : Area2D
     TileSet CreateTileset()
     {
         return (new MapTileset()).tileset;
+    }
+
+    TileSet CreateBuildingTileset()
+    {
+        return (new MapTileset()).buildingTileset;
     }
 
     TileSet CreateGridTileset()
