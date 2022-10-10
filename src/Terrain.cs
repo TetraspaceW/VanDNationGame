@@ -106,6 +106,12 @@ public class Terrain
                 return "barren";
             case TerrainType.Nucleotide:
                 return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToString().ToLower() + "_" + props[PropKey.NucleicBackbone].ToString().ToLower() + props[PropKey.Rotation].ToString().ToLower();
+            case TerrainType.NucleotideBlank:
+                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToString().ToLower() + "_blank" + props[PropKey.Rotation].ToString().ToLower();
+            case TerrainType.NucleotideTurnInner:
+                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToString().ToLower() + "_turn_inner" + props[PropKey.Rotation].ToString().ToLower();
+            case TerrainType.NucleotideTurnOuter:
+                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToString().ToLower() + "_turn_outer" + props[PropKey.Rotation].ToString().ToLower();
             case TerrainType.Atom:
                 return "atom/" + props[PropKey.AtomElement].ToString().ToLower();
             case TerrainType.ElectronCloud:
@@ -238,7 +244,7 @@ public class Terrain
         // -23  100 nm across
         // -24  10 nm across
         // -25  1 nm across
-        Nucleotide,
+        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter,
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace,
         // -27  10 pm across

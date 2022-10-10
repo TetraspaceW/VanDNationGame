@@ -243,13 +243,10 @@ class Structure
         else if (rot == 2)
         {
             TerrainRule[,][] result = new TerrainRule[rules.GetLength(0), rules.GetLength(1)][];
-            System.Diagnostics.Debug.Print(rules.ToString());
             for (int i = 0; i < rules.GetLength(0); i++)
             {
                 for (int j = 0; j < rules.GetLength(1); j++)
                 {
-                    System.Diagnostics.Debug.Print(i + "\n");
-                    System.Diagnostics.Debug.Print(j + "\n");
                     if (rules[i, j] != null)
                     {
                         result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j] = (TerrainRule[])rules[i, j].Clone();
@@ -312,13 +309,13 @@ class Structure
         return new[] { new StructureRule(this, weight / 4), new StructureRule(Rotate(1), weight / 4), new StructureRule(Rotate(2), weight / 4), new StructureRule(Rotate(3), weight / 4) };
     }
 
-    public static TerrainRule[] CreateStructureTile(string name, int shiftX, int shiftY, int rot)
+    public static TerrainRule CreateStructureTile(string name, int shiftX, int shiftY, int rot=0, double weight=1)
     {
-        return new[] { new TerrainRule(Terrain.TerrainType.StructureTile, true, 1, props: new Dictionary<PropKey, string>() {
+        return new TerrainRule(Terrain.TerrainType.StructureTile, true, weight, props: new Dictionary<PropKey, string>() {
             {PropKey.StructureType, name },
             {PropKey.StructureShiftX, shiftX.ToString() },
             {PropKey.StructureShiftY, shiftY.ToString() },
             {PropKey.Rotation, rot.ToString() }
-        })};
+        });
     }
 }
