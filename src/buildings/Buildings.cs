@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
@@ -13,7 +14,7 @@ class BuildingTemplateList
         {
             this.name = name;
             this.size = size;
-            this.terrainTypes = terrainTypes;
+            this.terrainTypes = terrainTypes.Select((it) => { return (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it); }).ToList();
             this.technology = technology;
             this.cost = cost;
             this.extraction = extraction;
@@ -23,7 +24,7 @@ class BuildingTemplateList
 
         public string name;
         int size;
-        List<string> terrainTypes;
+        List<Terrain.TerrainType> terrainTypes;
         string technology;
         BuildingCost cost;
         Extraction extraction;
