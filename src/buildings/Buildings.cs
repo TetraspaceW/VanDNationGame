@@ -1,0 +1,70 @@
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using System.Linq;
+
+class BuildingTemplateList
+{
+    public static List<BuildingTemplate> buildingTemplates = new BuildingTemplateListLoader().buildingTemplates;
+
+    public class BuildingTemplate
+    {
+        [JsonConstructor]
+        BuildingTemplate(string name, int size, List<string> terrainTypes, string technology, BuildingCost cost, Extraction extraction, Transport transport, Process process)
+        {
+            this.name = name;
+            this.size = size;
+            this.terrainTypes = terrainTypes;
+            this.technology = technology;
+            this.cost = cost;
+            this.extraction = extraction;
+            this.transport = transport;
+            this.process = process;
+        }
+
+        public string name;
+        int size;
+        List<string> terrainTypes;
+        string technology;
+        BuildingCost cost;
+        Extraction extraction;
+        Transport transport;
+        Process process;
+
+        class BuildingCost
+        {
+            string resource;
+            double amount;
+        }
+        class Extraction
+        {
+            string resource;
+            double rate;
+        }
+        class Transport
+        {
+            int range;
+        }
+        class Process
+        {
+            string input;
+            string output;
+            double amount;
+            double rate;
+        }
+    }
+
+    class BuildingTemplateListLoader
+    {
+        public List<BuildingTemplate> buildingTemplates;
+        public BuildingTemplateListLoader()
+        {
+            var buildingFile = System.IO.File.ReadAllText("./src/buildings/buildings.json");
+            buildingTemplates = (JsonConvert.DeserializeObject<List<BuildingTemplate>>(buildingFile));
+            buildingTemplates.ForEach((template) =>
+            {
+                Godot.GD.Print("Loading building ", template.name, ".");
+            });
+        }
+
+    }
+}

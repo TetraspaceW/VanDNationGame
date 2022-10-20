@@ -16,6 +16,6 @@ public class Resources
 
     public enum Resource
     {
-        BaryonicMass
+        BaryonicMass, Metamaterials
     }
 }

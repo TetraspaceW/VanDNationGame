@@ -20,7 +20,8 @@ public class MapView : Area2D
         CreateTileMap();
         UpdateWholeMapTo(Model);
 
-        var s = TechTree.techTree; // load tech tree from file
+        var techTree = TechTree.techTree; // load tech tree from file
+        var buildings = BuildingTemplateList.buildingTemplates; // load buildings from file
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
     }
@@ -33,13 +34,13 @@ public class MapView : Area2D
         Tiles.TileSet = mapTileset.tileset;
         AddChild(Tiles);
 
-        grid = new TileMap();
-        grid.TileSet = CreateGridTileset();
-        AddChild(grid);
-
         BuildingTiles = new TileMap();
         BuildingTiles.TileSet = mapTileset.buildingTileset;
         AddChild(BuildingTiles);
+
+        grid = new TileMap();
+        grid.TileSet = CreateGridTileset();
+        AddChild(grid);
     }
 
     void UpdateTileAtLocation(TileModel newTile, int x, int y)
