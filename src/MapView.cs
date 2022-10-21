@@ -127,7 +127,7 @@ public class MapView : Area2D
             var (x, y) = (pos.x / 64, pos.y / 64);
             var Tile = TileAt((int)x, (int)y);
 
-            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
+            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable && Model.GetBuildingAt((int)x, (int)y) == null)
             {
                 ZoomInToInternalMap(Tile);
                 tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));

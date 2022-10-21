@@ -74,7 +74,7 @@ public class MapModel
         {
             for (int y = 0; y < height; y++)
             {
-                if (Tiles[x, y].terrain.terrainType == type) { possibleLocations.Add((x, y)); }
+                if (Tiles[x, y].terrain.terrainType == type && GetBuildingAt(x, y) == null) { possibleLocations.Add((x, y)); }
             }
         }
 
