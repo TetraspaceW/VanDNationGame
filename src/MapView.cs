@@ -7,7 +7,7 @@ public class MapView : Area2D
     private TileMap Tiles;
     private TileMap grid;
     private TileMap BuildingTiles;
-    private MapInfoTooltip tooltip;
+    private Sidebar tooltip;
     public override void _Ready()
     {
         // universe start
@@ -99,7 +99,7 @@ public class MapView : Area2D
 
     public void CreateTooltip()
     {
-        this.tooltip = GD.Load<PackedScene>("res://src/MapInfoTooltip.tscn").Instance() as MapInfoTooltip;
+        this.tooltip = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instance() as Sidebar;
         AddChild(tooltip);
     }
 

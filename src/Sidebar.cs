@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Linq;
 
-public class MapInfoTooltip : CanvasLayer
+public class Sidebar : CanvasLayer
 {
     RichTextLabel scaleLabel;
     RichTextLabel sidePanelLabel;
