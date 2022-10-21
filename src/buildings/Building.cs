@@ -1,7 +1,7 @@
 public class Building
 {
-    (int, int) coords;
-    BuildingTemplate template;
+    public (int, int) coords;
+    public BuildingTemplate template;
 
     public Building((int, int) coords, BuildingTemplate template)
     {

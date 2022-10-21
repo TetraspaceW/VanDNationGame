@@ -24,6 +24,7 @@ public class MapView : Area2D
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
+        UpdateWholeMapTo(Model);
     }
 
     void PlaceStartingBuildings()
@@ -52,6 +53,17 @@ public class MapView : Area2D
     {
         Model.Tiles[x, y] = newTile;
         Tiles.SetCell(x, y, Tiles.TileSet.FindTileByName("tiles/" + newTile.image));
+
+        var building = Model.GetBuildingAt(x, y);
+        if (building != null)
+        {
+            BuildingTiles.SetCell(x, y, BuildingTiles.TileSet.FindTileByName("buildings/" + building.template.image));
+        }
+        else
+        {
+            BuildingTiles.SetCell(x, y, -1);
+        }
+
         grid.SetCell(x, y, grid.TileSet.FindTileByName("border"));
     }
 

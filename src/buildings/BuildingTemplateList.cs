@@ -41,6 +41,7 @@ public class BuildingTemplate
         this.extraction = extraction;
         this.transport = transport;
         this.process = process;
+        this.image = name.ToLower();
     }
 
     public string name;
@@ -73,4 +74,6 @@ public class BuildingTemplate
         double amount;
         double rate;
     }
+
+    public string image;
 }

@@ -60,7 +60,12 @@ public class MapModel
         );
     }
 
-    public (int, int) GetUnoccupiedTileOfType(Terrain.TerrainType type)
+    public Building GetBuildingAt(int x, int y)
+    {
+        return Buildings.FirstOrDefault((building) => { return (building.coords.Item1 == x && building.coords.Item2 == y); });
+    }
+
+    private (int, int) GetUnoccupiedTileOfType(Terrain.TerrainType type)
     {
         var (width, height) = TerrainGenerator.Shape(Tiles);
         List<(int, int)> possibleLocations = new List<(int, int)>();

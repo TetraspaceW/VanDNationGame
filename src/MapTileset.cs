@@ -9,7 +9,7 @@ public class MapTileset
     public MapTileset()
     {
         this.tileset = GetTilesetWithImages("/tiles");
-        // this.buildingTileset = GetTilesetWithImages("/buildings");
+        this.buildingTileset = GetTilesetWithImages("/buildings");
     }
 
     TileSet GetTilesetWithImages(string folder)
