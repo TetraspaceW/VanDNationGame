@@ -18,12 +18,17 @@ public class MapView : Area2D
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
         CreateTileMap();
-        UpdateWholeMapTo(Model);
 
         var techTree = TechTree.techTree; // load tech tree from file
         var buildings = BuildingTemplateList.buildingTemplates; // load buildings from file
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
+        PlaceStartingBuildings();
+    }
+
+    void PlaceStartingBuildings()
+    {
+        Model.PlaceStartingBuildings();
     }
 
     void CreateTileMap()
@@ -72,7 +77,7 @@ public class MapView : Area2D
             }
         }
 
-        tooltip.setScaleLabelText(ScaleUtil.TextForScale(Model.parent.scale));
+        tooltip.setScaleLabelText(global::Scale.TextForScale(Model.parent.scale));
         MoveChild(tooltip, GetChildCount());
 
         camera.SetMapSize(width, height);

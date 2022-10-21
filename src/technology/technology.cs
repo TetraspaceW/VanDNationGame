@@ -36,6 +36,8 @@ class TechTree
                     SetTechCoords(importedTechs[i], importedTechs);
                 }
             }
+
+            this.techs = importedTechs;
         }
 
         private void SetTechCoords(TreeTechnology tech, List<TreeTechnology> techs)

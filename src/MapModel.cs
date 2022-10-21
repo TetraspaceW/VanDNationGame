@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Linq;
 public class MapModel
 {
     public TileModel[,] Tiles;
     public TileModel parent;
+    public List<Building> Buildings = new List<Building>();
 
     public MapModel(TileModel parent)
     {
@@ -44,5 +46,33 @@ public class MapModel
             }
             return null;
         }
+    }
+
+    public void PlaceStartingBuildings()
+    {
+        Buildings.Add(new Building(
+            GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
+            BuildingTemplateList.Get("Airport"))
+        );
+        Buildings.Add(new Building(
+            GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
+            BuildingTemplateList.Get("Mine"))
+        );
+    }
+
+    public (int, int) GetUnoccupiedTileOfType(Terrain.TerrainType type)
+    {
+        var (width, height) = TerrainGenerator.Shape(Tiles);
+        List<(int, int)> possibleLocations = new List<(int, int)>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (Tiles[x, y].terrain.terrainType == type) { possibleLocations.Add((x, y)); }
+            }
+        }
+
+        return possibleLocations[RND.Next(0, possibleLocations.Count)];
     }
 }
