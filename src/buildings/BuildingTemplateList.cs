@@ -47,7 +47,7 @@ public class BuildingTemplate
     public string name;
     public int size;
     public HashSet<Terrain.TerrainType> terrainTypes;
-    string technology;
+    public string technology;
     public BuildingCost cost;
     Extraction extraction;
     Transport transport;

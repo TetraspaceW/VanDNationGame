@@ -104,9 +104,9 @@ public class MapView : Area2D
     {
         return BuildingTemplateList.buildingTemplates.Where((buildingTemplate) =>
         {
-            bool isValidTerrain = buildingTemplate.terrainTypes.Intersect(Model.GetTerrainTypes()).Count() > 0;
-            bool isValidSize = buildingTemplate.size == Model.GetTileScale();
-            return isValidTerrain && isValidSize;
+            return buildingTemplate.terrainTypes.Intersect(Model.GetTerrainTypes()).Count() > 0
+             && FactionList.GetPlayerFaction().techsKnown.Contains(buildingTemplate.technology)
+             && buildingTemplate.size == Model.GetTileScale();
         }).ToList();
     }
 

@@ -6,7 +6,7 @@
             "VerdantTerrain"
         ],
         "cost": {
-            "resource": "Baryonic Mass",
+            "resource": "Metal",
             "amount": 10
         },
         "technology": "Computing",
@@ -21,7 +21,7 @@
             "VerdantTerrain"
         ],
         "cost": {
-            "resource": "Baryonic Mass",
+            "resource": "Metal",
             "amount": 100
         },
         "technology": "Satellites",
@@ -54,12 +54,12 @@
             "VerdantTerrain"
         ],
         "cost": {
-            "resource": "Baryonic Mass",
+            "resource": "Metal",
             "amount": 10
         },
         "technology": "Computing",
         "extraction": {
-            "resource": "Baryonic Mass",
+            "resource": "Metal",
             "rate": 10
         }
     },
@@ -71,12 +71,12 @@
             "Ocean"
         ],
         "cost": {
-            "resource": "Baryonic Mass",
+            "resource": "Metal",
             "amount": 100
         },
         "technology": "Nanoassembly",
         "process": {
-            "input": "Baryonic Mass",
+            "input": "Metal",
             "output": "Metamaterials",
             "amount": 0.1,
             "rate": 1
