@@ -16,7 +16,7 @@ public class CameraBuddy : Node2D
 
     public void SetMapSize(int width, int height)
     {
-        camera.LimitRight = width * 64 + 200;
+        camera.LimitRight = width * 64 + 300;
         camera.LimitBottom = height * 64 + 16;
     }
 }

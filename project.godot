@@ -20,12 +20,13 @@ config/icon="res://icon.png"
 
 [display]
 
-window/size/width=840
+window/size/width=940
 window/size/height=656
 
 [global]
 
 window=false
+resolution=false
 
 [rendering]
 

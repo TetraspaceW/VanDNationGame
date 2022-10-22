@@ -5,30 +5,30 @@
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource( 1 )
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="MapInfoPanelContainer" type="MarginContainer" parent="."]
 anchor_right = 1.0
 margin_bottom = 16.0
 
-[node name="MapInfoPanel" type="Panel" parent="MarginContainer"]
-margin_right = 840.0
+[node name="MapInfoPanel" type="Panel" parent="MapInfoPanelContainer"]
+margin_right = 940.0
 margin_bottom = 16.0
 
-[node name="ScaleText" type="RichTextLabel" parent="MarginContainer/MapInfoPanel"]
+[node name="ScaleText" type="RichTextLabel" parent="MapInfoPanelContainer/MapInfoPanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 text = "Default Text"
 
-[node name="MarginContainer2" type="MarginContainer" parent="."]
+[node name="SidePanelContainer" type="MarginContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -200.0
+margin_left = -300.0
 
-[node name="SidePanel" type="Panel" parent="MarginContainer2"]
-margin_right = 200.0
+[node name="SidePanel" type="Panel" parent="SidePanelContainer"]
+margin_right = 300.0
 margin_bottom = 656.0
 
-[node name="MarginContainer" type="MarginContainer" parent="MarginContainer2/SidePanel"]
+[node name="MarginContainer" type="MarginContainer" parent="SidePanelContainer/SidePanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 16.0
@@ -36,12 +36,12 @@ margin_top = 16.0
 margin_right = -16.0
 margin_bottom = -540.0
 
-[node name="SidePanelText" type="RichTextLabel" parent="MarginContainer2/SidePanel/MarginContainer"]
-margin_right = 168.0
+[node name="SidePanelText" type="RichTextLabel" parent="SidePanelContainer/SidePanel/MarginContainer"]
+margin_right = 268.0
 margin_bottom = 100.0
 text = "All kinds of fun content could appear on this panel on the left hand side of the UI!"
 
-[node name="AvailableBuildingsContainer" type="MarginContainer" parent="MarginContainer2/SidePanel"]
+[node name="AvailableBuildingsContainer" type="MarginContainer" parent="SidePanelContainer/SidePanel"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 16.0
@@ -49,7 +49,13 @@ margin_top = 132.0
 margin_right = -16.0
 margin_bottom = -16.0
 
-[node name="SidePanelText" type="RichTextLabel" parent="MarginContainer2/SidePanel/AvailableBuildingsContainer"]
-margin_right = 168.0
+[node name="ScrollContainer" type="ScrollContainer" parent="SidePanelContainer/SidePanel/AvailableBuildingsContainer"]
+margin_right = 268.0
 margin_bottom = 508.0
-text = "All kinds of fun content could appear on this panel on the left hand side of the UI!"
+
+[node name="AvailableBuildingsTable" type="VBoxContainer" parent="SidePanelContainer/SidePanel/AvailableBuildingsContainer/ScrollContainer"]
+margin_right = 268.0
+margin_bottom = 508.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 16
