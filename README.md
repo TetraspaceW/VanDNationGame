@@ -3,7 +3,7 @@ Zoom in, zoom out.
 
 ![image](https://user-images.githubusercontent.com/2828594/197349263-f78a4c8f-e6d8-4953-90fa-ee6a4c741a2d.png)
 
-This game is a universe generator. Each map is 10×10 tiles, and clicking on a tile expands it into a full map of its own representing a region of space ten times smaller.
+This game is a universe generator. Each map is 10×10 tiles, and clicking on a tile expands it into a full map of its own representing a region of space ten times smaller. The scale of the game ranges from a 10 billion light year universe map to a 1 attometer quark map.
 
 ## Installation
 
