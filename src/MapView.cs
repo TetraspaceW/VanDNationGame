@@ -31,7 +31,7 @@ public class MapView : Area2D
 
     void PlaceStartingBuildings()
     {
-        Model.PlaceStartingBuildings();
+        Model.PlaceStartingBuildings(FactionList.GetPlayerFaction().startingBuildings);
     }
 
     void CreateTileMap()

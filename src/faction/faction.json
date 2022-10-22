@@ -13,6 +13,10 @@
             "Artificial Intelligence",
             "Nuclear Fusion",
             "Nanotechnology"
+        ],
+        "startingBuildings": [
+            "Airport",
+            "Mine"
         ]
     }
 ]

@@ -48,16 +48,15 @@ public class MapModel
         }
     }
 
-    public void PlaceStartingBuildings()
+    public void PlaceStartingBuildings(List<string> buildings)
     {
-        Buildings.Add(new Building(
-            GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
-            BuildingTemplateList.Get("Airport"))
-        );
-        Buildings.Add(new Building(
-            GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
-            BuildingTemplateList.Get("Mine"))
-        );
+        buildings.ForEach((building) =>
+        {
+            Buildings.Add(new Building(
+                GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
+                BuildingTemplateList.Get(building))
+            );
+        });
     }
 
     public Building GetBuildingAt(int x, int y)
