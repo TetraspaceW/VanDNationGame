@@ -1,4 +1,6 @@
 using Godot;
+using System.Collections.Generic;
+using System.Linq;
 public class MapView : Area2D
 {
     private CameraBuddy camera;
@@ -7,14 +9,14 @@ public class MapView : Area2D
     private TileMap Tiles;
     private TileMap grid;
     private TileMap BuildingTiles;
-    private Sidebar tooltip;
+    private Sidebar sidebar;
     public override void _Ready()
     {
         // universe start
         TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
         Model = new MapModel(tile);
         tile.internalMap = Model;
-        CreateTooltip();
+        CreateSidebar();
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
         CreateTileMap();
@@ -89,18 +91,29 @@ public class MapView : Area2D
             }
         }
 
-        tooltip.setScaleLabelText(global::Scale.TextForScale(Model.parent.scale));
-        MoveChild(tooltip, GetChildCount());
+        sidebar.SetScaleLabelText(global::Scale.TextForScale(Model.parent.scale));
+        sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
+        MoveChild(sidebar, GetChildCount());
 
         camera.SetMapSize(width, height);
         ((RectangleShape2D)collision.Shape).Extents = new Vector2(width * 32, height * 32);
         collision.Position = new Vector2(width * 32, height * 32);
     }
 
-    public void CreateTooltip()
+    public List<BuildingTemplate> GetAvailableBuildingsList()
     {
-        this.tooltip = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instance() as Sidebar;
-        AddChild(tooltip);
+        return BuildingTemplateList.buildingTemplates.Where((buildingTemplate) =>
+        {
+            bool isValidTerrain = buildingTemplate.terrainTypes.Intersect(Model.GetTerrainTypes()).Count() > 0;
+            bool isValidSize = buildingTemplate.size == Model.GetTileScale();
+            return isValidTerrain && isValidSize;
+        }).ToList();
+    }
+
+    public void CreateSidebar()
+    {
+        this.sidebar = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instance() as Sidebar;
+        AddChild(sidebar);
     }
 
     Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);
@@ -130,12 +143,12 @@ public class MapView : Area2D
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable && Model.GetBuildingAt((int)x, (int)y) == null)
             {
                 ZoomInToInternalMap(Tile);
-                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
+                sidebar.SetSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
             {
                 ZoomOutToExternalMap(Tile);
-                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.parent.parent.terrain.terrainType, (", " + Tile.parent.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
+                sidebar.SetSidePanelLabelText("Currently inside tile of type ", Tile.parent.parent.terrain.terrainType, (", " + Tile.parent.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
         }
     }

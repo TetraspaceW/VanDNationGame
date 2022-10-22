@@ -35,7 +35,7 @@ public class BuildingTemplate
     {
         this.name = name;
         this.size = size;
-        this.terrainTypes = terrainTypes.Select((it) => { return (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it); }).ToList();
+        this.terrainTypes = terrainTypes.Select((it) => { return (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it); }).ToHashSet();
         this.technology = technology;
         this.cost = cost;
         this.extraction = extraction;
@@ -45,8 +45,8 @@ public class BuildingTemplate
     }
 
     public string name;
-    int size;
-    List<Terrain.TerrainType> terrainTypes;
+    public int size;
+    public HashSet<Terrain.TerrainType> terrainTypes;
     string technology;
     BuildingCost cost;
     Extraction extraction;

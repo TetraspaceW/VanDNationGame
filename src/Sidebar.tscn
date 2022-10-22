@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/Sidebar.cs" type="Script" id=1]
+[ext_resource path="res://src/BuildingButton.tscn" type="PackedScene" id=2]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource( 1 )
@@ -59,3 +60,5 @@ margin_bottom = 508.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 16
+
+[node name="BuildingButton" parent="SidePanelContainer/SidePanel/AvailableBuildingsContainer/ScrollContainer/AvailableBuildingsTable" instance=ExtResource( 2 )]

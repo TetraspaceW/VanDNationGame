@@ -80,4 +80,25 @@ public class MapModel
 
         return possibleLocations[RND.Next(0, possibleLocations.Count)];
     }
+
+    public int GetTileScale()
+    {
+        return parent.scale - 1;
+    }
+
+    public HashSet<Terrain.TerrainType> GetTerrainTypes()
+    {
+        var terrainTypes = new HashSet<Terrain.TerrainType>();
+        var (width, height) = TerrainGenerator.Shape(Tiles);
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                terrainTypes.Add(Tiles[x, y].terrain.terrainType);
+            }
+        }
+
+        return terrainTypes;
+    }
 }
