@@ -463,5 +463,4 @@ class TerrainGenerator
             case Terrain.PlanetType.Terrestrial: case Terrain.PlanetType.Chunk: return true;
         }
     }
-
 }

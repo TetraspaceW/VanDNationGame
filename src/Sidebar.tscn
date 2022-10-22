@@ -1,23 +1,9 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://src/Sidebar.cs" type="Script" id=1]
-[ext_resource path="res://src/BuildingButton.tscn" type="PackedScene" id=2]
 
 [node name="CanvasLayer" type="CanvasLayer"]
 script = ExtResource( 1 )
-
-[node name="MapInfoPanelContainer" type="MarginContainer" parent="."]
-anchor_right = 1.0
-margin_bottom = 16.0
-
-[node name="MapInfoPanel" type="Panel" parent="MapInfoPanelContainer"]
-margin_right = 940.0
-margin_bottom = 16.0
-
-[node name="ScaleText" type="RichTextLabel" parent="MapInfoPanelContainer/MapInfoPanel"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-text = "Default Text"
 
 [node name="SidePanelContainer" type="MarginContainer" parent="."]
 anchor_left = 1.0
@@ -61,4 +47,38 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 16
 
-[node name="BuildingButton" parent="SidePanelContainer/SidePanel/AvailableBuildingsContainer/ScrollContainer/AvailableBuildingsTable" instance=ExtResource( 2 )]
+[node name="MapInfoPanel" type="Panel" parent="."]
+margin_right = 940.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MapInfoPanelContainer" type="MarginContainer" parent="MapInfoPanel"]
+anchor_right = 1.0
+margin_bottom = 16.0
+custom_constants/margin_right = 8
+custom_constants/margin_left = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MapInfoPanel/MapInfoPanelContainer"]
+margin_left = 8.0
+margin_right = 932.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ScaleText" type="RichTextLabel" parent="MapInfoPanel/MapInfoPanelContainer/HBoxContainer"]
+margin_right = 460.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+text = "Scale Text"
+
+[node name="DateText" type="RichTextLabel" parent="MapInfoPanel/MapInfoPanelContainer/HBoxContainer"]
+margin_left = 464.0
+margin_right = 924.0
+margin_bottom = 16.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+bbcode_text = "[right]Date Text[/right]"
+text = "Date Text"

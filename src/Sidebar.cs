@@ -6,6 +6,7 @@ public class Sidebar : CanvasLayer
 {
     RichTextLabel scaleLabel;
     RichTextLabel sidePanelLabel;
+    RichTextLabel dateLabel;
     VBoxContainer availableBuildingsTable;
 
     public BuildingTemplate selectedBuilding;
@@ -13,25 +14,24 @@ public class Sidebar : CanvasLayer
     public override void _Ready()
     {
         scaleLabel = (RichTextLabel)FindNode("ScaleText");
+        dateLabel = (RichTextLabel)FindNode("DateText");
         sidePanelLabel = (RichTextLabel)FindNode("SidePanelText");
         availableBuildingsTable = (VBoxContainer)FindNode("AvailableBuildingsTable");
     }
 
-    public void SetScaleLabelText(string text)
-    {
-        scaleLabel.Text = "";
-        scaleLabel.PushColor(new Color(1, 1, 1));
-        scaleLabel.AppendBbcode(text);
-        scaleLabel.Pop();
-    }
+    public void SetScaleLabelText(string text) { SetLabelText(scaleLabel, text); }
 
-    public void SetSidePanelLabelText(params object[] what)
+    public void SetDateLabelText(string text) { SetLabelText(dateLabel, "[right]", text); }
+
+    public void SetSidePanelLabelText(params object[] what) { SetLabelText(sidePanelLabel, what); }
+
+    private void SetLabelText(RichTextLabel label, params object[] what)
     {
         var text = what.Select((it) => (it.ToString())).Aggregate((acc, it) => acc + it);
-        sidePanelLabel.Text = "";
-        sidePanelLabel.PushColor(new Color(1, 1, 1));
-        sidePanelLabel.AppendBbcode(text);
-        sidePanelLabel.Pop();
+        label.Text = "";
+        label.PushColor(new Color(1, 1, 1));
+        label.AppendBbcode(text);
+        label.Pop();
     }
 
     public void SetAvailableBuildingsList(List<BuildingTemplate> buildings)

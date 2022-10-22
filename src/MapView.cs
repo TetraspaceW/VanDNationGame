@@ -27,6 +27,8 @@ public class MapView : Area2D
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
         UpdateWholeMapTo(Model);
+
+        sidebar.SetDateLabelText("2030 AD");
     }
 
     void PlaceStartingBuildings()
