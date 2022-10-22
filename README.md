@@ -1,9 +1,9 @@
 # VanDNationGame
 Zoom in, zoom out.
 
-![image](https://user-images.githubusercontent.com/2828594/175772869-f16fc72a-c1da-43c9-986f-19a2dc0c19bc.png)
+![image](https://user-images.githubusercontent.com/2828594/197349263-f78a4c8f-e6d8-4953-90fa-ee6a4c741a2d.png)
 
-This game is a universe generator. Each map is 10×10 tiles, and clicking on a tile expands it into a full map of its own representing a region of space ten times smaller. At some point, we might do something useful with these maps. 
+This game is a universe generator. Each map is 10×10 tiles, and clicking on a tile expands it into a full map of its own representing a region of space ten times smaller.
 
 ## Installation
 
