@@ -157,11 +157,11 @@ public class MapView : Area2D
             {
                 if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && Model.GetBuildingAt((int)x, (int)y) == null)
                 {
-                    Model.PlaceBuildingAt(sidebar.selectedBuilding, ((int)x, (int)y));
-                    UpdateTileAtLocation(Model.Tiles[(int)x, (int)y], (int)x, (int)y);
+                    if (Model.TryPlaceBuildingAt(sidebar.selectedBuilding, ((int)x, (int)y)))
+                    {
+                        UpdateTileAtLocation(Model.Tiles[(int)x, (int)y], (int)x, (int)y);
+                    }
                 }
-                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right)
-                { }
                 sidebar.SetSelectedBuilding(null);
             }
         }

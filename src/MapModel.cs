@@ -52,19 +52,25 @@ public class MapModel
     {
         buildings.ForEach((building) =>
         {
-            PlaceBuildingAt(
+            TryPlaceBuildingAt(
                 BuildingTemplateList.Get(building),
                 GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain)
             );
         });
     }
 
-    public void PlaceBuildingAt(BuildingTemplate building, (int, int) coords)
+    public bool TryPlaceBuildingAt(BuildingTemplate building, (int, int) coords)
     {
-        Buildings.Add(new Building(
-            coords,
-            building
-        ));
+        bool canPlaceBuildingHere = building.terrainTypes.Contains(Tiles[coords.Item1, coords.Item2].terrain.terrainType);
+        if (canPlaceBuildingHere)
+        {
+            Buildings.Add(new Building(
+                coords,
+                building
+            ));
+        }
+        return canPlaceBuildingHere;
+
     }
 
     public Building GetBuildingAt(int x, int y)
