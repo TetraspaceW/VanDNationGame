@@ -3,6 +3,8 @@ using System;
 
 public class BuildingButton : Button
 {
+    public Sidebar sidebar;
+    public BuildingTemplate building;
     TextureRect texture;
     RichTextLabel label;
 
@@ -13,8 +15,14 @@ public class BuildingButton : Button
         label = (RichTextLabel)FindNode("BuildingButtonLabel");
     }
 
+    public void _OnBuildingButtonPressed()
+    {
+        sidebar.SetSelectedBuilding(building);
+    }
+
     public void SetBuilding(BuildingTemplate building)
     {
+        this.building = building;
         texture.Texture = GD.Load<Texture>("res://assets/buildings/" + building.image + ".png");
         label.Text = "";
         label.PushColor(new Color(1, 1, 1));

@@ -8,6 +8,8 @@ public class Sidebar : CanvasLayer
     RichTextLabel sidePanelLabel;
     VBoxContainer availableBuildingsTable;
 
+    public BuildingTemplate selectedBuilding;
+
     public override void _Ready()
     {
         scaleLabel = (RichTextLabel)FindNode("ScaleText");
@@ -34,17 +36,27 @@ public class Sidebar : CanvasLayer
 
     public void SetAvailableBuildingsList(List<BuildingTemplate> buildings)
     {
-        var children = availableBuildingsTable.GetChildren();
-        foreach (Node child in children)
+        foreach (BuildingButton button in availableBuildingsTable.GetChildren())
         {
-            availableBuildingsTable.RemoveChild(child);
+            availableBuildingsTable.RemoveChild(button);
         }
 
         buildings.ForEach((building) =>
         {
             var buildingButton = GD.Load<PackedScene>("res://src/BuildingButton.tscn").Instance() as BuildingButton;
+            buildingButton.sidebar = this;
             availableBuildingsTable.AddChild(buildingButton);
+
             buildingButton.SetBuilding(building);
         });
+    }
+
+    public void SetSelectedBuilding(BuildingTemplate building)
+    {
+        selectedBuilding = building;
+        foreach (BuildingButton button in availableBuildingsTable.GetChildren())
+        {
+            button.Pressed = (building != null && button.building.name == building.name);
+        }
     }
 }

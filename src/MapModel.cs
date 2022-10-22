@@ -52,11 +52,19 @@ public class MapModel
     {
         buildings.ForEach((building) =>
         {
-            Buildings.Add(new Building(
-                GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
-                BuildingTemplateList.Get(building))
+            PlaceBuildingAt(
+                BuildingTemplateList.Get(building),
+                GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain)
             );
         });
+    }
+
+    public void PlaceBuildingAt(BuildingTemplate building, (int, int) coords)
+    {
+        Buildings.Add(new Building(
+            coords,
+            building
+        ));
     }
 
     public Building GetBuildingAt(int x, int y)

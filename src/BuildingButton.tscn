@@ -35,3 +35,5 @@ margin_bottom = 64.0
 mouse_filter = 1
 size_flags_horizontal = 3
 fit_content_height = true
+
+[connection signal="pressed" from="." to="." method="_OnBuildingButtonPressed"]

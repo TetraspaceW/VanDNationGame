@@ -141,13 +141,28 @@ public class MapView : Area2D
             var (x, y) = (pos.x / 64, pos.y / 64);
             var Tile = TileAt((int)x, (int)y);
 
-            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable && Model.GetBuildingAt((int)x, (int)y) == null)
+            if (sidebar.selectedBuilding == null)
             {
-                ZoomInToInternalMap(Tile);
+
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable && Model.GetBuildingAt((int)x, (int)y) == null)
+                {
+                    ZoomInToInternalMap(Tile);
+                }
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
+                {
+                    ZoomOutToExternalMap(Tile);
+                }
             }
-            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
+            else if (!mouseClickEvent.Pressed)
             {
-                ZoomOutToExternalMap(Tile);
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && Model.GetBuildingAt((int)x, (int)y) == null)
+                {
+                    Model.PlaceBuildingAt(sidebar.selectedBuilding, ((int)x, (int)y));
+                    UpdateTileAtLocation(Model.Tiles[(int)x, (int)y], (int)x, (int)y);
+                }
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right)
+                { }
+                sidebar.SetSelectedBuilding(null);
             }
         }
     }
