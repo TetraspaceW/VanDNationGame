@@ -92,6 +92,7 @@ public class MapView : Area2D
         }
 
         sidebar.SetScaleLabelText(global::Scale.TextForScale(Model.parent.scale));
+        sidebar.SetSidePanelLabelText("Currently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
         MoveChild(sidebar, GetChildCount());
 
@@ -143,12 +144,10 @@ public class MapView : Area2D
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable && Model.GetBuildingAt((int)x, (int)y) == null)
             {
                 ZoomInToInternalMap(Tile);
-                sidebar.SetSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
             if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
             {
                 ZoomOutToExternalMap(Tile);
-                sidebar.SetSidePanelLabelText("Currently inside tile of type ", Tile.parent.parent.terrain.terrainType, (", " + Tile.parent.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
             }
         }
     }
