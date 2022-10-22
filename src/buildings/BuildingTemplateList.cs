@@ -48,15 +48,15 @@ public class BuildingTemplate
     public int size;
     public HashSet<Terrain.TerrainType> terrainTypes;
     string technology;
-    BuildingCost cost;
+    public BuildingCost cost;
     Extraction extraction;
     Transport transport;
     Process process;
 
-    class BuildingCost
+    public class BuildingCost
     {
-        string resource;
-        double amount;
+        public string resource;
+        public double amount;
     }
     class Extraction
     {

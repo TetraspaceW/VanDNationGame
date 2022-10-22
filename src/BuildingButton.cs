@@ -18,7 +18,7 @@ public class BuildingButton : Button
         texture.Texture = GD.Load<Texture>("res://assets/buildings/" + building.image + ".png");
         label.Text = "";
         label.PushColor(new Color(1, 1, 1));
-        label.AppendBbcode(building.name);
+        label.AppendBbcode(building.name + "\n" + building.cost.amount + " " + building.cost.resource);
         label.Pop();
     }
 }
