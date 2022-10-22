@@ -10,8 +10,8 @@ anchor_right = 1.0
 margin_bottom = 16.0
 
 [node name="MapInfoPanel" type="Panel" parent="MarginContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
+margin_right = 840.0
+margin_bottom = 16.0
 
 [node name="ScaleText" type="RichTextLabel" parent="MarginContainer/MapInfoPanel"]
 anchor_right = 1.0
@@ -34,31 +34,22 @@ anchor_bottom = 1.0
 margin_left = 16.0
 margin_top = 16.0
 margin_right = -16.0
-margin_bottom = -16.0
+margin_bottom = -540.0
 
 [node name="SidePanelText" type="RichTextLabel" parent="MarginContainer2/SidePanel/MarginContainer"]
 margin_right = 168.0
-margin_bottom = 624.0
-text = "All kinds of fun content could appear on this panel on the left hand side of the UI!
+margin_bottom = 100.0
+text = "All kinds of fun content could appear on this panel on the left hand side of the UI!"
 
+[node name="AvailableBuildingsContainer" type="MarginContainer" parent="MarginContainer2/SidePanel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 16.0
+margin_top = 132.0
+margin_right = -16.0
+margin_bottom = -16.0
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"
+[node name="SidePanelText" type="RichTextLabel" parent="MarginContainer2/SidePanel/AvailableBuildingsContainer"]
+margin_right = 168.0
+margin_bottom = 508.0
+text = "All kinds of fun content could appear on this panel on the left hand side of the UI!"

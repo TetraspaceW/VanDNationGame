@@ -133,5 +133,117 @@
             "Starflight",
             "Climate Control"
         ]
+    },
+    {
+        "name": "Atomic Picotechnology",
+        "requirements": [
+            "Starflight"
+        ]
+    },
+    {
+        "name": "Angelnetting",
+        "requirements": [
+            "Starflight",
+            "Climate Control"
+        ]
+    },
+    {
+        "name": "Torchships",
+        "requirements": [
+            "Starflight"
+        ]
+    },
+    {
+        "name": "von Neumann Seeds",
+        "requirements": [
+            "Angelnetting",
+            "Torchships"
+        ]
+    },
+    {
+        "name": "Archailects",
+        "requirements": [
+            "Angelnetting",
+            "Planetary Megastructures"
+        ]
+    },
+    {
+        "name": "Dyson Spheres",
+        "requirements": [
+            "Torchships",
+            "Planetary Megastructures"
+        ]
+    },
+    {
+        "name": "Galactic Federation",
+        "requirements": [
+            "Archailects",
+            "Dyson Spheres"
+        ]
+    },
+    {
+        "name": "Nuclear Femtotechnology",
+        "requirements": [
+            "Galactic Federation"
+        ]
+    },
+    {
+        "name": "Shkadov Thrusters",
+        "requirements": [
+            "Galactic Federation",
+            "von Neumann Seeds"
+        ]
+    },
+    {
+        "name": "Megadisks",
+        "requirements": [
+            "Shkadov Thrusters"
+        ]
+    },
+    {
+        "name": "Black Hole Manipulation",
+        "requirements": [
+            "Shkadov Thrusters",
+            "Nuclear Femtotechnology"
+        ]
+    },
+    {
+        "name": "Intergalactic Empire",
+        "requirements": [
+            "Black Hole Manipulation",
+            "Megadisks"
+        ]
+    },
+    {
+        "name": "Wormholes",
+        "requirements": [
+            "Intergalactic Empire"
+        ]
+    },
+    {
+        "name": "Metric Computation",
+        "requirements": [
+            "Intergalactic Empire"
+        ]
+    },
+    {
+        "name": "Horizon Breaking",
+        "requirements": [
+            "Wormholes"
+        ]
+    },
+    {
+        "name": "Defect Manipulation",
+        "requirements": [
+            "Wormholes"
+        ]
+    },
+    {
+        "name": "Nudge Drive",
+        "requirements": [
+            "Metric Computation",
+            "Defect Manipulation",
+            "Horizon Breaking"
+        ]
     }
 ]
