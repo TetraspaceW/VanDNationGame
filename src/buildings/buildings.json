@@ -64,6 +64,23 @@
         }
     },
     {
+        "name": "Small Mine",
+        "image": "mine",
+        "size": -11,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1.5
+        },
+        "technology": "Computing",
+        "extraction": {
+            "resource": "Metal",
+            "rate": 0.1
+        }
+    },
+    {
         "name": "Nanofactory",
         "size": -10,
         "terrainTypes": [

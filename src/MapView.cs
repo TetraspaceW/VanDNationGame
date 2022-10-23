@@ -157,7 +157,7 @@ public class MapView : Area2D
         ).Select((buildingTemplate) =>
             (
                 buildingTemplate,
-                Model.parent.localResources.GetAmount(TileResources.GetResource(buildingTemplate.cost.resource)) >= buildingTemplate.cost.amount
+                Model.parent.GetAvailableResources().GetAmount(TileResources.GetResource(buildingTemplate.cost.resource)) >= buildingTemplate.cost.amount
             )
         ).ToList();
     }
