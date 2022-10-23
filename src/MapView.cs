@@ -11,13 +11,14 @@ public class MapView : Area2D
     private TileMap BuildingTiles;
     private Sidebar sidebar;
 
+    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+
     private int date = 2030;
     public override void _Ready()
     {
         // universe start
-        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
-        Model = new MapModel(tile);
-        tile.internalMap = Model;
+        Model = new MapModel(root);
+        root.internalMap = Model;
         CreateSidebar();
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
@@ -208,7 +209,7 @@ public class MapView : Area2D
 
     public void NextTurn()
     {
-        Model.NextTurn();
+        root.internalMap.NextTurn();
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetDateLabelText(date + " AD");
