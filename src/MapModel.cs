@@ -54,12 +54,13 @@ public class MapModel
         {
             TryPlaceBuildingAt(
                 BuildingTemplateList.Get(building),
-                GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain)
+                GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
+                ignoreCost: true
             );
         });
     }
 
-    public bool TryPlaceBuildingAt(BuildingTemplate building, (int, int) coords)
+    public bool TryPlaceBuildingAt(BuildingTemplate building, (int, int) coords, bool ignoreCost = false)
     {
         bool canPlaceBuildingHere = building.terrainTypes.Contains(Tiles[coords.Item1, coords.Item2].terrain.terrainType);
         if (canPlaceBuildingHere)
@@ -68,6 +69,10 @@ public class MapModel
                 coords,
                 building
             ));
+            if (!ignoreCost)
+            {
+                parent.SubtractResource(TileResources.GetResource(building.cost.resource), building.cost.amount);
+            }
         }
         return canPlaceBuildingHere;
 
@@ -117,7 +122,7 @@ public class MapModel
 
     public void NextTurn()
     {
-        parent.CalculateResourcesDelta();
+        parent.BuildingResourcesTick();
         foreach (var tile in Tiles)
         {
             if (tile.internalMap != null)

@@ -64,6 +64,8 @@ public class MapView : Area2D
                     if (Model.TryPlaceBuildingAt(sidebar.selectedBuilding, ((int)x, (int)y)))
                     {
                         UpdateTileAtLocation(Model.Tiles[(int)x, (int)y], (int)x, (int)y);
+                        UpdateSidePanelLabelText();
+                        sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
                     }
                 }
                 sidebar.SetSelectedBuilding(null);

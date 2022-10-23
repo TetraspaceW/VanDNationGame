@@ -1,5 +1,6 @@
 using System.Linq;
 using System;
+using System.Collections.Generic;
 public class TileModel
 {
     public Terrain terrain;
@@ -32,7 +33,7 @@ public class TileModel
 
     public TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
 
-    public void CalculateResourcesDelta()
+    public void BuildingResourcesTick()
     {
         var buildings = internalMap.Buildings;
         buildings.ForEach((building) =>
@@ -126,5 +127,48 @@ public class TileModel
         {
             return parent.totalChildResources;
         }
+    }
+
+    public void SubtractResource(Resource resource, double amount)
+    {
+        var localChange = Math.Min(amount, localResources.GetAmount(resource));
+        amount -= localChange;
+        localResources.AddAmount(resource, -localChange);
+        SubtractFromAllParents(resource, localChange);
+
+        var childrenWithResource = GetChildrenWithResource(resource);
+        var totalAmountInChildren = totalChildResources.GetAmount(resource) - localChange;
+        childrenWithResource.ForEach((it) =>
+        {
+            it.Item1.SubtractResource(resource, amount * (it.Item2 / totalAmountInChildren));
+        });
+
+    }
+
+    private void SubtractFromAllParents(Resource resource, double amount)
+    {
+        var tile = this;
+        while (tile != null)
+        {
+            tile.totalChildResources.AddAmount(resource, -amount);
+            tile = tile.parent;
+        }
+    }
+
+    public List<(TileModel, double)> GetChildrenWithResource(Resource resource)
+    {
+        var childrenWithResource = new List<(TileModel, double)>();
+        if (internalMap != null)
+        {
+            foreach (var tile in internalMap.Tiles)
+            {
+                var resourcesInTile = tile.totalChildResources.GetAmount(resource);
+                if (resourcesInTile > 0)
+                {
+                    childrenWithResource.Add((tile, resourcesInTile));
+                }
+            }
+        }
+        return childrenWithResource;
     }
 }
