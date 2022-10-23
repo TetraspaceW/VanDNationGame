@@ -107,4 +107,29 @@ public class TileModel
         totalChildResources = resources;
         return resources;
     }
+
+    public TileModel GetParentAtScale(int scale)
+    {
+        if (scale < this.scale) { return null; }
+        if (scale == this.scale || parent == null) { return this; }
+        return parent.GetParentAtScale(scale);
+    }
+
+    public TileResources GetAvailableResources()
+    {
+        Godot.GD.Print("Highest transport neighbouring is ", CalculateHighestTransportNeigbouring());
+        Godot.GD.Print("My scale is ", scale);
+        var parent = GetParentAtScale(CalculateHighestTransportNeigbouring());
+        if (parent == null)
+        {
+            return new TileResources();
+        }
+        else
+        {
+            Godot.GD.Print("The parent at that scale is a ", parent.terrain.terrainType);
+            Godot.GD.Print("Parent has resources ", parent.localResources.GetResourcesList());
+            Godot.GD.Print("Parent has child resources ", parent.totalChildResources.GetResourcesList());
+            return parent.totalChildResources;
+        }
+    }
 }

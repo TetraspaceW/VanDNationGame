@@ -27,6 +27,7 @@ public class MapView : Area2D
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
         root.UpdateHighestTransportInside();
+        root.CalculateTotalChildResources();
 
         UpdateWholeMapTo(Model);
 
@@ -144,7 +145,7 @@ public class MapView : Area2D
 
     private void UpdateSidePanelLabelText()
     {
-        sidebar.SetSidePanelLabelText(Model.parent.localResources.GetResourcesList() + "\nCurrently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
+        sidebar.SetSidePanelLabelText(Model.parent.GetAvailableResources().GetResourcesList() + "\nCurrently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
     }
 
     public List<(BuildingTemplate, bool)> GetAvailableBuildingsList()
@@ -212,6 +213,7 @@ public class MapView : Area2D
     {
         root.UpdateHighestTransportInside();
         root.internalMap.NextTurn();
+        root.CalculateTotalChildResources();
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
