@@ -10,6 +10,8 @@ public class MapView : Area2D
     private TileMap grid;
     private TileMap BuildingTiles;
     private Sidebar sidebar;
+
+    private int date = 2030;
     public override void _Ready()
     {
         // universe start
@@ -28,7 +30,7 @@ public class MapView : Area2D
         PlaceStartingBuildings();
         UpdateWholeMapTo(Model);
 
-        sidebar.SetDateLabelText("2030 AD");
+        sidebar.SetDateLabelText(date + " AD");
     }
 
     void PlaceStartingBuildings()
@@ -94,13 +96,18 @@ public class MapView : Area2D
         }
 
         sidebar.SetScaleLabelText(global::Scale.TextForScale(Model.parent.scale));
-        sidebar.SetSidePanelLabelText("Currently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
+        UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
         MoveChild(sidebar, GetChildCount());
 
         camera.SetMapSize(width, height);
         ((RectangleShape2D)collision.Shape).Extents = new Vector2(width * 32, height * 32);
         collision.Position = new Vector2(width * 32, height * 32);
+    }
+
+    private void UpdateSidePanelLabelText()
+    {
+        sidebar.SetSidePanelLabelText(Model.parent.resources.GetResourcesList() + "\nCurrently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
     }
 
     public List<BuildingTemplate> GetAvailableBuildingsList()
@@ -117,6 +124,7 @@ public class MapView : Area2D
     {
         this.sidebar = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instance() as Sidebar;
         AddChild(sidebar);
+        sidebar.mapView = this;
     }
 
     Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);
@@ -196,5 +204,13 @@ public class MapView : Area2D
     private TileModel TileAt(int x, int y)
     {
         return Model.Tiles[x, y];
+    }
+
+    public void NextTurn()
+    {
+        Model.NextTurn();
+        date += 1;
+        UpdateSidePanelLabelText();
+        sidebar.SetDateLabelText(date + " AD");
     }
 }

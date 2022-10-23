@@ -3,11 +3,18 @@ using System.Linq;
 using System;
 public class TileResources
 {
-    public Dictionary<Resource, double> resources;
+    public Dictionary<Resource, double> resources = new Dictionary<Resource, double>();
 
     public static Resource GetResource(string resource)
     {
-        return (Resource)Enum.Parse(typeof(Resource), resource);
+        return (Resource)Enum.Parse(typeof(Resource), new string(resource.Where(c => c != ' ').ToArray()));
+    }
+
+    public string GetResourcesList()
+    {
+        string s = "Resources: ";
+        resources.ToList().ForEach(r => { s += r.Value.ToString() + " " + r.Key.ToString() + ", "; });
+        return s.TrimEnd(", ".ToCharArray());
     }
 
     public double GetAmount(Resource resource)
@@ -18,12 +25,12 @@ public class TileResources
 
     public void SetAmount(Resource resource, double amount)
     {
-        resources.Add(resource, amount);
+        resources[resource] = amount;
     }
 
     public void AddAmount(Resource resource, double amount)
     {
-        resources.Add(resource, GetAmount(resource) + amount);
+        resources[resource] = GetAmount(resource) + amount;
     }
 
     public void AddTileResources(TileResources amounts)

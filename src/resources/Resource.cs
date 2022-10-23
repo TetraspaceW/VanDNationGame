@@ -1,4 +1,4 @@
 public enum Resource
 {
-    BaryonicMass, Metamaterials
+    Metal, Metamaterials
 }

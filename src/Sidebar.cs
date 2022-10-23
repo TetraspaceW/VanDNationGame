@@ -9,6 +9,8 @@ public class Sidebar : CanvasLayer
     RichTextLabel dateLabel;
     VBoxContainer availableBuildingsTable;
 
+    public MapView mapView; // Does C# handle interfaces?
+
     public BuildingTemplate selectedBuilding;
 
     public override void _Ready()
@@ -17,6 +19,11 @@ public class Sidebar : CanvasLayer
         dateLabel = (RichTextLabel)FindNode("DateText");
         sidePanelLabel = (RichTextLabel)FindNode("SidePanelText");
         availableBuildingsTable = (VBoxContainer)FindNode("AvailableBuildingsTable");
+    }
+
+    public void _OnNextTurnButtonPress()
+    {
+        mapView.NextTurn();
     }
 
     public void SetScaleLabelText(string text) { SetLabelText(scaleLabel, text); }

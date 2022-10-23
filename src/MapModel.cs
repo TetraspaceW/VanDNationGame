@@ -114,4 +114,9 @@ public class MapModel
 
         return terrainTypes;
     }
+
+    public void NextTurn()
+    {
+        parent.CalculateResourcesDelta();
+    }
 }

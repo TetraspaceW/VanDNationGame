@@ -34,18 +34,25 @@ anchor_bottom = 1.0
 margin_left = 16.0
 margin_top = 132.0
 margin_right = -16.0
-margin_bottom = -16.0
+margin_bottom = -48.0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="SidePanelContainer/SidePanel/AvailableBuildingsContainer"]
 margin_right = 268.0
-margin_bottom = 508.0
+margin_bottom = 476.0
 
 [node name="AvailableBuildingsTable" type="VBoxContainer" parent="SidePanelContainer/SidePanel/AvailableBuildingsContainer/ScrollContainer"]
 margin_right = 268.0
-margin_bottom = 508.0
+margin_bottom = 476.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 custom_constants/separation = 16
+
+[node name="NextTurnButton" type="Button" parent="SidePanelContainer/SidePanel"]
+margin_left = 8.0
+margin_top = 616.0
+margin_right = 292.0
+margin_bottom = 648.0
+text = "Next Turn"
 
 [node name="MapInfoPanel" type="Panel" parent="."]
 margin_right = 940.0
@@ -82,3 +89,5 @@ size_flags_vertical = 3
 bbcode_enabled = true
 bbcode_text = "[right]Date Text[/right]"
 text = "Date Text"
+
+[connection signal="pressed" from="SidePanelContainer/SidePanel/NextTurnButton" to="." method="_OnNextTurnButtonPress"]
