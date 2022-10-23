@@ -30,6 +30,21 @@
         }
     },
     {
+        "name": "Satellite",
+        "size": -9,
+        "terrainTypes": [
+            "LunarOrbit"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1
+        },
+        "technology": "Satellites",
+        "transport": {
+            "range": -5
+        }
+    },
+    {
         "name": "Space Elevator",
         "size": -10,
         "terrainTypes": [
