@@ -13,10 +13,6 @@ class BuildingTemplateList
         {
             var buildingFile = System.IO.File.ReadAllText("./src/buildings/buildings.json");
             buildingTemplates = (JsonConvert.DeserializeObject<List<BuildingTemplate>>(buildingFile));
-            buildingTemplates.ForEach((template) =>
-            {
-                Godot.GD.Print("Loading building ", template.name, ".");
-            });
         }
 
     }

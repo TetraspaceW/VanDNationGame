@@ -1,4 +1,3 @@
-using Godot;
 public class TileModel
 {
     public Terrain terrain;
@@ -7,7 +6,7 @@ public class TileModel
     public bool zoomable;
     public int scale;
     public string image;
-    public Resources resources;
+    public TileResources resources;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
     {
@@ -25,8 +24,5 @@ public class TileModel
         image = terrain.filenameForTileType();
     }
 
-    public Resources GetResources(Terrain terrain, int scale)
-    {
-        return new Resources();
-    }
+    public TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
 }

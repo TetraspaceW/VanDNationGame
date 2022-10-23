@@ -42,8 +42,6 @@ class TechTree
 
         private void SetTechCoords(TreeTechnology tech, List<TreeTechnology> techs)
         {
-            Godot.GD.Print("Loading technology ", tech.techDef.name, ".");
-
             var newX = tech.techDef.requirements.Select((req) =>
             {
                 var indexToCheck = techs.FindIndex((it) => it.techDef.name == req);

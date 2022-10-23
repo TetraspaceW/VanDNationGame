@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-public class Resources
+public class TileResources
 {
     Dictionary<Resource, double> _resources;
 
@@ -12,10 +12,5 @@ public class Resources
     public void SetAmount(Resource resource, double amount)
     {
         _resources.Add(resource, amount);
-    }
-
-    public enum Resource
-    {
-        BaryonicMass, Metamaterials
     }
 }
