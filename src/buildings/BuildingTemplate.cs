@@ -24,7 +24,7 @@ public class BuildingTemplate
     public string technology;
     public BuildingCost cost;
     public Extraction extraction;
-    Transport transport;
+    public Transport transport;
     public Process process;
 
     public class BuildingCost
@@ -37,9 +37,9 @@ public class BuildingTemplate
         public string resource;
         public double rate;
     }
-    class Transport
+    public class Transport
     {
-        int range;
+        public int range;
     }
     public class Process
     {

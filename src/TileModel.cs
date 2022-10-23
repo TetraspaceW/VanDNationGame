@@ -1,3 +1,5 @@
+using System.Linq;
+using System;
 public class TileModel
 {
     public Terrain terrain;
@@ -7,6 +9,7 @@ public class TileModel
     public int scale;
     public string image;
     public TileResources localResources;
+    public int highestTransportInside;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
     {
@@ -47,5 +50,45 @@ public class TileModel
                 localResources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
             }
         });
+    }
+
+    public int CalculateHighestTransportInside()
+    {
+        int transportRange = int.MinValue;
+        if (internalMap != null) // this weird check makes me think it binds to maps instead
+        {
+            transportRange = internalMap.Buildings
+               .Where((building) => building.template.transport != null)
+               .Select((building) => building.template.transport.range)
+               .Append(int.MinValue)
+               .Max();
+
+            foreach (var tile in internalMap.Tiles)
+            {
+                transportRange = Math.Max(tile.CalculateHighestTransportInside(), transportRange);
+            }
+        }
+
+        return transportRange;
+    }
+
+    public int CalculateHighestTransportNeigbouring()
+    {
+        return CalculateHighestTransportInside();
+    }
+
+    public TileResources CalculateTotalChildResources()
+    {
+        var resources = new TileResources();
+        resources.AddTileResources(localResources);
+        if (internalMap != null)
+        {
+            foreach (var tile in internalMap.Tiles)
+            {
+                resources.AddTileResources(tile.CalculateTotalChildResources());
+            }
+        }
+
+        return resources;
     }
 }

@@ -130,7 +130,7 @@ public class MapView : Area2D
             }
         }
 
-        sidebar.SetScaleLabelText(global::Scale.TextForScale(Model.parent.scale));
+        sidebar.SetScaleLabelText(DistanceScale.TextForScale(Model.parent.scale));
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
         MoveChild(sidebar, GetChildCount());
@@ -210,6 +210,7 @@ public class MapView : Area2D
     public void NextTurn()
     {
         root.internalMap.NextTurn();
+        GD.Print("The furthest anyone can go from the Shire is ", DistanceScale.TextForScale(root.CalculateHighestTransportInside()));
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
