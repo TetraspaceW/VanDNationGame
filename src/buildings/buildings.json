@@ -30,6 +30,21 @@
         }
     },
     {
+        "name": "Satellite",
+        "size": -9,
+        "terrainTypes": [
+            "LunarOrbit"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1
+        },
+        "technology": "Satellites",
+        "transport": {
+            "range": -5
+        }
+    },
+    {
         "name": "Space Elevator",
         "size": -10,
         "terrainTypes": [
@@ -61,6 +76,23 @@
         "extraction": {
             "resource": "Metal",
             "rate": 1
+        }
+    },
+    {
+        "name": "Small Mine",
+        "image": "mine",
+        "size": -11,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1.5
+        },
+        "technology": "Computing",
+        "extraction": {
+            "resource": "Metal",
+            "rate": 0.1
         }
     },
     {

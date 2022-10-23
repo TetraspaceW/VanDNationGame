@@ -35,7 +35,7 @@ public class TileResources
 
     public void AddTileResources(TileResources amounts)
     {
-        resources.ToList().ForEach((resourceAmount) =>
+        amounts.resources.ToList().ForEach((resourceAmount) =>
         {
             AddAmount(resourceAmount.Key, resourceAmount.Value);
         });

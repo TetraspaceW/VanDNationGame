@@ -5,17 +5,18 @@ using System;
 public class BuildingTemplate
 {
     [JsonConstructor]
-    BuildingTemplate(string name, int size, List<string> terrainTypes, string technology, BuildingCost cost, Extraction extraction, Transport transport, Process process)
+    BuildingTemplate(string name, string image, int size, List<string> terrainTypes, string technology, BuildingCost cost, Extraction extraction, Transport transport, Process process)
     {
         this.name = name;
         this.size = size;
-        this.terrainTypes = terrainTypes.Select((it) => { return (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it); }).ToHashSet();
+        this.terrainTypes = terrainTypes.Select((it) => (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it)).ToHashSet();
         this.technology = technology;
         this.cost = cost;
         this.extraction = extraction;
         this.transport = transport;
         this.process = process;
-        this.image = name.ToLower();
+        if (image != null) { this.image = image; } else { this.image = name.ToLower(); }
+
     }
 
     public string name;
@@ -24,7 +25,7 @@ public class BuildingTemplate
     public string technology;
     public BuildingCost cost;
     public Extraction extraction;
-    Transport transport;
+    public Transport transport;
     public Process process;
 
     public class BuildingCost
@@ -37,9 +38,9 @@ public class BuildingTemplate
         public string resource;
         public double rate;
     }
-    class Transport
+    public class Transport
     {
-        int range;
+        public int range;
     }
     public class Process
     {
