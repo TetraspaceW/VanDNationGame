@@ -87,12 +87,12 @@
         ],
         "cost": {
             "resource": "Metal",
-            "amount": 1.5
+            "amount": 0.15
         },
         "technology": "Computing",
         "extraction": {
             "resource": "Metal",
-            "rate": 0.1
+            "rate": 0.01
         }
     },
     {
