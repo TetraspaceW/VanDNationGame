@@ -25,4 +25,27 @@ public class TileModel
     }
 
     public TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
+
+    public void CalculateResourcesDelta()
+    {
+        var buildings = internalMap.Buildings;
+        buildings.ForEach((building) =>
+        {
+            BuildingTemplate.Extraction extraction = building.template.extraction;
+            if (extraction != null)
+            {
+                resources.AddAmount(TileResources.GetResource(extraction.resource), extraction.rate);
+            }
+        });
+
+        buildings.ForEach((building) =>
+        {
+            BuildingTemplate.Process process = building.template.process;
+            if (process != null && resources.GetAmount(TileResources.GetResource(process.input)) >= process.rate)
+            {
+                resources.AddAmount(TileResources.GetResource(process.input), -process.rate);
+                resources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
+            }
+        });
+    }
 }

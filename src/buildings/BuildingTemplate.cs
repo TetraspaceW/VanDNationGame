@@ -23,30 +23,30 @@ public class BuildingTemplate
     public HashSet<Terrain.TerrainType> terrainTypes;
     public string technology;
     public BuildingCost cost;
-    Extraction extraction;
+    public Extraction extraction;
     Transport transport;
-    Process process;
+    public Process process;
 
     public class BuildingCost
     {
         public string resource;
         public double amount;
     }
-    class Extraction
+    public class Extraction
     {
-        string resource;
-        double rate;
+        public string resource;
+        public double rate;
     }
     class Transport
     {
         int range;
     }
-    class Process
+    public class Process
     {
-        string input;
-        string output;
-        double amount;
-        double rate;
+        public string input;
+        public string output;
+        public double amount;
+        public double rate;
     }
 
     public string image;
