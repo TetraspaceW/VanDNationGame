@@ -26,6 +26,8 @@ public class MapView : Area2D
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
+        root.UpdateHighestTransportInside();
+
         UpdateWholeMapTo(Model);
 
         sidebar.SetDateLabelText(date + " AD");
@@ -184,7 +186,6 @@ public class MapView : Area2D
             Tile.internalMap = new MapModel(Tile);
         }
         UpdateWholeMapTo(Tile.internalMap);
-
     }
 
     private void ZoomOutToExternalMap(TileModel Tile)
@@ -209,8 +210,8 @@ public class MapView : Area2D
 
     public void NextTurn()
     {
+        root.UpdateHighestTransportInside();
         root.internalMap.NextTurn();
-        GD.Print("The furthest anyone can go from the Shire is ", DistanceScale.TextForScale(root.CalculateHighestTransportInside()));
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());

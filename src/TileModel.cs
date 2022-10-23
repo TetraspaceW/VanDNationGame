@@ -9,7 +9,10 @@ public class TileModel
     public int scale;
     public string image;
     public TileResources localResources;
-    public int highestTransportInside;
+
+    // recursive
+    public TileResources totalChildResources;
+    public int highestTransportInside = int.MinValue;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
     {
@@ -52,7 +55,7 @@ public class TileModel
         });
     }
 
-    public int CalculateHighestTransportInside()
+    public int UpdateHighestTransportInside()
     {
         int transportRange = int.MinValue;
         if (internalMap != null) // this weird check makes me think it binds to maps instead
@@ -65,16 +68,28 @@ public class TileModel
 
             foreach (var tile in internalMap.Tiles)
             {
-                transportRange = Math.Max(tile.CalculateHighestTransportInside(), transportRange);
+                transportRange = Math.Max(tile.UpdateHighestTransportInside(), transportRange);
             }
         }
 
+        highestTransportInside = transportRange;
         return transportRange;
     }
 
     public int CalculateHighestTransportNeigbouring()
     {
-        return CalculateHighestTransportInside();
+        var tileConsidered = parent;
+        var highestTransportNeighboring = highestTransportInside;
+        while (tileConsidered != null)
+        {
+            if (tileConsidered.highestTransportInside >= tileConsidered.scale)
+            {
+                highestTransportNeighboring = Math.Max(highestTransportNeighboring, tileConsidered.highestTransportInside);
+            }
+            tileConsidered = tileConsidered.parent;
+        }
+
+        return highestTransportNeighboring;
     }
 
     public TileResources CalculateTotalChildResources()
@@ -89,6 +104,7 @@ public class TileModel
             }
         }
 
+        totalChildResources = resources;
         return resources;
     }
 }
