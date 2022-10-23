@@ -7,7 +7,7 @@
         ],
         "cost": {
             "resource": "Metal",
-            "amount": 10
+            "amount": 15
         },
         "technology": "Computing",
         "transport": {
@@ -22,7 +22,7 @@
         ],
         "cost": {
             "resource": "Metal",
-            "amount": 100
+            "amount": 150
         },
         "technology": "Satellites",
         "transport": {
@@ -40,7 +40,7 @@
         ],
         "cost": {
             "resource": "Metamaterials",
-            "amount": 100
+            "amount": 150
         },
         "technology": "Space Elevator",
         "transport": {
@@ -55,12 +55,12 @@
         ],
         "cost": {
             "resource": "Metal",
-            "amount": 10
+            "amount": 15
         },
         "technology": "Computing",
         "extraction": {
             "resource": "Metal",
-            "rate": 10
+            "rate": 1
         }
     },
     {
@@ -72,14 +72,14 @@
         ],
         "cost": {
             "resource": "Metal",
-            "amount": 100
+            "amount": 150
         },
         "technology": "Nanoassembly",
         "process": {
             "input": "Metal",
             "output": "Metamaterials",
             "amount": 0.1,
-            "rate": 1
+            "rate": 15
         }
     }
 ]
