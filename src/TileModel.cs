@@ -6,7 +6,7 @@ public class TileModel
     public bool zoomable;
     public int scale;
     public string image;
-    public TileResources resources;
+    public TileResources localResources;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
     {
@@ -15,7 +15,7 @@ public class TileModel
         this.scale = scale;
         this.zoomable = zoomable;
         this.image = terrain.filenameForTileType();
-        this.resources = GetResources(terrain, scale);
+        this.localResources = GetResources(terrain, scale);
     }
 
     public void SetTerrainType(Terrain.TerrainType terrainType)
@@ -34,17 +34,17 @@ public class TileModel
             BuildingTemplate.Extraction extraction = building.template.extraction;
             if (extraction != null)
             {
-                resources.AddAmount(TileResources.GetResource(extraction.resource), extraction.rate);
+                localResources.AddAmount(TileResources.GetResource(extraction.resource), extraction.rate);
             }
         });
 
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Process process = building.template.process;
-            if (process != null && resources.GetAmount(TileResources.GetResource(process.input)) >= process.rate)
+            if (process != null && localResources.GetAmount(TileResources.GetResource(process.input)) >= process.rate)
             {
-                resources.AddAmount(TileResources.GetResource(process.input), -process.rate);
-                resources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
+                localResources.AddAmount(TileResources.GetResource(process.input), -process.rate);
+                localResources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
             }
         });
     }

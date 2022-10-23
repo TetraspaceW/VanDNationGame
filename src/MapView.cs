@@ -108,16 +108,22 @@ public class MapView : Area2D
 
     private void UpdateSidePanelLabelText()
     {
-        sidebar.SetSidePanelLabelText(Model.parent.resources.GetResourcesList() + "\nCurrently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
+        sidebar.SetSidePanelLabelText(Model.parent.localResources.GetResourcesList() + "\nCurrently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
     }
 
-    public List<BuildingTemplate> GetAvailableBuildingsList()
+    public List<(BuildingTemplate, bool)> GetAvailableBuildingsList()
     {
         return BuildingTemplateList.buildingTemplates.Where((buildingTemplate) =>
         {
             return buildingTemplate.terrainTypes.Intersect(Model.GetTerrainTypes()).Count() > 0
              && FactionList.GetPlayerFaction().techsKnown.Contains(buildingTemplate.technology)
              && buildingTemplate.size == Model.GetTileScale();
+        }).Select((buildingTemplate) =>
+        {
+            return (
+                buildingTemplate,
+                Model.parent.localResources.GetAmount(TileResources.GetResource(buildingTemplate.cost.resource)) >= buildingTemplate.cost.amount
+            );
         }).ToList();
     }
 
@@ -212,6 +218,7 @@ public class MapView : Area2D
         root.internalMap.NextTurn();
         date += 1;
         UpdateSidePanelLabelText();
+        sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
         sidebar.SetDateLabelText(date + " AD");
     }
 }

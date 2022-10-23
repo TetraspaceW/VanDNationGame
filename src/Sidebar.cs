@@ -41,7 +41,7 @@ public class Sidebar : CanvasLayer
         label.Pop();
     }
 
-    public void SetAvailableBuildingsList(List<BuildingTemplate> buildings)
+    public void SetAvailableBuildingsList(List<(BuildingTemplate, bool)> buildings)
     {
         foreach (BuildingButton button in availableBuildingsTable.GetChildren())
         {
@@ -54,7 +54,8 @@ public class Sidebar : CanvasLayer
             buildingButton.sidebar = this;
             availableBuildingsTable.AddChild(buildingButton);
 
-            buildingButton.SetBuilding(building);
+            buildingButton.SetBuilding(building.Item1);
+            buildingButton.Disabled = !building.Item2;
         });
     }
 
