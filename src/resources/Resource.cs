@@ -1,4 +1,4 @@
 public enum Resource
 {
-    Metal, Metamaterials
+    Metal, Metamaterials, Electronics
 }

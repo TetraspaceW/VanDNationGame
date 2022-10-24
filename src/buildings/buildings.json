@@ -79,6 +79,24 @@
         }
     },
     {
+        "name": "Electronics Factory",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Computing",
+        "process": {
+            "input": "Metal",
+            "output": "Electronics",
+            "amount": 1,
+            "rate": 1
+        }
+    },
+    {
         "name": "Small Mine",
         "image": "mine",
         "size": -11,

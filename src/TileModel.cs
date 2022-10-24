@@ -48,9 +48,9 @@ public class TileModel
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Process process = building.template.process;
-            if (process != null && localResources.GetAmount(TileResources.GetResource(process.input)) >= process.rate)
+            if (process != null && totalChildResources.GetAmount(TileResources.GetResource(process.input)) >= process.rate)
             {
-                localResources.AddAmount(TileResources.GetResource(process.input), -process.rate);
+                SubtractResource(TileResources.GetResource(process.input), process.rate);
                 localResources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
             }
         });
