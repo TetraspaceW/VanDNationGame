@@ -3,12 +3,7 @@ using System.Linq;
 using System;
 public class TileResources
 {
-    public Dictionary<Resource, double> resources = new Dictionary<Resource, double>();
-
-    public static Resource GetResource(string resource)
-    {
-        return (Resource)Enum.Parse(typeof(Resource), new string(resource.Where(c => c != ' ').ToArray()));
-    }
+    public Dictionary<string, double> resources = new Dictionary<string, double>();
 
     public string GetResourcesList()
     {
@@ -17,18 +12,18 @@ public class TileResources
         return s.TrimEnd(", ".ToCharArray());
     }
 
-    public double GetAmount(Resource resource)
+    public double GetAmount(string resource)
     {
         double amount;
         return resources.TryGetValue(resource, out amount) ? amount : 0;
     }
 
-    public void SetAmount(Resource resource, double amount)
+    public void SetAmount(string resource, double amount)
     {
         resources[resource] = amount;
     }
 
-    public void AddAmount(Resource resource, double amount)
+    public void AddAmount(string resource, double amount)
     {
         resources[resource] = GetAmount(resource) + amount;
     }

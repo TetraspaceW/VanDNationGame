@@ -49,17 +49,17 @@ public class TileModel
             BuildingTemplate.Extraction extraction = building.template.extraction;
             if (extraction != null && building.active)
             {
-                localResources.AddAmount(TileResources.GetResource(extraction.resource), extraction.rate);
+                localResources.AddAmount(extraction.resource, extraction.rate);
             }
         });
 
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Process process = building.template.process;
-            if (process != null && totalChildResources.GetAmount(TileResources.GetResource(process.input)) >= process.rate && building.active)
+            if (process != null && totalChildResources.GetAmount(process.input) >= process.rate && building.active)
             {
-                SubtractResource(TileResources.GetResource(process.input), process.rate);
-                localResources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
+                SubtractResource(process.input, process.rate);
+                localResources.AddAmount(process.output, process.rate * process.amount);
             }
         });
 
@@ -140,13 +140,13 @@ public class TileModel
     }
 
 
-    public void SubtractResource(Resource resource, double amount)
+    public void SubtractResource(string resource, double amount)
     {
         var parentOrRoot = GetParentAtScale(CalculateHighestTransportNeigbouring());
         if (parentOrRoot != null) { parentOrRoot.SubtractResourceFromThisOrChildren(resource, amount); }
     }
 
-    private void SubtractResourceFromThisOrChildren(Resource resource, double amount)
+    private void SubtractResourceFromThisOrChildren(string resource, double amount)
     {
         var localChange = Math.Min(amount, localResources.GetAmount(resource));
         amount -= localChange;
@@ -162,7 +162,7 @@ public class TileModel
 
     }
 
-    private void SubtractFromAllParents(Resource resource, double amount)
+    private void SubtractFromAllParents(string resource, double amount)
     {
         var tile = this;
         while (tile != null)
@@ -172,7 +172,7 @@ public class TileModel
         }
     }
 
-    public List<(TileModel, double)> GetChildrenWithResource(Resource resource)
+    public List<(TileModel, double)> GetChildrenWithResource(string resource)
     {
         var childrenWithResource = new List<(TileModel, double)>();
         if (internalMap != null)

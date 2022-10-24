@@ -71,7 +71,7 @@ public class MapModel
             ));
             if (!ignoreCost)
             {
-                parent.SubtractResource(TileResources.GetResource(building.cost.resource), building.cost.amount);
+                parent.SubtractResource(building.cost.resource, building.cost.amount);
             }
         }
         return canPlaceBuildingHere;
