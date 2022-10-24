@@ -26,7 +26,7 @@ public class MapView : Area2D
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
-        root.UpdateHighestTransportInside();
+        root.UpdateHighestTransportInside(false);
         root.CalculateTotalChildResources();
 
         UpdateWholeMapTo(Model);

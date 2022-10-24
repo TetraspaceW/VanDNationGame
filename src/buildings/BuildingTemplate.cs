@@ -5,7 +5,7 @@ using System;
 public class BuildingTemplate
 {
     [JsonConstructor]
-    BuildingTemplate(string name, string image, int size, List<string> terrainTypes, string technology, BuildingCost cost, Extraction extraction, Transport transport, Process process)
+    BuildingTemplate(string name, string image, int size, List<string> terrainTypes, string technology, BuildingCost cost, Extraction extraction, Transport transport, Process process, Maintenance maintenance)
     {
         this.name = name;
         this.size = size;
@@ -16,7 +16,7 @@ public class BuildingTemplate
         this.transport = transport;
         this.process = process;
         if (image != null) { this.image = image; } else { this.image = name.ToLower(); }
-
+        this.maintenance = maintenance;
     }
 
     public string name;
@@ -27,6 +27,7 @@ public class BuildingTemplate
     public Extraction extraction;
     public Transport transport;
     public Process process;
+    public Maintenance maintenance;
 
     public class BuildingCost
     {
@@ -48,6 +49,11 @@ public class BuildingTemplate
         public string output;
         public double amount;
         public double rate;
+    }
+    public class Maintenance
+    {
+        public string resource;
+        public double amount;
     }
 
     public string image;

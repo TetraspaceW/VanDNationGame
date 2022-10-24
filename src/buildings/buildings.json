@@ -39,10 +39,7 @@
             "resource": "Metal",
             "amount": 1
         },
-        "technology": "Satellites",
-        "transport": {
-            "range": -5
-        }
+        "technology": "Satellites"
     },
     {
         "name": "Space Elevator",

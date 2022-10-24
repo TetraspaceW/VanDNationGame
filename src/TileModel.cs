@@ -33,13 +33,21 @@ public class TileModel
 
     public TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
 
+    public void BuildingMaintenanceTick()
+    {
+        internalMap.Buildings.ForEach((building) =>
+        {
+            building.active = building.TryMaintenance(this);
+        });
+    }
+
     public void BuildingResourcesTick()
     {
         var buildings = internalMap.Buildings;
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Extraction extraction = building.template.extraction;
-            if (extraction != null)
+            if (extraction != null && building.active)
             {
                 localResources.AddAmount(TileResources.GetResource(extraction.resource), extraction.rate);
             }
@@ -48,28 +56,30 @@ public class TileModel
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Process process = building.template.process;
-            if (process != null && totalChildResources.GetAmount(TileResources.GetResource(process.input)) >= process.rate)
+            if (process != null && totalChildResources.GetAmount(TileResources.GetResource(process.input)) >= process.rate && building.active)
             {
                 SubtractResource(TileResources.GetResource(process.input), process.rate);
                 localResources.AddAmount(TileResources.GetResource(process.output), process.rate * process.amount);
             }
         });
+
+        BuildingMaintenanceTick();
     }
 
-    public int UpdateHighestTransportInside()
+    public int UpdateHighestTransportInside(bool onTurn = true)
     {
         int transportRange = int.MinValue;
         if (internalMap != null) // this weird check makes me think it binds to maps instead
         {
             transportRange = internalMap.Buildings
-               .Where((building) => building.template.transport != null)
+               .Where((building) => building.template.transport != null && building.active)
                .Select((building) => building.template.transport.range)
                .Append(int.MinValue)
                .Max();
 
             foreach (var tile in internalMap.Tiles)
             {
-                transportRange = Math.Max(tile.UpdateHighestTransportInside(), transportRange);
+                transportRange = Math.Max(tile.UpdateHighestTransportInside(onTurn), transportRange);
             }
         }
 

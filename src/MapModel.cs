@@ -123,6 +123,7 @@ public class MapModel
     public void NextTurn()
     {
         parent.BuildingResourcesTick();
+        parent.BuildingMaintenanceTick();
         foreach (var tile in Tiles)
         {
             if (tile.internalMap != null)
