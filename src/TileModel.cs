@@ -56,7 +56,7 @@ public class TileModel
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Process process = building.template.process;
-            if (process != null && totalChildResources.GetAmount(process.input) >= process.rate && building.active)
+            if (process != null && GetParentAtScale(CalculateHighestTransportNeigbouring()).totalChildResources.GetAmount(process.input) >= process.rate && building.active)
             {
                 SubtractResource(process.input, process.rate);
                 TemporarilyAddLocalResources(process.output, process.rate * process.amount);

@@ -39,7 +39,11 @@
             "resource": "Metal",
             "amount": 1
         },
-        "technology": "Satellites"
+        "technology": "Satellites",
+        "maintenance": {
+            "resource": "Electronics",
+            "amount": 0.1
+        }
     },
     {
         "name": "Space Elevator",
