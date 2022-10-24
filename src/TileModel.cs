@@ -49,7 +49,7 @@ public class TileModel
             BuildingTemplate.Extraction extraction = building.template.extraction;
             if (extraction != null && building.active)
             {
-                localResources.AddAmount(extraction.resource, extraction.rate);
+                TemporarilyAddLocalResources(extraction.resource, extraction.rate);
             }
         });
 
@@ -59,7 +59,7 @@ public class TileModel
             if (process != null && totalChildResources.GetAmount(process.input) >= process.rate && building.active)
             {
                 SubtractResource(process.input, process.rate);
-                localResources.AddAmount(process.output, process.rate * process.amount);
+                TemporarilyAddLocalResources(process.output, process.rate * process.amount);
             }
         });
 
@@ -150,8 +150,7 @@ public class TileModel
     {
         var localChange = Math.Min(amount, localResources.GetAmount(resource));
         amount -= localChange;
-        localResources.AddAmount(resource, -localChange);
-        SubtractFromAllParents(resource, localChange);
+        TemporarilyAddLocalResources(resource, -localChange);
 
         var childrenWithResource = GetChildrenWithResource(resource);
         var totalAmountInChildren = totalChildResources.GetAmount(resource) - localChange;
@@ -162,12 +161,18 @@ public class TileModel
 
     }
 
-    private void SubtractFromAllParents(string resource, double amount)
+    private void TemporarilyAddLocalResources(string resource, double amount)
+    {
+        localResources.AddAmount(resource, amount);
+        AddToAllParents(resource, amount);
+    }
+
+    private void AddToAllParents(string resource, double amount)
     {
         var tile = this;
         while (tile != null)
         {
-            tile.totalChildResources.AddAmount(resource, -amount);
+            tile.totalChildResources.AddAmount(resource, amount);
             tile = tile.parent;
         }
     }
