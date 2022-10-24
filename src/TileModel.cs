@@ -118,18 +118,25 @@ public class TileModel
 
     public TileResources GetAvailableResources()
     {
-        var parent = GetParentAtScale(CalculateHighestTransportNeigbouring());
-        if (parent == null)
+        var parentOrRoot = GetParentAtScale(CalculateHighestTransportNeigbouring());
+        if (parentOrRoot == null)
         {
             return new TileResources();
         }
         else
         {
-            return parent.totalChildResources;
+            return parentOrRoot.totalChildResources;
         }
     }
 
+
     public void SubtractResource(Resource resource, double amount)
+    {
+        var parentOrRoot = GetParentAtScale(CalculateHighestTransportNeigbouring());
+        if (parentOrRoot != null) { parentOrRoot.SubtractResourceFromThisOrChildren(resource, amount); }
+    }
+
+    private void SubtractResourceFromThisOrChildren(Resource resource, double amount)
     {
         var localChange = Math.Min(amount, localResources.GetAmount(resource));
         amount -= localChange;
@@ -140,7 +147,7 @@ public class TileModel
         var totalAmountInChildren = totalChildResources.GetAmount(resource) - localChange;
         childrenWithResource.ForEach((it) =>
         {
-            it.Item1.SubtractResource(resource, amount * (it.Item2 / totalAmountInChildren));
+            it.Item1.SubtractResourceFromThisOrChildren(resource, amount * (it.Item2 / totalAmountInChildren));
         });
 
     }

@@ -187,6 +187,7 @@ public class MapView : Area2D
         if (Tile.internalMap == null)
         {
             Tile.internalMap = new MapModel(Tile);
+            Tile.CalculateTotalChildResources();
         }
         UpdateWholeMapTo(Tile.internalMap);
     }
