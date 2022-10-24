@@ -26,6 +26,7 @@ public class Terrain
             case TerrainType.InterstellarSpace:
             case TerrainType.SystemOrbit:
             case TerrainType.LunarOrbit:
+            case TerrainType.IntermolecularFluid:
             case TerrainType.IntermolecularSpace:
                 return "void";
             case TerrainType.CMB:
@@ -243,8 +244,9 @@ public class Terrain
         // -22  1 um across
         // -23  100 nm across
         // -24  10 nm across
+        Nucleosome,
         // -25  1 nm across
-        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter,
+        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid,
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace,
         // -27  10 pm across

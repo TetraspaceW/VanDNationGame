@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 class TerrainGenRule
 {
     static public (int, int) ArbitraryCenter(TileModel[,] tiles)
@@ -142,13 +144,29 @@ class TerrainGenRule
         return null;
     }
 
-    static public TileModel[,] StructureFill(TileModel parent, TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
+    static public TileModel[,] StructureFill(TileModel parent, TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill, Terrain.TerrainType[] replace = null)
     {
         var (width, height) = Shape(tiles);
-        tiles = new TileModel[width, height];
-        for (int x = 0; x < width; x++)
+        if (replace == null)
         {
-            for (int y = 0; y < height; y++)
+            tiles = new TileModel[width, height];
+        }
+        else
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (replace.Contains(tiles[x,y].terrain.terrainType))
+                    {
+                        tiles[x, y] = null;
+                    }
+                }
+            }
+        }
+        for (int x = -width / 2; x < width * 3 / 2; x++)
+        {
+            for (int y = -height / 2; y < height * 3 / 2; y++)
             {
                 Structure thing = RandomStructureFromRule(parent, rules, chanceNone);
                 if (thing != null)

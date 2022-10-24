@@ -13,7 +13,7 @@ public class MapView : Area2D
     {
         // universe start
         //TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
-        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Sandbox), null, 10, zoomable: true);
+        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Sandbox), null, -23, zoomable: true);
         Model = new MapModel(tile);
         tile.internalMap = Model;
         CreateTooltip();
