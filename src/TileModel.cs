@@ -140,13 +140,13 @@ public class TileModel
     }
 
 
-    public void SubtractResource(string resource, double amount)
+    public void SubtractResource(string resource, decimal amount)
     {
         var parentOrRoot = GetParentAtScale(CalculateHighestTransportNeigbouring());
         if (parentOrRoot != null) { parentOrRoot.SubtractResourceFromThisOrChildren(resource, amount); }
     }
 
-    private void SubtractResourceFromThisOrChildren(string resource, double amount)
+    private void SubtractResourceFromThisOrChildren(string resource, decimal amount)
     {
         var localChange = Math.Min(amount, localResources.GetAmount(resource));
         amount -= localChange;
@@ -161,13 +161,13 @@ public class TileModel
 
     }
 
-    private void TemporarilyAddLocalResources(string resource, double amount)
+    private void TemporarilyAddLocalResources(string resource, decimal amount)
     {
         localResources.AddAmount(resource, amount);
         AddToAllParents(resource, amount);
     }
 
-    private void AddToAllParents(string resource, double amount)
+    private void AddToAllParents(string resource, decimal amount)
     {
         var tile = this;
         while (tile != null)
@@ -177,9 +177,9 @@ public class TileModel
         }
     }
 
-    public List<(TileModel, double)> GetChildrenWithResource(string resource)
+    public List<(TileModel, decimal)> GetChildrenWithResource(string resource)
     {
-        var childrenWithResource = new List<(TileModel, double)>();
+        var childrenWithResource = new List<(TileModel, decimal)>();
         if (internalMap != null)
         {
             foreach (var tile in internalMap.Tiles)

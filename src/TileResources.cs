@@ -3,7 +3,7 @@ using System.Linq;
 using System;
 public class TileResources
 {
-    public Dictionary<string, double> resources = new Dictionary<string, double>();
+    public Dictionary<string, decimal> resources = new Dictionary<string, decimal>();
 
     public string GetResourcesList()
     {
@@ -12,18 +12,18 @@ public class TileResources
         return s.TrimEnd(", ".ToCharArray());
     }
 
-    public double GetAmount(string resource)
+    public decimal GetAmount(string resource)
     {
-        double amount;
+        decimal amount;
         return resources.TryGetValue(resource, out amount) ? amount : 0;
     }
 
-    public void SetAmount(string resource, double amount)
+    public void SetAmount(string resource, decimal amount)
     {
         resources[resource] = amount;
     }
 
-    public void AddAmount(string resource, double amount)
+    public void AddAmount(string resource, decimal amount)
     {
         resources[resource] = GetAmount(resource) + amount;
     }

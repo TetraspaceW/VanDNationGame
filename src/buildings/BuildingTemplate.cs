@@ -32,12 +32,12 @@ public class BuildingTemplate
     public class BuildingCost
     {
         public string resource;
-        public double amount;
+        public decimal amount;
     }
     public class Extraction
     {
         public string resource;
-        public double rate;
+        public decimal rate;
     }
     public class Transport
     {
@@ -47,13 +47,13 @@ public class BuildingTemplate
     {
         public string input;
         public string output;
-        public double amount;
-        public double rate;
+        public decimal amount;
+        public decimal rate;
     }
     public class Maintenance
     {
         public string resource;
-        public double amount;
+        public decimal amount;
     }
 
     public string image;

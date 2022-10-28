@@ -18,8 +18,6 @@ public class Building
         // maintenance succeeds if there is none
         if (maintenance == null) { return true; }
 
-        Godot.GD.Print("Available electronics ", tile.GetParentAtScale(tile.CalculateHighestTransportNeigbouring()).totalChildResources.GetAmount(maintenance.resource));
-
         if (tile.GetParentAtScale(tile.CalculateHighestTransportNeigbouring()).totalChildResources.GetAmount(maintenance.resource) >= maintenance.amount)
         {
             tile.SubtractResource(maintenance.resource, maintenance.amount);
