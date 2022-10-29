@@ -27,20 +27,20 @@ class Chem
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
 
     public static readonly Structure WATER = new Structure(new TerrainRule[,][] {
-        { null, molc, null, null },
-        { molc, hydr, molc, null },
+        { molc, molc, molc, null },
+        { molc, hydr, molc, molc },
         { molc, oxyg, hydr, molc },
-        { null, molc, molc, null }, }, "water");
+        { molc, molc, molc, molc }, }, "water");
     public static readonly Structure HYDROXIDE = new Structure(new TerrainRule[,][] {
-        { null, molc, null },
+        { molc, molc, molc },
         { molc, hydr, molc },
         { molc, oxyg, molc },
-        { null, molc, null }, }, "hydroxide");
+        { molc, molc, molc }, }, "hydroxide");
     public static readonly Structure HYDRONIUM = new Structure(new TerrainRule[,][] {
-        { null, null, molc, null, null },
-        { null, molc, hydr, molc, null },
+        { null, molc, molc, molc, null },
+        { molc, molc, hydr, molc, molc },
         { molc, hydr, oxyg, hydr, molc },
-        { null, molc, molc, molc, null }, }, "hydronium");
+        { molc, molc, molc, molc, molc }, }, "hydronium");
     public static readonly Structure SILICA = new Structure(new TerrainRule[,][] {
         { silc, oxyg },
         { oxyg, molc }, }, "silica");

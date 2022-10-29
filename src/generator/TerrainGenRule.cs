@@ -157,7 +157,7 @@ class TerrainGenRule
             {
                 for (int y = 0; y < height; y++)
                 {
-                    if (replace.Contains(tiles[x,y].terrain.terrainType))
+                    if (tiles[x, y] != null && replace.Contains(tiles[x, y].terrain.terrainType))
                     {
                         tiles[x, y] = null;
                     }

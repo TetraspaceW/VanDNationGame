@@ -105,6 +105,10 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
+            case TerrainType.Nucleosome:
+                return "biomolecules/nucleotides/nucleosome";
+            case TerrainType.Nucleoplasm:
+                return "biomolecules/nucleotides/nucleoplasm";
             case TerrainType.Nucleotide:
                 return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToString().ToLower() + "_" + props[PropKey.NucleicBackbone].ToString().ToLower() + props[PropKey.Rotation].ToString().ToLower();
             case TerrainType.NucleotideBlank:
@@ -244,7 +248,7 @@ public class Terrain
         // -22  1 um across
         // -23  100 nm across
         // -24  10 nm across
-        Nucleosome,
+        Nucleosome, Nucleoplasm,
         // -25  1 nm across
         Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid,
         // -26  100 pm across / 1 angstrom

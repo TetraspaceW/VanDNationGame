@@ -294,19 +294,17 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = StructureFill(Tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
-                            , 0.5, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        });
+                        Tiles = WaterFill(Tiles);
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.Ocean, true)
+                            new TerrainRule(terrain.terrainType, true)
                         });
                         break;
                 }
                 break;
             case Terrain.TerrainType.Nucleosome:
+            case Terrain.TerrainType.Nucleoplasm:
 
                 TerrainRule adenine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "adenine"},
@@ -384,11 +382,12 @@ class TerrainGenerator
                         { nucleotideStructuresLeft , null },
                         { null , nucleotideStructuresRight },
                     });
+
                 Tiles = StructureFill(Tiles, new StructureRule[] {
                     new StructureRule(dnaStart, 1),
                     new StructureRule(dnaStart.Rotate(1), 1),
                     },
-                    0.5/*0.9*/, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true)
+                    terrain.terrainType == Terrain.TerrainType.Nucleosome ? 0.5 : 0.99, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true)
                     });
                 break;
             case Terrain.TerrainType.Nucleotide:
@@ -429,10 +428,7 @@ class TerrainGenerator
                            0, 0, new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                        }, rotation);
-                Tiles = StructureFill(Tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
-                            , 0.5, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+                Tiles = WaterFill(Tiles);
                 break;
             case Terrain.TerrainType.Atom:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
@@ -477,7 +473,7 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.Sandbox:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleosome, true) });
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true), new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1) });
                 /*Fill(Tiles, new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "adenine"},
                         {PropKey.NucleicBackbone, "DNA"}
@@ -614,6 +610,15 @@ class TerrainGenerator
     private TileModel[,] StructureFill(TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill, Terrain.TerrainType[] replace = null)
     {
         return TerrainGenRule.StructureFill(parent: tile, tiles, rules, chanceNone, baseFill, replace);
+    }
+
+
+    private TileModel[,] WaterFill(TileModel[,] tiles)
+    {
+        return StructureFill(tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
+                            , 0.5, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
