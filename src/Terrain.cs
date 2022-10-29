@@ -114,6 +114,8 @@ public class Terrain
                 return "biomolecules/nucleoplasm";
             case TerrainType.Chromatin:
                 return "biomolecules/chromatin";
+            case TerrainType.ChromatinChain:
+                return "biomolecules/chromatin_chain";
             case TerrainType.Nucleotide:
                 return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToString().ToLower() + "_" + props[PropKey.NucleicBackbone].ToString().ToLower() + props[PropKey.Rotation].ToString().ToLower();
             case TerrainType.NucleotideBlank:

@@ -309,6 +309,18 @@ class TerrainGenerator
                 AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, false) }, center, 3, true, center);
                 AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Chromatin, true) }, center, 3, false);
                 break;
+            case Terrain.TerrainType.Chromatin:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.ChromatinChain, true, 0.1)
+                });
+                break;
+            case Terrain.TerrainType.ChromatinChain:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1)
+                });
+                break;
             case Terrain.TerrainType.Nucleoplasm:
                 switch (tile.scale)
                 {
