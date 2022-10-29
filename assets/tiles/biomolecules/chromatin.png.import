@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/e.png-79726658ce6f7279c1a9f56c6d200b44.stex"
+path="res://.import/chromatin.png-1364f2d101d7b7d68e7b240a2ad0378e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/e.png"
-dest_files=[ "res://.import/e.png-79726658ce6f7279c1a9f56c6d200b44.stex" ]
+source_file="res://assets/tiles/biomolecules/chromatin.png"
+dest_files=[ "res://.import/chromatin.png-1364f2d101d7b7d68e7b240a2ad0378e.stex" ]
 
 [params]
 

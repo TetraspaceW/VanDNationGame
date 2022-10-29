@@ -26,7 +26,6 @@ public class Terrain
             case TerrainType.InterstellarSpace:
             case TerrainType.SystemOrbit:
             case TerrainType.LunarOrbit:
-            case TerrainType.IntermolecularFluid:
             case TerrainType.IntermolecularSpace:
                 return "void";
             case TerrainType.CMB:
@@ -105,10 +104,16 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
+            case TerrainType.Cytoplasm:
+                return "biomolecules/cytoplasm";
+            case TerrainType.Nucleolus:
+                return "biomolecules/nucleolus";
             case TerrainType.Nucleosome:
                 return "biomolecules/nucleotides/nucleosome";
             case TerrainType.Nucleoplasm:
-                return "biomolecules/nucleotides/nucleoplasm";
+                return "biomolecules/nucleoplasm";
+            case TerrainType.Chromatin:
+                return "biomolecules/chromatin";
             case TerrainType.Nucleotide:
                 return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToString().ToLower() + "_" + props[PropKey.NucleicBackbone].ToString().ToLower() + props[PropKey.Rotation].ToString().ToLower();
             case TerrainType.NucleotideBlank:
@@ -117,6 +122,8 @@ public class Terrain
                 return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToString().ToLower() + "_turn_inner" + props[PropKey.Rotation].ToString().ToLower();
             case TerrainType.NucleotideTurnOuter:
                 return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToString().ToLower() + "_turn_outer" + props[PropKey.Rotation].ToString().ToLower();
+            case TerrainType.IntermolecularFluid:
+                return "biomolecules/intermolecular_fluid";
             case TerrainType.Atom:
                 return "atom/" + props[PropKey.AtomElement].ToString().ToLower();
             case TerrainType.ElectronCloud:
@@ -245,10 +252,13 @@ public class Terrain
         // -19  1 mm across
         // -20  100 um across
         // -21  10 um across
+        Cell,
         // -22  1 um across
+        Nucleoplasm, Cytoplasm, Nucleolus, Chromatin,
         // -23  100 nm across
+        ChromatinChain,
         // -24  10 nm across
-        Nucleosome, Nucleoplasm,
+        Nucleosome,
         // -25  1 nm across
         Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid,
         // -26  100 pm across / 1 angstrom

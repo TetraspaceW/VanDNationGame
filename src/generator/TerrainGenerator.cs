@@ -303,9 +303,24 @@ class TerrainGenerator
                         break;
                 }
                 break;
-            case Terrain.TerrainType.Nucleosome:
+            case Terrain.TerrainType.Cell:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cytoplasm, false) });
+                var center = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleolus, false) });
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, false) }, center, 3, true, center);
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Chromatin, true) }, center, 3, false);
+                break;
             case Terrain.TerrainType.Nucleoplasm:
-
+                switch (tile.scale)
+                {
+                    case -24:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true) });
+                        break;
+                    default:
+                        Fill(Tiles, new[] { new TerrainRule(terrain.terrainType, true) });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.Nucleosome:
                 TerrainRule adenine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "adenine"},
                         {PropKey.NucleicBackbone, "DNA"},
