@@ -78,6 +78,12 @@ public class MapModel
 
     }
 
+    public void RemoveBuilding(Building building)
+    {
+        Buildings.Remove(building);
+
+    }
+
     public Building GetBuildingAt(int x, int y)
     {
         return Buildings.FirstOrDefault((building) => { return (building.coords.Item1 == x && building.coords.Item2 == y); });

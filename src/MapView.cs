@@ -221,5 +221,6 @@ public class MapView : Area2D
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
         sidebar.SetDateLabelText(date + " AD");
+        UpdateWholeMapTo(Model);
     }
 }

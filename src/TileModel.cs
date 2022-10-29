@@ -39,6 +39,10 @@ public class TileModel
         {
             building.active = building.TryMaintenance(this);
         });
+        internalMap.Buildings.RemoveAll((building) =>
+        {
+            return building.removed;
+        });
     }
 
     public void BuildingResourcesTick()

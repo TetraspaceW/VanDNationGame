@@ -3,6 +3,7 @@ public class Building
     public (int, int) coords;
     public BuildingTemplate template;
     public bool active;
+    public bool removed;
 
     public Building((int, int) coords, BuildingTemplate template)
     {
@@ -25,6 +26,13 @@ public class Building
             tile.SubtractResource(maintenance.resource, maintenance.amount);
             return true;
         }
-        else { return false; }
+        else { 
+            switch(template.name)
+            {
+                case "Satellite":
+                    removed = true;
+                    break;
+            }
+            return false; }
     }
 }

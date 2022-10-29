@@ -16,7 +16,8 @@
         ],
         "startingBuildings": [
             "Airport",
-            "Mine"
+            "Mine",
+            "Spaceport"
         ]
     }
 ]
