@@ -112,9 +112,11 @@ public class Terrain
                 return "biomolecules/nucleotides/nucleosome";
             case TerrainType.Nucleoplasm:
                 return "biomolecules/nucleoplasm";
-            case TerrainType.Chromatin:
+            case TerrainType.HeterochromatinDomain:
+            case TerrainType.Heterochromatin:
                 return "biomolecules/chromatin";
-            case TerrainType.ChromatinChain:
+            case TerrainType.EuchromatinDomain:
+            case TerrainType.Euchromatin:
                 return "biomolecules/chromatin_chain";
             case TerrainType.Nucleotide:
                 return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToString().ToLower() + "_" + props[PropKey.NucleicBackbone].ToString().ToLower() + props[PropKey.Rotation].ToString().ToLower();
@@ -256,11 +258,11 @@ public class Terrain
         // -21  10 um across
         Cell,
         // -22  1 um across
-        Nucleoplasm, Cytoplasm, Nucleolus, Chromatin,
+        Nucleoplasm, Cytoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
         // -23  100 nm across
-        ChromatinChain,
+        Heterochromatin, Euchromatin,
         // -24  10 nm across
-        Nucleosome,
+        Nucleosome, LinkerDNA,
         // -25  1 nm across
         Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid,
         // -26  100 pm across / 1 angstrom

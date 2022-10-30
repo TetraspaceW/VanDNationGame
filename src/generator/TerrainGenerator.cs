@@ -306,16 +306,26 @@ class TerrainGenerator
             case Terrain.TerrainType.Cell:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cytoplasm, false) });
                 var center = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleolus, false) });
-                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, false) }, center, 3, true, center);
-                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Chromatin, true) }, center, 3, false);
+                AddCircle(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.EuchromatinDomain, true, 0.1)
+                }, center, 3, true, center);
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HeterochromatinDomain, true) }, center, 3, false);
                 break;
-            case Terrain.TerrainType.Chromatin:
+            case Terrain.TerrainType.HeterochromatinDomain:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
-                    new TerrainRule(Terrain.TerrainType.ChromatinChain, true, 0.1)
+                    new TerrainRule(Terrain.TerrainType.Heterochromatin, true, 0.5),
                 });
                 break;
-            case Terrain.TerrainType.ChromatinChain:
+            case Terrain.TerrainType.EuchromatinDomain:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.Euchromatin, true, 0.5),
+                });
+                break;
+            case Terrain.TerrainType.Euchromatin:
+            case Terrain.TerrainType.Heterochromatin:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
                     new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1)
