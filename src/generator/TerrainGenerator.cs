@@ -325,69 +325,111 @@ class TerrainGenerator
                 });
                 break;
             case Terrain.TerrainType.Euchromatin:
-                Fill(Tiles, new[] {
-                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
-                    new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1)
+                TerrainRule[] ENSM = new[] { new TerrainRule(Terrain.TerrainType.Nucleosome, true) };
+                TerrainRule[] LNKV = new[] { new TerrainRule(Terrain.TerrainType.LinkerDNA, true, props: new Dictionary<PropKey, string>() {
+                    { PropKey.Rotation, "0" }
+                }) };
+                TerrainRule[] LNKH = LNKV.Select((it) => it.rotate(1)).ToArray();
+
+                TerrainRule ecChain = Structure.CreateStructureTile("10nm-chain", 0, 0, weight: 2);
+                TerrainRule ecLeft = Structure.CreateStructureTile("10nm-turn-left", 0, 0);
+                TerrainRule ecRight = Structure.CreateStructureTile("10nm-turn-right", 0, 0);
+
+                TerrainRule[] ECHN = new[] { ecChain, ecLeft, ecRight };
+                TerrainRule[] ECHL = ECHN.Select((it) => it.rotate(3)).ToArray();
+                TerrainRule[] ECHR = ECHN.Select((it) => it.rotate(1)).ToArray();
+
+                if (!Structure.structureDict.ContainsKey("10nm-chain"))
+                {
+                    new Structure(new TerrainRule[,][] {
+                        { null, LNKV, null },
+                        { null, ENSM, null },
+                        { ECHN, null, null }
+                    }, "10nm-chain");
+
+                    new Structure(new TerrainRule[,][] {
+                        { ECHL, LNKV, null },
+                        { null, ENSM, null },
+                        { null, null, null }
+                    }, "10nm-turn-left");
+
+                    new Structure(new TerrainRule[,][] {
+                        { null, LNKV, null },
+                        { null, ENSM, null },
+                        { null, null, ECHR }
+                    }, "10nm-turn-right");
+                }
+
+                Structure ecChainStart = new Structure(new TerrainRule[,][] {
+                    { ECHL, null },
+                    { null, null },
+                    { null, ECHR },
+                });
+
+                Tiles = StructureFill(Tiles,
+                    new StructureRule[] { new StructureRule(ecChainStart, 1), },
+                    0.5,
+                    baseFill: new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true)
                 });
                 break;
             case Terrain.TerrainType.Heterochromatin:
-                TerrainRule[] NSME = new[] { new TerrainRule(Terrain.TerrainType.Nucleosome, true) };
+                TerrainRule[] HNSM = new[] { new TerrainRule(Terrain.TerrainType.Nucleosome, true) };
 
                 TerrainRule hcChain = Structure.CreateStructureTile("30nm-chain", 0, 0, weight: 2);
                 TerrainRule hcLeft = Structure.CreateStructureTile("30nm-turn-left", 0, 0);
                 TerrainRule hcRight = Structure.CreateStructureTile("30nm-turn-right", 0, 0);
 
                 TerrainRule[] HCHN = new[] { hcChain, hcLeft, hcRight };
-                TerrainRule[] HCHL = HCHN.ToList().Select((it) => it.rotate(3)).ToArray();
-                TerrainRule[] HCHR = HCHN.ToList().Select((it) => it.rotate(1)).ToArray();
+                TerrainRule[] HCHL = HCHN.Select((it) => it.rotate(3)).ToArray();
+                TerrainRule[] HCHR = HCHN.Select((it) => it.rotate(1)).ToArray();
 
                 if (!Structure.structureDict.ContainsKey("30nm-chain"))
                 {
                     new Structure(new TerrainRule[,][] {
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
                         { HCHN, null, null, null, null, null, null },
                         { null, null, null, null, null, null, null },
                         { null, null, null, null, null, null, null },
                     }, "30nm-chain");
 
                     new Structure(new TerrainRule[,][] {
-                        { null, HCHL, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
+                        { null, HCHL, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
                         { null, null, null, null, null, null, null },
                         { null, null, null, null, null, null, null },
                     }, "30nm-turn-left");
 
                     new Structure(new TerrainRule[,][] {
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
-                        { null, null, NSME, NSME, NSME, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
+                        { null, null, HNSM, HNSM, HNSM, null, null },
                         { null, null, null, null, null, null, null },
                         { null, null, null, null, null, HCHR, null },
                     }, "30nm-turn-right");
                 }
 
-                Structure chainStart = new Structure(new TerrainRule[,][] {
-                        { HCHL, null },
-                        { null, null },
-                        { null, null },
-                        { null, null },
-                        { null, null },
-                        { null, null },
-                        { null, HCHR },
-                    });
+                Structure hcChainStart = new Structure(new TerrainRule[,][] {
+                    { HCHL, null },
+                    { null, null },
+                    { null, null },
+                    { null, null },
+                    { null, null },
+                    { null, null },
+                    { null, HCHR },
+                });
 
                 Tiles = StructureFill(Tiles,
-                    new StructureRule[] { new StructureRule(chainStart, 1), },
+                    new StructureRule[] { new StructureRule(hcChainStart, 1), },
                     0.5,
                     baseFill: new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true)
-                    });
+                });
                 break;
             case Terrain.TerrainType.Nucleoplasm:
                 switch (tile.scale)
