@@ -109,7 +109,7 @@ public class Terrain
             case TerrainType.Nucleolus:
                 return "biomolecules/nucleolus";
             case TerrainType.Nucleosome:
-                return "biomolecules/nucleotides/nucleosome";
+                return "biomolecules/nucleosome";
             case TerrainType.Nucleoplasm:
                 return "biomolecules/nucleoplasm";
             case TerrainType.HeterochromatinDomain:
@@ -264,7 +264,7 @@ public class Terrain
         // -24  10 nm across
         Nucleosome, LinkerDNA,
         // -25  1 nm across
-        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid,
+        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid, Histone,
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace,
         // -27  10 pm across
