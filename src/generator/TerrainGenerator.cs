@@ -333,7 +333,7 @@ class TerrainGenerator
             case Terrain.TerrainType.Heterochromatin:
                 TerrainRule[] NSME = new[] { new TerrainRule(Terrain.TerrainType.Nucleosome, true) };
 
-                TerrainRule hcChain = Structure.CreateStructureTile("30nm-chain", 0, 0);
+                TerrainRule hcChain = Structure.CreateStructureTile("30nm-chain", 0, 0, weight: 2);
                 TerrainRule hcLeft = Structure.CreateStructureTile("30nm-turn-left", 0, 0);
                 TerrainRule hcRight = Structure.CreateStructureTile("30nm-turn-right", 0, 0);
 
@@ -347,7 +347,9 @@ class TerrainGenerator
                         { null, null, NSME, NSME, NSME, null, null },
                         { null, null, NSME, NSME, NSME, null, null },
                         { null, null, NSME, NSME, NSME, null, null },
-                        { HCHN, null, null, null, null, null, null }
+                        { HCHN, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
+                        { null, null, null, null, null, null, null },
                     }, "30nm-chain");
 
                     new Structure(new TerrainRule[,][] {
@@ -383,7 +385,7 @@ class TerrainGenerator
 
                 Tiles = StructureFill(Tiles,
                     new StructureRule[] { new StructureRule(chainStart, 1), },
-                    0,
+                    0.5,
                     baseFill: new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true)
                     });
                 break;
