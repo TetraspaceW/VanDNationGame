@@ -326,6 +326,7 @@ class TerrainGenerator
                         break;
                 }
                 break;
+            case Terrain.TerrainType.LinkerDNA:
             case Terrain.TerrainType.Nucleosome:
                 TerrainRule adenine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "adenine"},
