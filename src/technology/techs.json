@@ -1,6 +1,249 @@
 [
     {
-        "name": "Nanotechnology",
+        "name": "Computing",
         "requirements": []
+    },
+    {
+        "name": "Telecommunications",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Satellites",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Guidance Systems",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Lasers",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Composites",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Stealth",
+        "requirements": [
+            "Computing"
+        ]
+    },
+    {
+        "name": "Robotics",
+        "requirements": [
+            "Guidance Systems",
+            "Composites"
+        ]
+    },
+    {
+        "name": "Artificial Intelligence",
+        "requirements": [
+            "Guidance Systems",
+            "Telecommunications"
+        ]
+    },
+    {
+        "name": "Nuclear Fusion",
+        "requirements": [
+            "Lasers",
+            "Composites"
+        ]
+    },
+    {
+        "name": "Nanotechnology",
+        "requirements": [
+            "Artificial Intelligence",
+            "Robotics"
+        ]
+    },
+    {
+        "name": "Genetic Modification",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Utility Fog",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Diamondoid Computing",
+        "requirements": [
+            "Nanotechnology"
+        ]
+    },
+    {
+        "name": "Hypersonic Flight",
+        "requirements": [
+            "Nanotechnology",
+            "Nuclear Fusion"
+        ]
+    },
+    {
+        "name": "Nanoassembly",
+        "requirements": [
+            "Nanotechnology",
+            "Nuclear Fusion"
+        ]
+    },
+    {
+        "name": "Mind Uploads",
+        "requirements": [
+            "Utility Fog",
+            "Diamondoid Computing"
+        ]
+    },
+    {
+        "name": "Climate Control",
+        "requirements": [
+            "Diamondoid Computing",
+            "Hypersonic Flight"
+        ]
+    },
+    {
+        "name": "Space Elevator",
+        "requirements": [
+            "Hypersonic Flight",
+            "Nanoassembly"
+        ]
+    },
+    {
+        "name": "Starflight",
+        "requirements": [
+            "Mind Uploads",
+            "Space Elevator"
+        ]
+    },
+    {
+        "name": "Planetary Megastructures",
+        "requirements": [
+            "Starflight",
+            "Climate Control"
+        ]
+    },
+    {
+        "name": "Atomic Picotechnology",
+        "requirements": [
+            "Starflight"
+        ]
+    },
+    {
+        "name": "Angelnetting",
+        "requirements": [
+            "Starflight",
+            "Climate Control"
+        ]
+    },
+    {
+        "name": "Torchships",
+        "requirements": [
+            "Starflight"
+        ]
+    },
+    {
+        "name": "von Neumann Seeds",
+        "requirements": [
+            "Angelnetting",
+            "Torchships"
+        ]
+    },
+    {
+        "name": "Archailects",
+        "requirements": [
+            "Angelnetting",
+            "Planetary Megastructures"
+        ]
+    },
+    {
+        "name": "Dyson Spheres",
+        "requirements": [
+            "Torchships",
+            "Planetary Megastructures"
+        ]
+    },
+    {
+        "name": "Galactic Federation",
+        "requirements": [
+            "Archailects",
+            "Dyson Spheres"
+        ]
+    },
+    {
+        "name": "Nuclear Femtotechnology",
+        "requirements": [
+            "Galactic Federation"
+        ]
+    },
+    {
+        "name": "Shkadov Thrusters",
+        "requirements": [
+            "Galactic Federation",
+            "von Neumann Seeds"
+        ]
+    },
+    {
+        "name": "Megadisks",
+        "requirements": [
+            "Shkadov Thrusters"
+        ]
+    },
+    {
+        "name": "Black Hole Manipulation",
+        "requirements": [
+            "Shkadov Thrusters",
+            "Nuclear Femtotechnology"
+        ]
+    },
+    {
+        "name": "Intergalactic Empire",
+        "requirements": [
+            "Black Hole Manipulation",
+            "Megadisks"
+        ]
+    },
+    {
+        "name": "Wormholes",
+        "requirements": [
+            "Intergalactic Empire"
+        ]
+    },
+    {
+        "name": "Metric Computation",
+        "requirements": [
+            "Intergalactic Empire"
+        ]
+    },
+    {
+        "name": "Horizon Breaking",
+        "requirements": [
+            "Wormholes"
+        ]
+    },
+    {
+        "name": "Defect Manipulation",
+        "requirements": [
+            "Wormholes"
+        ]
+    },
+    {
+        "name": "Nudge Drive",
+        "requirements": [
+            "Metric Computation",
+            "Defect Manipulation",
+            "Horizon Breaking"
+        ]
     }
 ]

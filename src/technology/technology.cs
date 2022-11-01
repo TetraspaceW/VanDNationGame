@@ -33,21 +33,25 @@ class TechTree
             {
                 if (importedTechs[i].x == null)
                 {
-                    GetTechX(importedTechs[i], importedTechs);
+                    SetTechCoords(importedTechs[i], importedTechs);
                 }
             }
+
+            this.techs = importedTechs;
         }
 
-        private void GetTechX(TreeTechnology tech, List<TreeTechnology> techs)
+        private void SetTechCoords(TreeTechnology tech, List<TreeTechnology> techs)
         {
             var newX = tech.techDef.requirements.Select((req) =>
             {
                 var indexToCheck = techs.FindIndex((it) => it.techDef.name == req);
-                if (techs[indexToCheck].x == null) { GetTechX(techs[indexToCheck], techs); }
+                if (techs[indexToCheck].x == null) { SetTechCoords(techs[indexToCheck], techs); }
                 return techs[indexToCheck].x;
             }).Append(0).Max() + 1;
-            Godot.GD.Print("Setting x position of technology ", tech.techDef.name, " to ", newX);
+            var newY = techs.FindAll((it) => (it.y != null && it.x == newX)).Select((it) => (it.y)).Append(0).Max() + 1;
+
             tech.x = newX;
+            tech.y = newY;
         }
     }
 }

@@ -1,6 +1,6 @@
 using Godot;
 using System.Collections.Generic;
-
+using System.Linq;
 public class MapView : Area2D
 {
     private CameraBuddy camera;
@@ -8,30 +8,89 @@ public class MapView : Area2D
     private MapModel Model;
     private TileMap Tiles;
     private TileMap grid;
-    private MapInfoTooltip tooltip;
+    private TileMap BuildingTiles;
+    private Sidebar sidebar;
+
+    // private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Cell), null, -21, zoomable: true);
+
+    private int date = 2030;
     public override void _Ready()
     {
         // universe start
-        //TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
-        TileModel tile = new TileModel(new Terrain(Terrain.TerrainType.Cell), null, -21, zoomable: true);
-        Model = new MapModel(tile);
-        tile.internalMap = Model;
-        CreateTooltip();
+        Model = new MapModel(root);
+        root.internalMap = Model;
+        CreateSidebar();
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
         CreateTileMap();
+
+        // UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
+        // PlaceStartingBuildings();
+        root.UpdateHighestTransportInside(false);
+        root.CalculateTotalChildResources();
+
         UpdateWholeMapTo(Model);
 
-        var s = TechTree.techTree; // load tech tree from file
+        sidebar.SetDateLabelText(date + " AD");
+    }
 
-        //UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
+    // Handling zooming in and out
+    public override void _InputEvent(Godot.Object viewport, InputEvent @event, int shapeIdx)
+    {
+        if (@event is InputEventMouseButton)
+        {
+            InputEventMouseButton mouseClickEvent = @event as InputEventMouseButton;
+
+            var pos = mouseClickEvent.Position - GetGlobalTransformWithCanvas().origin;
+            var (x, y) = (pos.x / 64, pos.y / 64);
+            var Tile = TileAt((int)x, (int)y);
+
+            if (sidebar.selectedBuilding == null)
+            {
+
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable && Model.GetBuildingAt((int)x, (int)y) == null)
+                {
+                    ZoomInToInternalMap(Tile);
+                }
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
+                {
+                    ZoomOutToExternalMap(Tile);
+                }
+            }
+            else if (!mouseClickEvent.Pressed)
+            {
+                if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && Model.GetBuildingAt((int)x, (int)y) == null)
+                {
+                    if (Model.TryPlaceBuildingAt(sidebar.selectedBuilding, ((int)x, (int)y)))
+                    {
+                        UpdateTileAtLocation(Model.Tiles[(int)x, (int)y], (int)x, (int)y);
+                        UpdateSidePanelLabelText();
+                        sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
+                    }
+                }
+                sidebar.SetSelectedBuilding(null);
+            }
+        }
+    }
+
+    void PlaceStartingBuildings()
+    {
+        Model.PlaceStartingBuildings(FactionList.GetPlayerFaction().startingBuildings);
     }
 
     void CreateTileMap()
     {
+        var mapTileset = new MapTileset();
+
         Tiles = new TileMap();
-        Tiles.TileSet = CreateTileset();
+        Tiles.TileSet = mapTileset.tileset;
         AddChild(Tiles);
+
+        BuildingTiles = new TileMap();
+        BuildingTiles.TileSet = mapTileset.buildingTileset;
+        AddChild(BuildingTiles);
+
         grid = new TileMap();
         grid.TileSet = CreateGridTileset();
         AddChild(grid);
@@ -40,7 +99,18 @@ public class MapView : Area2D
     void UpdateTileAtLocation(TileModel newTile, int x, int y)
     {
         Model.Tiles[x, y] = newTile;
-        Tiles.SetCell(x, y, Tiles.TileSet.FindTileByName(newTile.image));
+        Tiles.SetCell(x, y, Tiles.TileSet.FindTileByName("tiles/" + newTile.image));
+
+        var building = Model.GetBuildingAt(x, y);
+        if (building != null)
+        {
+            BuildingTiles.SetCell(x, y, BuildingTiles.TileSet.FindTileByName("buildings/" + building.template.image));
+        }
+        else
+        {
+            BuildingTiles.SetCell(x, y, -1);
+        }
+
         grid.SetCell(x, y, grid.TileSet.FindTileByName("border"));
     }
 
@@ -66,25 +136,40 @@ public class MapView : Area2D
             }
         }
 
-        tooltip.setScaleLabelText(ScaleUtil.TextForScale(Model.parent.scale));
-        MoveChild(tooltip, GetChildCount());
+        sidebar.SetScaleLabelText(DistanceScale.TextForScale(Model.parent.scale));
+        UpdateSidePanelLabelText();
+        sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
+        MoveChild(sidebar, GetChildCount());
 
         camera.SetMapSize(width, height);
         ((RectangleShape2D)collision.Shape).Extents = new Vector2(width * 32, height * 32);
         collision.Position = new Vector2(width * 32, height * 32);
     }
 
-    public void CreateTooltip()
+    private void UpdateSidePanelLabelText()
     {
-        this.tooltip = GD.Load<PackedScene>("res://src/MapInfoTooltip.tscn").Instance() as MapInfoTooltip;
-        AddChild(tooltip);
+        sidebar.SetSidePanelLabelText(Model.parent.GetAvailableResources().GetResourcesList() + "\nCurrently inside tile of type ", Model.parent.terrain.terrainType, (", " + Model.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
     }
 
-    Vector2 positionForCoordinates(int x, int y) => new Vector2(x * 64 + 32, y * 64 + 32);
-
-    TileSet CreateTileset()
+    public List<(BuildingTemplate, bool)> GetAvailableBuildingsList()
     {
-        return (new MapTileset()).tileset;
+        return BuildingTemplateList.buildingTemplates.Where((buildingTemplate) =>
+            buildingTemplate.terrainTypes.Intersect(Model.GetTerrainTypes()).Count() > 0
+             && FactionList.GetPlayerFaction().techsKnown.Contains(buildingTemplate.technology)
+             && buildingTemplate.size == Model.GetTileScale()
+        ).Select((buildingTemplate) =>
+            (
+                buildingTemplate,
+                Model.parent.GetAvailableResources().GetAmount(buildingTemplate.cost.resource) >= buildingTemplate.cost.amount
+            )
+        ).ToList();
+    }
+
+    public void CreateSidebar()
+    {
+        this.sidebar = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instance() as Sidebar;
+        AddChild(sidebar);
+        sidebar.mapView = this;
     }
 
     TileSet CreateGridTileset()
@@ -98,39 +183,16 @@ public class MapView : Area2D
         return tileset;
     }
 
-    // Handling zooming in and out
-    public override void _InputEvent(Godot.Object viewport, InputEvent @event, int shapeIdx)
-    {
-        if (@event is InputEventMouseButton)
-        {
-            InputEventMouseButton mouseClickEvent = @event as InputEventMouseButton;
-
-            var pos = mouseClickEvent.Position - GetGlobalTransformWithCanvas().origin;
-            var (x, y) = (pos.x / 64, pos.y / 64);
-            var Tile = TileAt((int)x, (int)y);
-
-            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Left && !mouseClickEvent.Pressed && Tile.zoomable)
-            {
-                ZoomInToInternalMap(Tile);
-                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.terrain.terrainType, (", " + Tile.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
-            }
-            if (mouseClickEvent.ButtonIndex == (int)ButtonList.Right && !mouseClickEvent.Pressed)
-            {
-                ZoomOutToExternalMap(Tile);
-                tooltip.setSidePanelLabelText("Currently inside tile of type ", Tile.parent.parent.terrain.terrainType, (", " + Tile.parent.parent.terrain._debugProps()).TrimEnd(", ".ToCharArray()));
-            }
-        }
-    }
-
     private void ZoomInToInternalMap(TileModel Tile)
     {
         if (Tile.internalMap == null)
         {
             Tile.internalMap = new MapModel(Tile);
+            Tile.CalculateTotalChildResources();
         }
         UpdateWholeMapTo(Tile.internalMap);
-
     }
+
     private void ZoomOutToExternalMap(TileModel Tile)
     {
         if (Tile.parent.parent == null)
@@ -149,5 +211,16 @@ public class MapView : Area2D
     private TileModel TileAt(int x, int y)
     {
         return Model.Tiles[x, y];
+    }
+
+    public void NextTurn()
+    {
+        root.UpdateHighestTransportInside();
+        root.internalMap.NextTurn();
+        root.CalculateTotalChildResources();
+        date += 1;
+        UpdateSidePanelLabelText();
+        sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
+        sidebar.SetDateLabelText(date + " AD");
     }
 }

@@ -5,26 +5,36 @@ using Godot;
 public class MapTileset
 {
     public TileSet tileset;
+    public TileSet buildingTileset;
     public MapTileset()
     {
-        var images = GetFilesInFolder("", ".png");
-
-        tileset = new TileSet();
-        foreach (var image in images)
-        {
-            var id = tileset.GetLastUnusedTileId();
-            tileset.CreateTile(id);
-            tileset.TileSetName(id, image.ToLower());
-            tileset.TileSetTexture(id, GD.Load<Texture>("res://assets/tiles/" + image + ".png"));
-            tileset.TileSetRegion(id, new Rect2(0, 0, 64, 64));
-        }
+        this.tileset = GetTilesetWithImages("/tiles");
+        this.buildingTileset = GetTilesetWithImages("/buildings");
     }
 
-    List<String> GetFilesInFolder(string folder, string extension)
+    TileSet GetTilesetWithImages(string folder)
     {
+        var images = GetFilesInFolder(folder);
+        var newTileset = new TileSet();
+        foreach (var image in images)
+        {
+            var id = newTileset.GetLastUnusedTileId();
+            newTileset.CreateTile(id);
+            newTileset.TileSetName(id, image.ToLower());
+            newTileset.TileSetTexture(id, GD.Load<Texture>("res://assets/" + image + ".png"));
+            newTileset.TileSetRegion(id, new Rect2(0, 0, 64, 64));
+        }
+
+        return newTileset;
+    }
+
+    List<String> GetFilesInFolder(string folder)
+    {
+        string extension = ".png";
+
         List<String> filesInFolder = new List<string>();
         var dir = new Directory();
-        dir.Open("res://assets/tiles" + folder);
+        dir.Open("res://assets" + folder);
         dir.ListDirBegin(true, true);
         while (true)
         {
@@ -38,7 +48,7 @@ public class MapTileset
             else if (dir.CurrentIsDir())
             {
                 var subdir = open;
-                filesInFolder.AddRange(GetFilesInFolder(folder + '/' + subdir, extension));
+                filesInFolder.AddRange(GetFilesInFolder(folder + '/' + subdir));
             }
             else if (open.EndsWith(extension))
             {

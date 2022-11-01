@@ -635,7 +635,7 @@ class TerrainGenerator
         return TerrainGenRule.RandomTileFromRule(parent: tile, rules);
     }
 
-    private (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
+    public static (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
 
     private bool PlanetIsTerrestrial(string planetType)
     {
@@ -645,5 +645,4 @@ class TerrainGenerator
             case Terrain.PlanetType.Terrestrial: case Terrain.PlanetType.Chunk: return true;
         }
     }
-
 }

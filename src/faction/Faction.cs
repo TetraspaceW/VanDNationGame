@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 class Faction
 {
-    List<string> techsKnown;
+    public bool player;
+    public HashSet<string> techsKnown;
+    public List<string> startingBuildings;
 }

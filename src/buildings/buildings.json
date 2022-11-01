@@ -1,0 +1,136 @@
+[
+    {
+        "name": "Airport",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Computing",
+        "transport": {
+            "range": -9
+        }
+    },
+    {
+        "name": "Spaceport",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 150
+        },
+        "technology": "Satellites",
+        "transport": {
+            "range": -5
+        }
+    },
+    {
+        "name": "Satellite",
+        "size": -9,
+        "terrainTypes": [
+            "LunarOrbit"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1
+        },
+        "technology": "Satellites",
+        "maintenance": {
+            "resource": "Electronics",
+            "amount": 0.1
+        }
+    },
+    {
+        "name": "Space Elevator",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain",
+            "BarrenTerrain",
+            "IceSheet",
+            "Ocean"
+        ],
+        "cost": {
+            "resource": "Metamaterials",
+            "amount": 150
+        },
+        "technology": "Space Elevator",
+        "transport": {
+            "range": -3
+        }
+    },
+    {
+        "name": "Mine",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Computing",
+        "extraction": {
+            "resource": "Metal",
+            "rate": 1
+        }
+    },
+    {
+        "name": "Electronics Factory",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Computing",
+        "process": {
+            "input": "Metal",
+            "output": "Electronics",
+            "amount": 1,
+            "rate": 1
+        }
+    },
+    {
+        "name": "Small Mine",
+        "image": "mine",
+        "size": -11,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 0.15
+        },
+        "technology": "Computing",
+        "extraction": {
+            "resource": "Metal",
+            "rate": 0.01
+        }
+    },
+    {
+        "name": "Nanofactory",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain",
+            "Ocean"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 150
+        },
+        "technology": "Nanoassembly",
+        "process": {
+            "input": "Metal",
+            "output": "Metamaterials",
+            "amount": 0.1,
+            "rate": 15
+        }
+    }
+]
