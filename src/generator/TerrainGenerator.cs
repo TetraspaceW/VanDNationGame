@@ -229,7 +229,7 @@ class TerrainGenerator
 
                 SolarSystemGenerator.Hydrosphere hydrosphere = (SolarSystemGenerator.Hydrosphere)Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), terrain.props[PropKey.PlanetHydrosphereType]);
 
-                bool isLifeBearing = bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]);
+                bool planetIsLifeBearing = bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]);
 
                 double planetaryRadius = double.Parse(terrain.props[PropKey.PlanetRadius]);
                 var planetaryTileSize = (int)Math.Round(planetaryRadius / 1000);
@@ -237,8 +237,14 @@ class TerrainGenerator
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
                 var planetaryCenter = TerrainGenRule.ArbitraryCenter(Tiles);
                 AddCircle(Tiles, new[] {
-                    new TerrainRule(hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid ? Terrain.TerrainType.Ocean : Terrain.TerrainType.IceSheet, hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid, weight: oceanWeight),
-                    new TerrainRule(isLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight)
+                    new TerrainRule(
+                        terrainType: hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid ? Terrain.TerrainType.Ocean : Terrain.TerrainType.IceSheet,
+                        zoomable: hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid,
+                        weight: oceanWeight,
+                        props: new Dictionary<PropKey, string>() {
+                            { PropKey.PlanetIsLifeBearing, planetIsLifeBearing.ToString() }
+                        }),
+                    new TerrainRule(planetIsLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight)
                 }, planetaryCenter, planetaryTileSize < 5 ? planetaryTileSize : 10, true);
                 break;
 
@@ -259,6 +265,35 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.VerdantTerrain:
+                TerrainRule[] landLife = new TerrainRule[] { };
+
+                switch (tile.scale)
+                {
+                    case -14:
+                        landLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, false)
+                            };
+                        break;
+                    case -15:
+                        landLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, false),
+                            };
+                        break;
+                    case -16:
+                        landLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, false, 0.3),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, false, 0.15),
+                                new TerrainRule(Terrain.TerrainType.Reptile, false, 0.3),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, false, 0.3)
+                            };
+                        break;
+                    case -17:
+                        landLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, false)
+                            };
+                        break;
+                }
+
                 switch (tile.scale)
                 {
                     case -25:
@@ -269,12 +304,45 @@ class TerrainGenerator
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.VerdantTerrain, true)
-                        });
+                            new TerrainRule(Terrain.TerrainType.VerdantTerrain, true, 99)
+                        }.Concat(landLife).ToArray());
                         break;
                 }
                 break;
             case Terrain.TerrainType.Ocean:
+                TerrainRule[] oceanLife = new TerrainRule[] { };
+
+                if (bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]))
+                {
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            oceanLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Cetacean, false)
+                            };
+                            break;
+                        case -16:
+                            oceanLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Amphibian, false, 0.1),
+                                new TerrainRule(Terrain.TerrainType.Arthropod, false, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Fish, false, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Radiate, false, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Mollusk, false, 0.2),
+                            };
+                            break;
+                        case -19:
+                            oceanLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Eukaryote, false)
+                            };
+                            break;
+                        case -21:
+                            oceanLife = new[] {
+                                new TerrainRule(Terrain.TerrainType.Prokaryote, false)
+                            };
+                            break;
+                    }
+                }
+
                 switch (tile.scale)
                 {
                     case -25:
@@ -285,8 +353,8 @@ class TerrainGenerator
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.Ocean, true)
-                        });
+                            new TerrainRule(Terrain.TerrainType.Ocean, true, 99, props: tile.terrain.props)
+                        }.Concat(oceanLife).ToArray());
                         break;
                 }
                 break;
