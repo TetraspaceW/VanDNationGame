@@ -271,25 +271,25 @@ class TerrainGenerator
                 {
                     case -14:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Dinosaur, false)
+                                new SpeciesGenerator("Cerebral", "Terrestrial").GetTerrainRule()
                             };
                         break;
                     case -15:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Mammal, false),
+                                new SpeciesGenerator("Cerebral", "Terrestrial", "Warm").GetTerrainRule()
                             };
                         break;
                     case -16:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Bird, false, 0.3),
-                                new TerrainRule(Terrain.TerrainType.Amphibian, false, 0.15),
-                                new TerrainRule(Terrain.TerrainType.Reptile, false, 0.3),
-                                new TerrainRule(Terrain.TerrainType.Trichordate, false, 0.3)
+                                new SpeciesGenerator("Cerebral", "Terrestrial", "Warm").GetTerrainRule(0.3),
+                                new SpeciesGenerator("Cerebral", "Amphibious").GetTerrainRule(0.15),
+                                new SpeciesGenerator("Cerebral", "Terrestrial").GetTerrainRule(0.3),
+                                new SpeciesGenerator("Ganglionic", "Terrestrial").GetTerrainRule(0.3)
                             };
                         break;
                     case -17:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Insect, false)
+                                new SpeciesGenerator("Ganglionic", "Terrestrial").GetTerrainRule()
                             };
                         break;
                 }
@@ -318,16 +318,26 @@ class TerrainGenerator
                     {
                         case -14:
                             oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Cetacean, false)
+                                new SpeciesGenerator("Cerebral", thermoregulation: "Warm").GetTerrainRule()
                             };
                             break;
                         case -16:
                             oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Amphibian, false, 0.1),
-                                new TerrainRule(Terrain.TerrainType.Arthropod, false, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Fish, false, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Radiate, false, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Mollusk, false, 0.2),
+                                new SpeciesGenerator("Cerebral", "Amphibious").GetTerrainRule(0.1),
+                                new SpeciesGenerator("Cerebral").GetTerrainRule(0.2),
+                                new SpeciesGenerator().GetTerrainRule(0.2),
+                                new SpeciesGenerator("Ganglionic").GetTerrainRule(0.2),
+                            };
+                            break;
+                        case -17:
+                            oceanLife = new[] {
+                                new SpeciesGenerator("Ganglionic").GetTerrainRule(0.5),
+                                new SpeciesGenerator().GetTerrainRule(0.5)
+                            };
+                            break;
+                        case -18:
+                            oceanLife = new[] {
+                                new SpeciesGenerator().GetTerrainRule()
                             };
                             break;
                         case -19:

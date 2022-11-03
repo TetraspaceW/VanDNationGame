@@ -104,19 +104,43 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
-            case TerrainType.Dinosaur:
-            case TerrainType.Cetacean:
-            case TerrainType.Mammal:
-            case TerrainType.Carnifern:
-            case TerrainType.Bird:
-            case TerrainType.Amphibian:
-            case TerrainType.Arthropod:
-            case TerrainType.Fish:
-            case TerrainType.Reptile:
-            case TerrainType.Radiate:
-            case TerrainType.Mollusk:
-            case TerrainType.Trichordate:
-            case TerrainType.Insect:
+            case TerrainType.Animal:
+                string species = "radiate";
+                var intelligence = props[PropKey.AnimalIntelligence];
+                var habitat = props[PropKey.AnimalHabitat];
+                var thermoregulation = props[PropKey.AnimalThermoregulation];
+
+                switch (intelligence)
+                {
+                    case "Cerebral":
+                        switch (habitat)
+                        {
+                            case "Terrestrial":
+                                switch (thermoregulation)
+                                {
+                                    case "Warm": species = "mammal"; break;
+                                    case "Cold": species = "reptile"; break;
+                                }
+                                break;
+                            case "Aquatic":
+                                switch (thermoregulation)
+                                {
+                                    case "Warm": species = "cetacean"; break;
+                                    case "Cold": species = "fish"; break;
+                                }
+                                break;
+                            case "Amphibious": species = "amphibian"; break;
+                        }
+                        break;
+                    case "Ganglionic":
+                        switch (habitat)
+                        {
+                            case "Terrestrial": species = "insect"; break;
+                            case "Aquatic": species = "arthropod"; break;
+                        }
+                        break;
+                }
+                return "life/" + species;
             case TerrainType.Eukaryote:
             case TerrainType.Prokaryote:
                 return "life/" + terrainType.ToString().ToLower();
@@ -242,13 +266,10 @@ public class Terrain
         // -13  1 km across
         // -14  100 m across
         // -15  10 m across
-        Dinosaur, Cetacean,
+        Animal,
         // -16  1 m across
-        Mammal, Carnifern,
         // -17  10 cm across
-        Bird, Amphibian, Arthropod, Fish, Reptile, Radiate, Mollusk, Trichordate,
         // -18  1 cm across
-        Insect,
         // -19  1 mm across
         // -20  100 um across
         Eukaryote,
@@ -323,6 +344,7 @@ public enum PropKey
 {
     QuarkColour, QuarkFlavour,
     AtomElement,
+    AnimalIntelligence, AnimalHabitat, AnimalThermoregulation,
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
     PlanetType,
     SpectralClass,
