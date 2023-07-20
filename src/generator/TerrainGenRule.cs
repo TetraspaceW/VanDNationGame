@@ -231,10 +231,26 @@ class TerrainGenRule
         }
         return tiles;
     }
-    static public TileModel[,] PlaceStructure(TileModel parent, TileModel[,] tiles, StructureRule[] rules, int initX, int initY, TerrainRule[] baseFill, int rotate)
+    static public TileModel[,] PlaceStructure(TileModel parent, TileModel[,] tiles, StructureRule[] rules, int initX, int initY, TerrainRule[] baseFill, int rotate, Terrain.TerrainType[] replace)
     {
         var (width, height) = Shape(tiles);
-        tiles = new TileModel[width, height];
+        if (replace == null)
+        {
+            tiles = new TileModel[width, height];
+        }
+        else
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (tiles[x, y] != null && replace.Contains(tiles[x, y].terrain.terrainType))
+                    {
+                        tiles[x, y] = null;
+                    }
+                }
+            }
+        }
         Structure thing = RandomStructureFromRule(parent, rules, 0);
         if (thing != null)
         {
