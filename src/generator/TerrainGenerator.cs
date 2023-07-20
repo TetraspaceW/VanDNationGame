@@ -328,7 +328,6 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.LinkerDNA:
             case Terrain.TerrainType.Nucleosome:
-                TerrainRule adenine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                 Tiles = new ChromatinGenerator(tile, Tiles).GenerateDNA(terrain.terrainType == Terrain.TerrainType.Nucleosome ? 0.5 : 0.99);
                 
                 break;
