@@ -89,7 +89,8 @@
         "name": "Hypersonic Flight",
         "requirements": [
             "Nanotechnology",
-            "Nuclear Fusion"
+            "Nuclear Fusion",
+            "Satellites"
         ]
     },
     {
