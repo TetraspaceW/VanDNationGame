@@ -33,9 +33,9 @@ public class MapModel
                 TileModel foundHabitablePlanet = null;
                 if (tile.zoomable && tile.scale >= -10)
                 {
-                    string dicts;
-                    if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out dicts) && !bool.Parse(dicts)) { return null; }
-                    if (parent.terrain.props.TryGetValue(PropKey.PlanetHydrosphereCoverage, out dicts) && (double.Parse(dicts) < 25 || double.Parse(dicts) > 75)) { return null; }
+                    string prop;
+                    if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out prop) && !bool.Parse(prop)) { return null; }
+                    if (parent.terrain.props.TryGetValue(PropKey.PlanetHydrosphereCoverage, out prop) && (double.Parse(prop) < 25 || double.Parse(prop) > 75)) { return null; }
 
                     if (tile.internalMap == null) { tile.internalMap = new MapModel(tile); }
                     foundHabitablePlanet = tile.internalMap.FindHabitablePlanet();
