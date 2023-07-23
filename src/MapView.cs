@@ -220,6 +220,6 @@ public class MapView : Area2D
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
-        sidebar.SetDateLabelText(date + " AD");
+        sidebar.SetDateLabelText(date + " CE");
     }
 }
