@@ -1,7 +1,107 @@
 [
     {
-        "name": "Computing",
+        "name": "Mechanisation",
         "requirements": []
+    },
+    {
+        "name": "Chemistry",
+        "requirements": [
+            "Mechanisation"
+        ]
+    },
+    {
+        "name": "Combustion",
+        "requirements": [
+            "Mechanisation"
+        ]
+    },
+    {
+        "name": "Steel",
+        "requirements": [
+            "Mechanisation"
+        ]
+    },
+    {
+        "name": "Electricity",
+        "requirements": [
+            "Mechanisation"
+        ]
+    },
+    {
+        "name": "Radio",
+        "requirements": [
+            "Mechanisation",
+            "Electricity"
+        ]
+    },
+    {
+        "name": "Flight",
+        "requirements": [
+            "Mechanisation"
+        ]
+    },
+    {
+        "name": "Globalisation",
+        "requirements": [
+            "Electricity",
+            "Radio",
+            "Flight"
+        ]
+    },
+    {
+        "name": "Transistors",
+        "requirements": [
+            "Steel",
+            "Electricity",
+            "Radio"
+        ]
+    },
+    {
+        "name": "Rocketry",
+        "requirements": [
+            "Combustion",
+            "Steel",
+            "Chemistry"
+        ]
+    },
+    {
+        "name": "Fluid Dynamics",
+        "requirements": [
+            "Chemistry",
+            "Combustion"
+        ]
+    },
+    {
+        "name": "Combined Arms",
+        "requirements": [
+            "Electricity",
+            "Flight",
+            "Combustion"
+        ]
+    },
+    {
+        "name": "Plastics",
+        "requirements": [
+            "Chemistry"
+        ]
+    },
+    {
+        "name": "Synthetic Materials",
+        "requirements": [
+            "Plastics"
+        ]
+    },
+    {
+        "name": "Nuclear Fission",
+        "requirements": [
+            "Fluid Dynamics"
+        ]
+    },
+    {
+        "name": "Computing",
+        "requirements": [
+            "Transistors"
+        ]
     },
     {
         "name": "Telecommunications",
@@ -12,31 +112,35 @@
     {
         "name": "Satellites",
         "requirements": [
-            "Computing"
+            "Computing",
+            "Rocketry"
         ]
     },
     {
         "name": "Guidance Systems",
         "requirements": [
-            "Computing"
+            "Computing",
+            "Combined Arms"
         ]
     },
     {
         "name": "Lasers",
         "requirements": [
+            "Nuclear Fission",
+            "Synthetic Materials",
             "Computing"
         ]
     },
     {
         "name": "Composites",
         "requirements": [
-            "Computing"
+            "Synthetic Materials"
         ]
     },
     {
         "name": "Stealth",
         "requirements": [
-            "Computing"
+            "Synthetic Materials"
         ]
     },
     {
