@@ -26,15 +26,14 @@ public class MapModel
         if (parent.terrain.terrainType == Terrain.TerrainType.VerdantTerrain) { return parent; }
         else
         {
-            foreach (var tile in Tiles)
+            var yWidth = Tiles.GetLength(1);
+            foreach (var i in Enumerable.Range(0, Tiles.Length).OrderBy(x => RND.Next()))
             {
+                var tile = Tiles[i / yWidth, i % yWidth];
                 TileModel foundHabitablePlanet = null;
                 if (tile.zoomable && tile.scale >= -10)
                 {
                     string dicts;
-                    if (parent.terrain.terrainType == Terrain.TerrainType.DwarfGalaxy) { return null; }
-                    if (parent.terrain.props.TryGetValue(PropKey.GalaxyType, out dicts) && dicts != "S") { return null; }
-                    if (parent.terrain.props.TryGetValue(PropKey.SpectralClass, out dicts) && dicts != "G") { return null; }
                     if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out dicts) && !bool.Parse(dicts)) { return null; }
                     if (parent.terrain.props.TryGetValue(PropKey.PlanetHydrosphereCoverage, out dicts) && (double.Parse(dicts) < 25 || double.Parse(dicts) > 75)) { return null; }
 
