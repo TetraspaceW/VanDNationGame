@@ -11,14 +11,16 @@ public class MapView : Area2D
     private TileMap BuildingTiles;
     private Sidebar sidebar;
 
-    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+    private TileModel root;
 
     private int date = 2030;
     public override void _Ready()
     {
+        TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+
         // universe start
-        Model = new MapModel(root);
-        root.internalMap = Model;
+        Model = new MapModel(startingTile);
+        startingTile.internalMap = Model;
         CreateSidebar();
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
@@ -26,8 +28,7 @@ public class MapView : Area2D
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
-        root.UpdateHighestTransportInside(false);
-        root.CalculateTotalChildResources();
+        SetRoot(startingTile);
 
         UpdateWholeMapTo(Model);
 
@@ -197,6 +198,7 @@ public class MapView : Area2D
         if (Tile.parent.parent == null)
         {
             Tile.parent.parent = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, Tile.scale + 2, zoomable: true);
+            SetRoot(Tile.parent.parent);
         }
         if (Tile.parent.parent.internalMap == null)
         {
@@ -205,6 +207,13 @@ public class MapView : Area2D
             grandparentMap.Tiles[RND.Next(0, 10), RND.Next(0, 10)] = Tile.parent;
         }
         UpdateWholeMapTo(Tile.parent.parent.internalMap);
+    }
+
+    private void SetRoot(TileModel Tile)
+    {
+        root = Tile;
+        root.UpdateHighestTransportInside(false);
+        root.CalculateTotalChildResources();
     }
 
     private TileModel TileAt(int x, int y)
