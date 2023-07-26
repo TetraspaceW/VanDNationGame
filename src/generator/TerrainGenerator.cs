@@ -21,6 +21,12 @@ class TerrainGenerator
         {
             case Terrain.TerrainType.InteruniversalSpace:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InteruniversalSpace) });
+                if (scale == 11)
+                {
+                    AddOneRandomly(Tiles, new[] {
+                        new TerrainRule(Terrain.TerrainType.Universe, zoomable: true)
+                    }, new List<Terrain.TerrainType> { });
+                }
                 break;
             case Terrain.TerrainType.Universe:
                 Fill(Tiles, new[] {

@@ -16,7 +16,7 @@ public class MapView : Area2D
     private int date = 2030;
     public override void _Ready()
     {
-        TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+        TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
 
         // universe start
         Model = new MapModel(startingTile);
