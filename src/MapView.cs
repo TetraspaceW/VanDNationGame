@@ -11,16 +11,14 @@ public class MapView : Area2D
     private TileMap BuildingTiles;
     private Sidebar sidebar;
 
-    private TileModel root;
+    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
 
     private int date = 2030;
     public override void _Ready()
     {
-        TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
-
         // universe start
-        Model = new MapModel(startingTile);
-        startingTile.internalMap = Model;
+        Model = new MapModel(root);
+        root.internalMap = Model;
         CreateSidebar();
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
@@ -28,7 +26,6 @@ public class MapView : Area2D
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
-        SetRoot(startingTile);
         root.UpdateHighestTransportInside(false);
         root.CalculateTotalChildResources();
         root.CalculateTotalChildCapacity();
@@ -204,7 +201,6 @@ public class MapView : Area2D
         if (Tile.parent.parent == null)
         {
             Tile.parent.parent = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, Tile.scale + 2, zoomable: true);
-            SetRoot(Tile.parent.parent);
         }
         if (Tile.parent.parent.internalMap == null)
         {
@@ -217,14 +213,6 @@ public class MapView : Area2D
         Tile.parent.parent.CalculateTotalChildResources();
         Tile.parent.parent.CalculateTotalChildCapacity();
         UpdateWholeMapTo(Tile.parent.parent.internalMap);
-    }
-
-    private void SetRoot(TileModel Tile)
-    {
-        root = Tile;
-        root.UpdateHighestTransportInside(false);
-        root.CalculateTotalChildResources();
-        root.CalculateTotalChildCapacity();
     }
 
     private TileModel TileAt(int x, int y)
@@ -241,9 +229,12 @@ public class MapView : Area2D
             tile.CalculateTotalChildCapacity();
             tile.internalMap.NextTurn();
         }
+        Model.parent.UpdateHighestTransportInside();
+        Model.parent.CalculateTotalChildResources();
+        Model.parent.CalculateTotalChildCapacity();
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
-        sidebar.SetDateLabelText(date + " CE");
+        sidebar.SetDateLabelText(date + " AD");
     }
 }
