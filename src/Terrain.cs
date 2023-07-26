@@ -104,6 +104,22 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
+            case TerrainType.Dinosaur:
+            case TerrainType.Cetacean:
+            case TerrainType.Mammal:
+            case TerrainType.Carnifern:
+            case TerrainType.Bird:
+            case TerrainType.Amphibian:
+            case TerrainType.Arthropod:
+            case TerrainType.Fish:
+            case TerrainType.Reptile:
+            case TerrainType.Radiate:
+            case TerrainType.Mollusk:
+            case TerrainType.Trichordate:
+            case TerrainType.Insect:
+            case TerrainType.Eukaryote:
+            case TerrainType.Prokaryote:
+                return "life/" + terrainType.ToString().ToLower();
             case TerrainType.Cytoplasm:
                 return "biomolecules/cytoplasm";
             case TerrainType.Nucleolus:
@@ -252,15 +268,21 @@ public class Terrain
         // -13  1 km across
         // -14  100 m across
         // -15  10 m across
+        Dinosaur, Cetacean,
         // -16  1 m across
+        Mammal, Carnifern,
         // -17  10 cm across
+        Bird, Amphibian, Arthropod, Fish, Reptile, Radiate, Mollusk, Trichordate,
         // -18  1 cm across
+        Insect,
         // -19  1 mm across
         // -20  100 um across
+        Eukaryote,
         // -21  10 um across
         Cell,
         // -22  1 um across
         Nucleoplasm, Cytoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
+        Prokaryote,
         // -23  100 nm across
         Heterochromatin, Euchromatin,
         // -24  10 nm across

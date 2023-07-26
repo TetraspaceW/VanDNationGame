@@ -1,5 +1,56 @@
 [
     {
+        "name": "Oil Well",
+        "image": "mine",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "technology": "Electricity",
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "extraction": {
+            "resource": "Energy",
+            "rate": 2
+        }
+    },
+    {
+        "name": "Renewable Power Plant",
+        "image": "mine",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "technology": "Computing",
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "extraction": {
+            "resource": "Energy",
+            "rate": 2
+        }
+    },
+    {
+        "name": "Fission Power Plant",
+        "image": "mine",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "technology": "Nuclear Fission",
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "extraction": {
+            "resource": "Energy",
+            "rate": 3
+        }
+    },
+    {
         "name": "Airport",
         "size": -10,
         "terrainTypes": [
@@ -9,9 +60,15 @@
             "resource": "Metal",
             "amount": 15
         },
-        "technology": "Computing",
+        "technology": "Globalisation",
         "transport": {
-            "range": -9
+            "range": -9,
+            "amount": 100,
+            "resources": [
+                "Metal",
+                "Electronics",
+                "Metamaterials",
+            ]
         }
     },
     {
@@ -26,7 +83,13 @@
         },
         "technology": "Satellites",
         "transport": {
-            "range": -5
+            "range": -5,
+            "amount": 10,
+            "resources": [
+                "Metal",
+                "Electronics",
+                "Metamaterials",
+            ]
         }
     },
     {
@@ -60,7 +123,13 @@
         },
         "technology": "Space Elevator",
         "transport": {
-            "range": -3
+            "range": -3,
+            "amount": 100,
+            "resources": [
+                "Metal",
+                "Electronics",
+                "Metamaterials",
+            ]
         }
     },
     {
@@ -73,10 +142,10 @@
             "resource": "Metal",
             "amount": 15
         },
-        "technology": "Computing",
+        "technology": "Combustion",
         "extraction": {
             "resource": "Metal",
-            "rate": 1
+            "rate": 1.5
         }
     },
     {
@@ -89,7 +158,7 @@
             "resource": "Metal",
             "amount": 15
         },
-        "technology": "Computing",
+        "technology": "Transistors",
         "process": {
             "input": "Metal",
             "output": "Electronics",
@@ -108,10 +177,10 @@
             "resource": "Metal",
             "amount": 0.15
         },
-        "technology": "Computing",
+        "technology": "Combustion",
         "extraction": {
             "resource": "Metal",
-            "rate": 0.01
+            "rate": 0.015
         }
     },
     {
