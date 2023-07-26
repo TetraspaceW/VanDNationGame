@@ -68,10 +68,18 @@ public class MapModel
                 coords,
                 building
             ));
+            parent.CalculateStorageBuildings(false);
+            parent.CalculateTotalChildCapacity();
+            parent.CalculateTotalChildResources();
             if (!ignoreCost)
             {
                 parent.SubtractResource(building.cost.resource, building.cost.amount);
             }
+            TileModel.activeTiles.Add(parent);
+            parent.UpdateHighestTransportInside(false);
+            parent.CalculateStorageBuildings(false);
+            parent.CalculateTotalChildCapacity();
+            parent.CalculateTotalChildResources();
         }
         return canPlaceBuildingHere;
 
@@ -122,12 +130,12 @@ public class MapModel
     public void NextTurn()
     {
         parent.BuildingResourcesTick();
-        foreach (var tile in Tiles)
-        {
-            if (tile.internalMap != null)
-            {
-                tile.internalMap.NextTurn();
-            }
-        }
+//        foreach (var tile in Tiles)
+//        {
+//            if (tile.internalMap != null)
+//            {
+//                tile.internalMap.NextTurn();
+//            }
+//        }
     }
 }

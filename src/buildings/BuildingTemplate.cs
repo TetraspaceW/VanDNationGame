@@ -42,6 +42,8 @@ public class BuildingTemplate
     public class Transport
     {
         public int range;
+        public int amount;
+        public string[] resources;
     }
     public class Process
     {

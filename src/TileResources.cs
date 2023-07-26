@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Runtime.CompilerServices;
+
 public class TileResources
 {
     public Dictionary<string, decimal> resources = new Dictionary<string, decimal>();
@@ -34,6 +36,20 @@ public class TileResources
         {
             AddAmount(resourceAmount.Key, resourceAmount.Value);
         });
+    }
+
+    public static TileResources SubtractTileResources(TileResources amounts, TileResources amounts2)
+    {
+        var result = new TileResources();
+        amounts.resources.ToList().ForEach((resourceAmount) =>
+        {
+            result.AddAmount(resourceAmount.Key, resourceAmount.Value);
+        });
+        amounts2.resources.ToList().ForEach((resourceAmount) =>
+        {
+            result.AddAmount(resourceAmount.Key, -resourceAmount.Value);
+        });
+        return result;
     }
 
 }
