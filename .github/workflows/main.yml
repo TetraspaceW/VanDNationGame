@@ -3,7 +3,7 @@ on: push
 
 env:
   GODOT_VERSION: 3.5
-  EXPORT_NAME: AFungusFallGuys
+  EXPORT_NAME: VanDNationGame
 
 jobs:
   export-windows:
