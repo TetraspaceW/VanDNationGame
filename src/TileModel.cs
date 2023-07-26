@@ -1,6 +1,9 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Godot;
+using System.Diagnostics;
+
 public class TileModel
 {
     public Terrain terrain;
@@ -11,8 +14,12 @@ public class TileModel
     public string image;
     public TileResources localResources;
 
+    public static HashSet<TileModel> activeTiles = new HashSet<TileModel>();
+    public HashSet<Building> storageBuildings = new HashSet<Building>();
+
     // recursive
-    public TileResources totalChildResources;
+    public TileResources totalChildResources = new TileResources();
+    public TileResources totalChildCapacity = new TileResources();
     public int highestTransportInside = int.MinValue;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
@@ -60,7 +67,7 @@ public class TileModel
         buildings.ForEach((building) =>
         {
             BuildingTemplate.Process process = building.template.process;
-            if (process != null && GetParentAtScale(CalculateHighestTransportNeigbouring()).totalChildResources.GetAmount(process.input) >= process.rate && building.active)
+            if (process != null && totalChildResources.GetAmount(process.input) >= process.rate && building.active)
             {
                 SubtractResource(process.input, process.rate);
                 TemporarilyAddLocalResources(process.output, process.rate * process.amount);
@@ -107,19 +114,53 @@ public class TileModel
         return highestTransportNeighboring;
     }
 
+    public HashSet<Building> CalculateStorageBuildings(bool onTurn = true)
+    {
+        var buildings = new HashSet<Building>();
+        if (internalMap != null) // this weird check makes me think it binds to maps instead
+        {
+            buildings = internalMap.Buildings
+               .Where((building) => building.template.transport != null && building.active && building.template.transport.range >= scale).ToHashSet();
+
+            foreach (var tile in internalMap.Tiles)
+            {
+                buildings.UnionWith(tile.storageBuildings.Where((building) => building.template.transport != null && building.active && building.template.transport.range >= scale).ToHashSet());
+            }
+        }
+        if (parent != null)
+        {
+            buildings.UnionWith(parent.storageBuildings);
+        }
+        storageBuildings = buildings;
+        return buildings;
+    }
+
     public TileResources CalculateTotalChildResources()
     {
         var resources = new TileResources();
-        resources.AddTileResources(localResources);
         if (internalMap != null)
         {
-            foreach (var tile in internalMap.Tiles)
+            foreach (var building in storageBuildings)
             {
-                resources.AddTileResources(tile.CalculateTotalChildResources());
+                resources.AddTileResources(building.storage);
             }
         }
 
         totalChildResources = resources;
+        return resources;
+    }
+    public TileResources CalculateTotalChildCapacity()
+    {
+        var resources = new TileResources();
+        if (internalMap != null)
+        {
+            foreach (var building in storageBuildings)
+            {
+                resources.AddTileResources(TileResources.SubtractTileResources(building.capacity, building.storage));
+            }
+        }
+
+        totalChildCapacity = resources;
         return resources;
     }
 
@@ -132,46 +173,45 @@ public class TileModel
 
     public TileResources GetAvailableResources()
     {
-        var parentOrRoot = GetParentAtScale(CalculateHighestTransportNeigbouring());
-        if (parentOrRoot == null)
-        {
-            return new TileResources();
-        }
-        else
-        {
-            return parentOrRoot.totalChildResources;
-        }
+        return totalChildResources;
     }
 
 
-    public void SubtractResource(string resource, double amount)
+    public void SubtractResource(string resource, decimal amount)
     {
-        var parentOrRoot = GetParentAtScale(CalculateHighestTransportNeigbouring());
-        if (parentOrRoot != null) { parentOrRoot.SubtractResourceFromThisOrChildren(resource, amount); }
+        SubtractResourceFromThisOrChildren(resource, amount);
     }
 
-    private void SubtractResourceFromThisOrChildren(string resource, double amount)
+    private void SubtractResourceFromThisOrChildren(string resource, decimal amount)
     {
-        var localChange = Math.Min(amount, localResources.GetAmount(resource));
-        amount -= localChange;
-        TemporarilyAddLocalResources(resource, -localChange);
-
         var childrenWithResource = GetChildrenWithResource(resource);
-        var totalAmountInChildren = totalChildResources.GetAmount(resource) - localChange;
+        var totalAmountInChildren = totalChildResources.GetAmount(resource);
         childrenWithResource.ForEach((it) =>
         {
-            it.Item1.SubtractResourceFromThisOrChildren(resource, amount * (it.Item2 / totalAmountInChildren));
+            it.Item1.SubtractResourceFromStorage(resource, amount * (it.Item2 / totalAmountInChildren));
         });
+        CalculateTotalChildCapacity();
+        CalculateTotalChildResources();
 
     }
 
-    private void TemporarilyAddLocalResources(string resource, double amount)
+    private void TemporarilyAddLocalResources(string resource, decimal amount)
     {
-        localResources.AddAmount(resource, amount);
-        AddToAllParents(resource, amount);
+        var childrenWithCapacity = GetChildrenWithCapacity(resource);
+        var totalCapcityInChildren = totalChildCapacity.GetAmount(resource);
+        if (totalCapcityInChildren < amount)
+        {
+            amount = totalCapcityInChildren;
+        }
+        childrenWithCapacity.ForEach((it) =>
+        {
+            it.Item1.AddResourceToStorage(resource, amount * (it.Item2 / totalCapcityInChildren));
+        });
+        CalculateTotalChildCapacity();
+        CalculateTotalChildResources();
     }
 
-    private void AddToAllParents(string resource, double amount)
+    private void AddToAllParents(string resource, decimal amount)
     {
         var tile = this;
         while (tile != null)
@@ -181,17 +221,33 @@ public class TileModel
         }
     }
 
-    public List<(TileModel, double)> GetChildrenWithResource(string resource)
+    public List<(Building, decimal)> GetChildrenWithResource(string resource)
     {
-        var childrenWithResource = new List<(TileModel, double)>();
+        var childrenWithResource = new List<(Building, decimal)>();
         if (internalMap != null)
         {
-            foreach (var tile in internalMap.Tiles)
+            foreach (var building in storageBuildings)
             {
-                var resourcesInTile = tile.totalChildResources.GetAmount(resource);
+                var resourcesInTile = building.storage.GetAmount(resource);
                 if (resourcesInTile > 0)
                 {
-                    childrenWithResource.Add((tile, resourcesInTile));
+                    childrenWithResource.Add((building, resourcesInTile));
+                }
+            }
+        }
+        return childrenWithResource;
+    }
+    public List<(Building, decimal)> GetChildrenWithCapacity(string resource)
+    {
+        var childrenWithResource = new List<(Building, decimal)>();
+        if (internalMap != null)
+        {
+            foreach (var building in storageBuildings)
+            {
+                var resourcesInTile = building.capacity.GetAmount(resource) - building.storage.GetAmount(resource);
+                if (resourcesInTile > 0)
+                {
+                    childrenWithResource.Add((building, resourcesInTile));
                 }
             }
         }

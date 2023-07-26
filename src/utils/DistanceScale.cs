@@ -5,7 +5,7 @@ public class DistanceScale
     private static (int, string)[] units = {
             (-51, "lp"),
             (-40, "ym"), (-37, "zm"), (-34, "am"), (-31, "fm"), (-26, "Å"), (-22, "um"), (-19, "mm"), (-16, "m"),
-            (-13, "km"), (0, "ly"),
+            (-13, "km"), (-5, "AU"), (0, "ly"),
             (int.MaxValue, null)
     };
 

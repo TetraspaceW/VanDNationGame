@@ -28,6 +28,7 @@ public class MapView : Area2D
         PlaceStartingBuildings();
         root.UpdateHighestTransportInside(false);
         root.CalculateTotalChildResources();
+        root.CalculateTotalChildCapacity();
 
         UpdateWholeMapTo(Model);
 
@@ -187,8 +188,11 @@ public class MapView : Area2D
         if (Tile.internalMap == null)
         {
             Tile.internalMap = new MapModel(Tile);
-            Tile.CalculateTotalChildResources();
         }
+        Tile.UpdateHighestTransportInside();
+        Tile.CalculateStorageBuildings();
+        Tile.CalculateTotalChildResources();
+        Tile.CalculateTotalChildCapacity();
         UpdateWholeMapTo(Tile.internalMap);
     }
 
@@ -204,6 +208,10 @@ public class MapView : Area2D
             MapModel grandparentMap = Tile.parent.parent.internalMap;
             grandparentMap.Tiles[RND.Next(0, 10), RND.Next(0, 10)] = Tile.parent;
         }
+        Tile.parent.parent.UpdateHighestTransportInside();
+        Tile.parent.parent.CalculateStorageBuildings();
+        Tile.parent.parent.CalculateTotalChildResources();
+        Tile.parent.parent.CalculateTotalChildCapacity();
         UpdateWholeMapTo(Tile.parent.parent.internalMap);
     }
 
@@ -214,9 +222,16 @@ public class MapView : Area2D
 
     public void NextTurn()
     {
-        root.UpdateHighestTransportInside();
-        root.internalMap.NextTurn();
-        root.CalculateTotalChildResources();
+        foreach(TileModel tile in TileModel.activeTiles)
+        {
+            tile.UpdateHighestTransportInside();
+            tile.CalculateTotalChildResources();
+            tile.CalculateTotalChildCapacity();
+            tile.internalMap.NextTurn();
+        }
+        Model.parent.UpdateHighestTransportInside();
+        Model.parent.CalculateTotalChildResources();
+        Model.parent.CalculateTotalChildCapacity();
         date += 1;
         UpdateSidePanelLabelText();
         sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());

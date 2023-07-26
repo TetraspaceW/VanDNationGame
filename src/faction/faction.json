@@ -2,8 +2,23 @@
     {
         "player": true,
         "techsKnown": [
+            "Mechanisation",
+            "Chemistry",
+            "Combustion",
+            "Steel",
+            "Electricity",
+            "Radio",
+            "Flight",
+            "Globalisation",
+            "Transistors",
             "Computing",
+            "Rocketry",
+            "Fluid Dynamics",
+            "Combined Arms",
             "Telecommunications",
+            "Plastics",
+            "Synthetic Materials",
+            "Nuclear Fission",
             "Satellites",
             "Guidance Systems",
             "Lasers",
@@ -17,7 +32,8 @@
         "startingBuildings": [
             "Airport",
             "Mine",
-            "Spaceport"
+            "Spaceport",
+            "Fission Power Plant"
         ]
     }
 ]
