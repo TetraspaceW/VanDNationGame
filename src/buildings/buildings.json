@@ -11,7 +11,13 @@
         },
         "technology": "Computing",
         "transport": {
-            "range": -9
+            "range": -9,
+            "amount": 100,
+            "resources": [
+                "Metal",
+                "Electronics",
+                "Metamaterials",
+            ]
         }
     },
     {
@@ -26,7 +32,13 @@
         },
         "technology": "Satellites",
         "transport": {
-            "range": -5
+            "range": -5,
+            "amount": 10,
+            "resources": [
+                "Metal",
+                "Electronics",
+                "Metamaterials",
+            ]
         }
     },
     {
@@ -60,7 +72,13 @@
         },
         "technology": "Space Elevator",
         "transport": {
-            "range": -3
+            "range": -3,
+            "amount": 100,
+            "resources": [
+                "Metal",
+                "Electronics",
+                "Metamaterials",
+            ]
         }
     },
     {
