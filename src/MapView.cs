@@ -11,14 +11,16 @@ public class MapView : Area2D
     private TileMap BuildingTiles;
     private Sidebar sidebar;
 
-    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
+    private TileModel root;
 
     private int date = 2030;
     public override void _Ready()
     {
+        TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
+
         // universe start
-        Model = new MapModel(root);
-        root.internalMap = Model;
+        Model = new MapModel(startingTile);
+        startingTile.internalMap = Model;
         CreateSidebar();
         camera = (CameraBuddy)GetNode("CameraBuddy");
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
@@ -26,13 +28,11 @@ public class MapView : Area2D
 
         UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
         PlaceStartingBuildings();
-        root.UpdateHighestTransportInside(false);
-        root.CalculateTotalChildResources();
-        root.CalculateTotalChildCapacity();
+        SetRootTo(startingTile);
 
         UpdateWholeMapTo(Model);
 
-        sidebar.SetDateLabelText(date + " AD");
+        sidebar.SetDateLabelText(date + " CE");
     }
 
     // Handling zooming in and out
@@ -72,6 +72,15 @@ public class MapView : Area2D
                 sidebar.SetSelectedBuilding(null);
             }
         }
+    }
+
+    void SetRootTo(TileModel newRoot)
+    {
+        root = newRoot;
+        root.UpdateHighestTransportInside(false);
+        root.CalculateTotalChildResources();
+        root.CalculateTotalChildCapacity();
+        root.CalculateStorageBuildings();
     }
 
     void PlaceStartingBuildings()
@@ -201,6 +210,7 @@ public class MapView : Area2D
         if (Tile.parent.parent == null)
         {
             Tile.parent.parent = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, Tile.scale + 2, zoomable: true);
+            SetRootTo(Tile.parent.parent);
         }
         if (Tile.parent.parent.internalMap == null)
         {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 class TerrainGenerator
 {
@@ -14,7 +15,6 @@ class TerrainGenerator
     {
         var scale = tile.scale;
         var terrain = tile.terrain;
-
         var Tiles = new TileModel[10, 10];
 
         switch (terrain.terrainType)
@@ -398,7 +398,7 @@ class TerrainGenerator
             case Terrain.TerrainType.Tissue:
                 switch (tile.scale)
                 {
-                    case -21: Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cell, true) }); break;
+                    case -20: Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cell, true) }); break;
                     default: Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Tissue, true) }); break;
                 }
                 break;
