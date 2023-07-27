@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/sb.png-b346e3ad20b4b53bacf357b788f24750.stex"
+path="res://.import/SB.png-f16143ea7c52f32b38dabb3139ef070a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/sb.png"
-dest_files=[ "res://.import/sb.png-b346e3ad20b4b53bacf357b788f24750.stex" ]
+source_file="res://assets/tiles/galaxies/SB.png"
+dest_files=[ "res://.import/SB.png-f16143ea7c52f32b38dabb3139ef070a.stex" ]
 
 [params]
 

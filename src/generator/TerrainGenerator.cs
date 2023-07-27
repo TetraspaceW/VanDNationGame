@@ -386,7 +386,7 @@ class TerrainGenerator
             case Terrain.TerrainType.Radiate:
             case Terrain.TerrainType.Mollusk:
             case Terrain.TerrainType.Trichordate:
-                Fill(Tiles, new[] { new TerrainRule(tile.parent.terrain.terrainType, true) });
+                Fill(Tiles, new[] { new TerrainRule(tile.parent.terrain.terrainType, true, 99, props: tile.parent.terrain.props) });
                 var organismCenter = TerrainGenRule.ArbitraryCenter(Tiles);
                 AddCircle(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Skin, true)
