@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/e.png-79726658ce6f7279c1a9f56c6d200b44.stex"
+path="res://.import/skin.png-c6d080f8c22853158210b8b1e1a03123.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/e.png"
-dest_files=[ "res://.import/e.png-79726658ce6f7279c1a9f56c6d200b44.stex" ]
+source_file="res://assets/tiles/biology/skin.png"
+dest_files=[ "res://.import/skin.png-c6d080f8c22853158210b8b1e1a03123.stex" ]
 
 [params]
 

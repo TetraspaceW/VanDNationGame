@@ -11,8 +11,7 @@ public class MapView : Area2D
     private TileMap BuildingTiles;
     private Sidebar sidebar;
 
-    // private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
-    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Cell), null, -21, zoomable: true);
+    private TileModel root = new TileModel(new Terrain(Terrain.TerrainType.Universe), null, 10, zoomable: true);
 
     private int date = 2030;
     public override void _Ready()
@@ -25,8 +24,8 @@ public class MapView : Area2D
         collision = (CollisionShape2D)GetNode("CollisionShape2D");
         CreateTileMap();
 
-        // UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
-        // PlaceStartingBuildings();
+        UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
+        PlaceStartingBuildings();
         root.UpdateHighestTransportInside(false);
         root.CalculateTotalChildResources();
         root.CalculateTotalChildCapacity();
@@ -223,7 +222,7 @@ public class MapView : Area2D
 
     public void NextTurn()
     {
-        foreach(TileModel tile in TileModel.activeTiles)
+        foreach (TileModel tile in TileModel.activeTiles)
         {
             tile.UpdateHighestTransportInside();
             tile.CalculateTotalChildResources();

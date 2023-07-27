@@ -120,6 +120,12 @@ public class Terrain
             case TerrainType.Eukaryote:
             case TerrainType.Prokaryote:
                 return "life/" + terrainType.ToString().ToLower();
+            case TerrainType.Skin:
+                return "biology/skin";
+            case TerrainType.Tissue:
+                return "biology/meat";
+            case TerrainType.Cell:
+                return "life/eukaryote";
             case TerrainType.Cytoplasm:
                 return "biomolecules/cytoplasm";
             case TerrainType.Nucleolus:
@@ -271,8 +277,10 @@ public class Terrain
         Dinosaur, Cetacean,
         // -16  1 m across
         Mammal, Carnifern,
+        Skin,
         // -17  10 cm across
         Bird, Amphibian, Arthropod, Fish, Reptile, Radiate, Mollusk, Trichordate,
+        Tissue,
         // -18  1 cm across
         Insect,
         // -19  1 mm across
