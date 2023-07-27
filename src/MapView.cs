@@ -222,7 +222,7 @@ public class MapView : Area2D
 
     public void NextTurn()
     {
-        foreach(TileModel tile in TileModel.activeTiles)
+        foreach (TileModel tile in TileModel.activeTiles)
         {
             tile.UpdateHighestTransportInside();
             tile.CalculateTotalChildResources();

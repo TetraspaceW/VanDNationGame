@@ -41,29 +41,29 @@ public class Terrain
                 return "star_clusters/dense_stars";
             case TerrainType.GalaxyCluster:
             case TerrainType.StellarBubble:
-                return "star_clusters/stars" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToString().ToLower() : "");
+                return "star_clusters/stars" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToLower() : "");
             case TerrainType.GalaxyGroup:
             case TerrainType.StellarCloud:
-                return "star_clusters/stars_sparse" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToString().ToLower() : "");
+                return "star_clusters/stars_sparse" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToLower() : "");
             case TerrainType.Galaxy:
-                return "galaxies/" + props[PropKey.GalaxyType].ToString().ToLower();
+                return "galaxies/" + props[PropKey.GalaxyType].ToLower();
             case TerrainType.DwarfGalaxy:
                 return "galaxies/dwarf_galaxy";
             case TerrainType.GalacticCore:
                 return "core_stars";
             case TerrainType.HillsCloud:
             case TerrainType.ScatteredDisk:
-                return "stars/kuiper_" + props[PropKey.SpectralClass].ToString().ToLower();
+                return "stars/kuiper_" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.OortCloudBodies:
             case TerrainType.HillsCloudBodies:
             case TerrainType.KuiperBeltBodies:
             case TerrainType.ScatteredDiskBodies:
                 return "kuiper";
             case TerrainType.SolarSystem:
-                return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
+                return "stars/" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.OuterSolarSystem:
             case TerrainType.InnerSolarSystem:
-                return "stars/" + props[PropKey.SpectralClass].ToString().ToLower() + "_noletter";
+                return "stars/" + props[PropKey.SpectralClass].ToLower() + "_noletter";
             case TerrainType.FarfarfarSystemBody:
             case TerrainType.FarfarSystemBody:
             case TerrainType.FarSystemBody:
@@ -75,7 +75,7 @@ public class Terrain
             case TerrainType.TerrestrialPlanet:
             case TerrainType.GasGiant:
             case TerrainType.LunarBody:
-                var planetFileName = "planets/" + props[PropKey.PlanetType].ToString().ToLower();
+                var planetFileName = "planets/" + props[PropKey.PlanetType].ToLower();
 
                 switch (Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), props[PropKey.PlanetHydrosphereType]))
                 {
@@ -93,7 +93,7 @@ public class Terrain
             case TerrainType.EpiepistellarSolarSystem:
             case TerrainType.EpiepiepistellarSolarSystem:
             case TerrainType.Star:
-                return "stars/star_" + props[PropKey.SpectralClass].ToString().ToLower();
+                return "stars/star_" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.StarSurface:
                 return "stars/starstuff";
             case TerrainType.VerdantTerrain:
@@ -120,8 +120,40 @@ public class Terrain
             case TerrainType.Eukaryote:
             case TerrainType.Prokaryote:
                 return "life/" + terrainType.ToString().ToLower();
+            case TerrainType.Skin:
+                return "biology/skin";
+            case TerrainType.Tissue:
+                return "biology/meat";
+            case TerrainType.Cell:
+                return "life/eukaryote";
+            case TerrainType.Cytoplasm:
+                return "biomolecules/cytoplasm";
+            case TerrainType.Nucleolus:
+                return "biomolecules/nucleolus";
+            case TerrainType.LinkerDNA:
+                return "biomolecules/dna_" + (int.Parse(props[PropKey.Rotation]) % 2).ToString().ToLower();
+            case TerrainType.Nucleosome:
+                return "biomolecules/nucleosome";
+            case TerrainType.Nucleoplasm:
+                return "biomolecules/nucleoplasm";
+            case TerrainType.HeterochromatinDomain:
+            case TerrainType.Heterochromatin:
+                return "biomolecules/chromatin";
+            case TerrainType.EuchromatinDomain:
+            case TerrainType.Euchromatin:
+                return "biomolecules/chromatin_chain";
+            case TerrainType.Nucleotide:
+                return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToLower() + "_" + props[PropKey.NucleicBackbone].ToLower() + props[PropKey.Rotation].ToLower();
+            case TerrainType.NucleotideBlank:
+                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_blank" + props[PropKey.Rotation].ToLower();
+            case TerrainType.NucleotideTurnInner:
+                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_turn_inner" + props[PropKey.Rotation].ToLower();
+            case TerrainType.NucleotideTurnOuter:
+                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_turn_outer" + props[PropKey.Rotation].ToLower();
+            case TerrainType.IntermolecularFluid:
+                return "biomolecules/intermolecular_fluid";
             case TerrainType.Atom:
-                return "atom/" + props[PropKey.AtomElement].ToString().ToLower();
+                return "atom/" + props[PropKey.AtomElement].ToLower();
             case TerrainType.ElectronCloud:
                 return "atom/electron_cloud";
             case TerrainType.Nucleus:
@@ -133,9 +165,9 @@ public class Terrain
             case TerrainType.GluonSea:
                 return "atom/quark_gluon_sea";
             case TerrainType.ValenceQuark:
-                return "atom/valence_quark_" + props[PropKey.QuarkColour].ToString().ToLower() + "_" + props[PropKey.QuarkFlavour].ToString().ToLower();
+                return "atom/valence_quark_" + props[PropKey.QuarkColour].ToLower() + "_" + props[PropKey.QuarkFlavour].ToLower();
             case TerrainType.Quark:
-                return "atom/quark_" + props[PropKey.QuarkColour].ToString().ToLower() + "_" + props[PropKey.QuarkFlavour].ToString().ToLower();
+                return "atom/quark_" + props[PropKey.QuarkColour].ToLower() + "_" + props[PropKey.QuarkFlavour].ToLower();
             default:
                 return null;
         }
@@ -245,19 +277,26 @@ public class Terrain
         Dinosaur, Cetacean,
         // -16  1 m across
         Mammal, Carnifern,
+        Skin,
         // -17  10 cm across
         Bird, Amphibian, Arthropod, Fish, Reptile, Radiate, Mollusk, Trichordate,
+        Tissue,
         // -18  1 cm across
         Insect,
         // -19  1 mm across
         // -20  100 um across
         Eukaryote,
         // -21  10 um across
+        Cell,
         // -22  1 um across
+        Nucleoplasm, Cytoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
         Prokaryote,
         // -23  100 nm across
+        Heterochromatin, Euchromatin,
         // -24  10 nm across
+        Nucleosome, LinkerDNA,
         // -25  1 nm across
+        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid, Histone,
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace,
         // -27  10 pm across
@@ -272,7 +311,10 @@ public class Terrain
         GluonSea, ValenceQuark,
         // -33  10 am across
         // -34  1 am across
-        Quark
+        Quark,
+        // N/A
+        StructureTile,
+        Sandbox
     }
 
     public enum PlanetType
@@ -321,8 +363,11 @@ public class Terrain
 
 public enum PropKey
 {
+    Rotation,
+    StructureType, StructureShiftX, StructureShiftY,
     QuarkColour, QuarkFlavour,
     AtomElement,
+    Nucleobase, NucleicBackbone,
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
     PlanetType,
     SpectralClass,

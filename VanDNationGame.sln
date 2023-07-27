@@ -1,12 +1,15 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32929.386
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VanDNationGame", "VanDNationGame.csproj", "{DEA744EF-6DE4-4941-A716-7992E8A8813F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-	Debug|Any CPU = Debug|Any CPU
-	ExportDebug|Any CPU = ExportDebug|Any CPU
-	ExportRelease|Any CPU = ExportRelease|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		ExportDebug|Any CPU = ExportDebug|Any CPU
+		ExportRelease|Any CPU = ExportRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DEA744EF-6DE4-4941-A716-7992E8A8813F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -15,5 +18,11 @@ Global
 		{DEA744EF-6DE4-4941-A716-7992E8A8813F}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{DEA744EF-6DE4-4941-A716-7992E8A8813F}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{DEA744EF-6DE4-4941-A716-7992E8A8813F}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D876BED1-8649-47C4-916B-0BE06FBEF9E4}
 	EndGlobalSection
 EndGlobal

@@ -258,7 +258,7 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Structure.SILICA, 1) }
+                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
                             , new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                         });
@@ -277,25 +277,25 @@ class TerrainGenerator
                 {
                     case -14:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Dinosaur, false)
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true)
                             };
                         break;
                     case -15:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Mammal, false),
+                                new TerrainRule(Terrain.TerrainType.Mammal, true),
                             };
                         break;
                     case -16:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Bird, false, 0.3),
-                                new TerrainRule(Terrain.TerrainType.Amphibian, false, 0.15),
-                                new TerrainRule(Terrain.TerrainType.Reptile, false, 0.3),
-                                new TerrainRule(Terrain.TerrainType.Trichordate, false, 0.3)
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3)
                             };
                         break;
                     case -17:
                         landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Insect, false)
+                                new TerrainRule(Terrain.TerrainType.Insect, true)
                             };
                         break;
                 }
@@ -303,7 +303,7 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Structure.SILICA, 1) }
+                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
                             , new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                         });
@@ -312,6 +312,19 @@ class TerrainGenerator
                         Fill(Tiles, new[] {
                             new TerrainRule(Terrain.TerrainType.VerdantTerrain, true, 99)
                         }.Concat(landLife).ToArray());
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.IntermolecularFluid:
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = WaterFill(Tiles);
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true, props: tile.terrain.props)
+                        });
                         break;
                 }
                 break;
@@ -324,16 +337,16 @@ class TerrainGenerator
                     {
                         case -14:
                             oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Cetacean, false)
+                                new TerrainRule(Terrain.TerrainType.Cetacean, true)
                             };
                             break;
                         case -16:
                             oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Amphibian, false, 0.1),
-                                new TerrainRule(Terrain.TerrainType.Arthropod, false, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Fish, false, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Radiate, false, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Mollusk, false, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.1),
+                                new TerrainRule(Terrain.TerrainType.Arthropod, true, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Fish, true, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Radiate, true, 0.2),
+                                new TerrainRule(Terrain.TerrainType.Mollusk, true, 0.2),
                             };
                             break;
                         case -19:
@@ -352,10 +365,7 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = StructureFill(Tiles, Structure.WATER.RotateAll(1).Concat(Structure.HYDROXIDE.RotateAll(0.0000001)).Concat(Structure.HYDRONIUM.RotateAll(0.0000001)).ToArray()
-                            , 0.5, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        });
+                        Tiles = WaterFill(Tiles);
                         break;
                     default:
                         Fill(Tiles, new[] {
@@ -363,6 +373,117 @@ class TerrainGenerator
                         }.Concat(oceanLife).ToArray());
                         break;
                 }
+                break;
+            case Terrain.TerrainType.Dinosaur:
+            case Terrain.TerrainType.Cetacean:
+            case Terrain.TerrainType.Mammal:
+            case Terrain.TerrainType.Carnifern:
+            case Terrain.TerrainType.Bird:
+            case Terrain.TerrainType.Amphibian:
+            case Terrain.TerrainType.Arthropod:
+            case Terrain.TerrainType.Fish:
+            case Terrain.TerrainType.Reptile:
+            case Terrain.TerrainType.Radiate:
+            case Terrain.TerrainType.Mollusk:
+            case Terrain.TerrainType.Trichordate:
+                Fill(Tiles, new[] { new TerrainRule(tile.parent.terrain.terrainType, true) });
+                var organismCenter = TerrainGenRule.ArbitraryCenter(Tiles);
+                AddCircle(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Skin, true)
+                }, organismCenter, 4, true);
+                break;
+            case Terrain.TerrainType.Skin:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Tissue, true) });
+                break;
+            case Terrain.TerrainType.Tissue:
+                switch (tile.scale)
+                {
+                    case -21: Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cell, true) }); break;
+                    default: Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Tissue, true) }); break;
+                }
+                break;
+            case Terrain.TerrainType.Cell:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cytoplasm, false) });
+                var center = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleolus, false) });
+                AddCircle(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.EuchromatinDomain, true, 0.5)
+                }, center, 3, true, center);
+                AddCircle(Tiles, new[] { new TerrainRule(Terrain.TerrainType.HeterochromatinDomain, true) }, center, 3, false);
+                break;
+            case Terrain.TerrainType.HeterochromatinDomain:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.Heterochromatin, true, 0.5),
+                });
+                break;
+            case Terrain.TerrainType.EuchromatinDomain:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
+                    new TerrainRule(Terrain.TerrainType.Euchromatin, true, 0.5),
+                });
+                break;
+            case Terrain.TerrainType.Euchromatin:
+                Tiles = new ChromatinGenerator(tile, Tiles).GenerateEuchromatin();
+                break;
+            case Terrain.TerrainType.Heterochromatin:
+                Tiles = new ChromatinGenerator(tile, Tiles).GenerateHeterochromatin();
+                break;
+            case Terrain.TerrainType.Nucleoplasm:
+                switch (tile.scale)
+                {
+                    case -24:
+                        Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true) });
+                        break;
+                    default:
+                        Fill(Tiles, new[] { new TerrainRule(terrain.terrainType, true) });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.LinkerDNA:
+            case Terrain.TerrainType.Nucleosome:
+                Tiles = new ChromatinGenerator(tile, Tiles).GenerateDNA(terrain.terrainType == Terrain.TerrainType.Nucleosome ? 0.5 : 0.99);
+
+                break;
+            case Terrain.TerrainType.Nucleotide:
+                TerrainRule[] nucleobase;
+                int rotation = int.Parse(terrain.props[PropKey.Rotation]);
+                switch (terrain.props[PropKey.Nucleobase])
+                {
+                    case "adenine":
+                        nucleobase = new[] { Structure.CreateStructureTile("adenine", 1, 2, 0) };
+                        break;
+                    case "guanine":
+                        nucleobase = new[] { Structure.CreateStructureTile("guanine", 1, 2, 0) };
+                        break;
+                    case "thymine":
+                        nucleobase = new[] { Structure.CreateStructureTile("thymine", 2, 4, 0) };
+                        break;
+                    case "cytosine":
+                        nucleobase = new[] { Structure.CreateStructureTile("cytosine", 2, 4, 0) };
+                        break;
+                    default:
+                        nucleobase = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+                            { PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString() }
+                        }) };
+                        break;
+                }
+                Structure backbone = Structure.NULL;
+                switch (terrain.props[PropKey.NucleicBackbone])
+                {
+                    case "RNA":
+                        backbone = Chem.RNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
+                        break;
+                    case "DNA":
+                    default:
+                        backbone = Chem.DNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
+                        break;
+                }
+                Tiles = PlaceStructure(Tiles, new[] { new StructureRule(backbone) },
+                           0, 0, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                       }, rotation);
+                Tiles = WaterFill(Tiles);
                 break;
             case Terrain.TerrainType.Atom:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
@@ -406,7 +527,13 @@ class TerrainGenerator
                         AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
                 }
                 break;
+            case Terrain.TerrainType.Sandbox:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true), new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1) });
+
+
+                break;
         }
+
 
         return Tiles;
     }
@@ -508,13 +635,27 @@ class TerrainGenerator
         TerrainGenRule.AddOneRandomly(parent: tile, tiles, rules, mask);
     }
 
-    private TileModel[,] StructureFill(TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
+    private TileModel[,] StructureFill(TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill, Terrain.TerrainType[] replace = null)
     {
-        return TerrainGenRule.StructureFill(parent: tile, tiles, rules, chanceNone, baseFill);
+        return TerrainGenRule.StructureFill(parent: tile, tiles, rules, chanceNone, baseFill, replace);
+    }
+
+
+    private TileModel[,] WaterFill(TileModel[,] tiles)
+    {
+        return StructureFill(tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
+                            , 0.5, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
         return TerrainGenRule.StructureTile(parent: tile, tiles, rules, baseFill);
+    }
+
+    private TileModel[,] PlaceStructure(TileModel[,] tiles, StructureRule[] rules, int initX, int initY, TerrainRule[] baseFill, int rotate = 0, Terrain.TerrainType[] replace = null)
+    {
+        return TerrainGenRule.PlaceStructure(parent: tile, tiles, rules, initX, initY, baseFill, rotate, replace);
     }
 
     private void AddCircle(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool filled, (int, int)? mask = null)

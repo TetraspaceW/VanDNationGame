@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 class TerrainGenRule
 {
     static public (int, int) ArbitraryCenter(TileModel[,] tiles)
@@ -142,18 +144,34 @@ class TerrainGenRule
         return null;
     }
 
-    static public TileModel[,] StructureFill(TileModel parent, TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill)
+    static public TileModel[,] StructureFill(TileModel parent, TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill, Terrain.TerrainType[] replace = null)
     {
         var (width, height) = Shape(tiles);
-        tiles = new TileModel[width, height];
-        for (int x = 0; x < width; x++)
+        if (replace == null)
         {
-            for (int y = 0; y < height; y++)
+            tiles = new TileModel[width, height];
+        }
+        else
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (tiles[x, y] != null && replace.Contains(tiles[x, y].terrain.terrainType))
+                    {
+                        tiles[x, y] = null;
+                    }
+                }
+            }
+        }
+        for (int x = -width / 2; x < width * 3 / 2; x++)
+        {
+            for (int y = -height / 2; y < height * 3 / 2; y++)
             {
                 Structure thing = RandomStructureFromRule(parent, rules, chanceNone);
                 if (thing != null)
                 {
-                    tiles = thing.AttemptPlace(parent, tiles, x, y);
+                    tiles = thing.AttemptPlace(parent, tiles, x - RND.Next(-thing.rules.GetLength(0), 0), y - RND.Next(-thing.rules.GetLength(1), 0));
                 }
             }
         }
@@ -171,6 +189,7 @@ class TerrainGenRule
         return tiles;
     }
 
+
     static public TileModel[,] StructureTile(TileModel parent, TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
         var (width, height) = Shape(tiles);
@@ -181,14 +200,14 @@ class TerrainGenRule
         int tileStartX = -RND.Next(0, tileLength);
         int tileStartY = -RND.Next(0, tileHeight);
 
-        for (int x = tileStartX; x < width + tileLength; x += tileLength)
+        for (int y = tileStartX; y < width + tileLength; y += tileLength)
         {
-            for (int y = tileStartY; y < height + tileHeight; y += tileHeight)
+            for (int x = tileStartY; x < height + tileHeight; x += tileHeight)
             {
                 Structure thing = RandomStructureFromRule(parent, rules, 0);
                 if (thing != null)
                 {
-                    if (thing.rules.GetLength(0) != tileLength || thing.rules.GetLength(0) != tileHeight)
+                    if (thing.rules.GetLength(0) != tileLength || thing.rules.GetLength(1) != tileHeight)
                     {
                         throw new ArgumentException("Rules must be the same dimensions");
                     }
@@ -198,6 +217,44 @@ class TerrainGenRule
                     }
                 }
             }
+        }
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (tiles[x, y] == null)
+                {
+                    tiles[x, y] = RandomTileFromRule(parent, baseFill);
+                }
+            }
+        }
+        return tiles;
+    }
+    static public TileModel[,] PlaceStructure(TileModel parent, TileModel[,] tiles, StructureRule[] rules, int initX, int initY, TerrainRule[] baseFill, int rotate, Terrain.TerrainType[] replace)
+    {
+        var (width, height) = Shape(tiles);
+        if (replace == null)
+        {
+            tiles = new TileModel[width, height];
+        }
+        else
+        {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    if (tiles[x, y] != null && replace.Contains(tiles[x, y].terrain.terrainType))
+                    {
+                        tiles[x, y] = null;
+                    }
+                }
+            }
+        }
+        Structure thing = RandomStructureFromRule(parent, rules, 0);
+        if (thing != null)
+        {
+            tiles = thing.AttemptPlace(parent, tiles, initX, initY, rotate);
         }
 
         for (int x = 0; x < width; x++)

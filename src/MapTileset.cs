@@ -39,7 +39,13 @@ public class MapTileset
         while (true)
         {
             var open = dir.GetNext();
-            if (dir.CurrentIsDir())
+
+
+            if (open == "")
+            {
+                break;
+            }
+            else if (dir.CurrentIsDir())
             {
                 var subdir = open;
                 filesInFolder.AddRange(GetFilesInFolder(folder + '/' + subdir));
@@ -48,10 +54,6 @@ public class MapTileset
             {
                 var file = open.GetFile();
                 filesInFolder.Add((folder + "/").TrimStart('/') + file.Left(file.Length() - extension.Length()));
-            }
-            else if (open == "")
-            {
-                break;
             }
         }
         return filesInFolder;
