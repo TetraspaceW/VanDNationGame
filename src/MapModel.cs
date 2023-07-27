@@ -66,7 +66,8 @@ public class MapModel
         {
             Buildings.Add(new Building(
                 coords,
-                building
+                building,
+                this
             ));
             parent.CalculateStorageBuildings(false);
             parent.CalculateTotalChildCapacity();

@@ -58,6 +58,7 @@ public class Terrain
             case TerrainType.HillsCloudBodies:
             case TerrainType.KuiperBeltBodies:
             case TerrainType.ScatteredDiskBodies:
+            case TerrainType.OrbitalDebris:
                 return "kuiper";
             case TerrainType.SolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToString().ToLower();
@@ -232,7 +233,7 @@ public class Terrain
         // -7   1m km across / Earth SOI
         OuterLunarSystem, EpiepistellarSolarSystem, StarSurface,
         // -8   100k km across
-        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem,
+        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem, OrbitalDebris,
         // -9   10k km across
         TerrestrialPlanet,
         // -10  1k km across

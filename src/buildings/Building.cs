@@ -8,13 +8,15 @@ public class Building
     public BuildingTemplate template;
     public bool active;
     public bool removed;
+    public MapModel parent;
     public TileResources storage;
     public TileResources capacity;
 
-    public Building((int, int) coords, BuildingTemplate template)
+    public Building((int, int) coords, BuildingTemplate template, MapModel parent)
     {
         this.coords = coords;
         this.template = template;
+        this.parent = parent;
         active = true;
         storage = new TileResources();
         capacity = new TileResources();
@@ -44,6 +46,7 @@ public class Building
             {
                 case "Satellite":
                     removed = true;
+                    parent.Tiles[coords.Item1,coords.Item2] = TerrainGenRule.RandomTileFromRule(parent.parent, new[] { new TerrainRule(Terrain.TerrainType.OrbitalDebris) });
                     break;
             }
             return false;
