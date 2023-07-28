@@ -363,14 +363,24 @@ public class Terrain
 
 public enum PropKey
 {
-    Rotation,
-    StructureType, StructureShiftX, StructureShiftY,
+    // Structures
+    Rotation, StructureType, StructureShiftX, StructureShiftY,
+    // Quarks
     QuarkColour, QuarkFlavour,
+    // Atoms
     AtomElement,
+    // DNA
     Nucleobase, NucleicBackbone,
+    // Lifeforms
+    Habitat,
+    // Terrestrial Planets
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
+    // Planets
     PlanetType,
+    // Stars
     SpectralClass,
+    // Star Clusters
     SpecialStar,
+    // Galaxies
     GalaxyType
 }

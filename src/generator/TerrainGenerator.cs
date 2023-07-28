@@ -250,7 +250,10 @@ class TerrainGenerator
                         props: new Dictionary<PropKey, string>() {
                             { PropKey.PlanetIsLifeBearing, planetIsLifeBearing.ToString() }
                         }),
-                    new TerrainRule(planetIsLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight)
+                    new TerrainRule(planetIsLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight,
+                        props: new Dictionary<PropKey, string>() {
+                            { PropKey.PlanetIsLifeBearing, planetIsLifeBearing.ToString() }
+                        })
                 }, planetaryCenter, planetaryTileSize < 5 ? planetaryTileSize : 10, true);
                 break;
 
@@ -271,35 +274,6 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.VerdantTerrain:
-                TerrainRule[] landLife = new TerrainRule[] { };
-
-                switch (tile.scale)
-                {
-                    case -14:
-                        landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Dinosaur, true)
-                            };
-                        break;
-                    case -15:
-                        landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Mammal, true),
-                            };
-                        break;
-                    case -16:
-                        landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3),
-                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15),
-                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3),
-                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3)
-                            };
-                        break;
-                    case -17:
-                        landLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Insect, true)
-                            };
-                        break;
-                }
-
                 switch (tile.scale)
                 {
                     case -25:
@@ -310,8 +284,21 @@ class TerrainGenerator
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.VerdantTerrain, true, 99)
-                        }.Concat(landLife).ToArray());
+                            new TerrainRule(Terrain.TerrainType.VerdantTerrain, true, 99, props: terrain.props)
+                        }.Concat(GetLifeForTerrain(terrain)).ToArray());
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.Ocean:
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = WaterFill(Tiles);
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.Ocean, true, 99, props: tile.terrain.props)
+                        }.Concat(GetLifeForTerrain(terrain)).ToArray());
                         break;
                 }
                 break;
@@ -328,52 +315,6 @@ class TerrainGenerator
                         break;
                 }
                 break;
-            case Terrain.TerrainType.Ocean:
-                TerrainRule[] oceanLife = new TerrainRule[] { };
-
-                if (bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]))
-                {
-                    switch (tile.scale)
-                    {
-                        case -14:
-                            oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Cetacean, true)
-                            };
-                            break;
-                        case -16:
-                            oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.1),
-                                new TerrainRule(Terrain.TerrainType.Arthropod, true, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Fish, true, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Radiate, true, 0.2),
-                                new TerrainRule(Terrain.TerrainType.Mollusk, true, 0.2),
-                            };
-                            break;
-                        case -19:
-                            oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Eukaryote, false)
-                            };
-                            break;
-                        case -21:
-                            oceanLife = new[] {
-                                new TerrainRule(Terrain.TerrainType.Prokaryote, false)
-                            };
-                            break;
-                    }
-                }
-
-                switch (tile.scale)
-                {
-                    case -25:
-                        Tiles = WaterFill(Tiles);
-                        break;
-                    default:
-                        Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.Ocean, true, 99, props: tile.terrain.props)
-                        }.Concat(oceanLife).ToArray());
-                        break;
-                }
-                break;
             case Terrain.TerrainType.Dinosaur:
             case Terrain.TerrainType.Cetacean:
             case Terrain.TerrainType.Mammal:
@@ -386,7 +327,15 @@ class TerrainGenerator
             case Terrain.TerrainType.Radiate:
             case Terrain.TerrainType.Mollusk:
             case Terrain.TerrainType.Trichordate:
-                Fill(Tiles, new[] { new TerrainRule(tile.parent.terrain.terrainType, true, 99, props: tile.parent.terrain.props) });
+            case Terrain.TerrainType.Insect:
+                var lifeformSurroundingTerrain = new Terrain(
+                    (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), terrain.props[PropKey.Habitat]),
+                    tile.terrain.props
+                );
+                var lifeformSurroundingsTerrainRule = new[] {
+                    new TerrainRule (lifeformSurroundingTerrain.terrainType, true, 99, lifeformSurroundingTerrain.props)
+                }.Concat(GetLifeForTerrain(lifeformSurroundingTerrain)).ToArray();
+                Fill(Tiles, lifeformSurroundingsTerrainRule);
                 var organismCenter = TerrainGenRule.ArbitraryCenter(Tiles);
                 AddCircle(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Skin, true)
@@ -677,5 +626,71 @@ class TerrainGenerator
             default: case Terrain.PlanetType.Jovian: return false;
             case Terrain.PlanetType.Terrestrial: case Terrain.PlanetType.Chunk: return true;
         }
+    }
+
+    private TerrainRule[] GetLifeForTerrain(Terrain terrain)
+    {
+        if (bool.Parse(terrain.props[PropKey.PlanetIsLifeBearing]))
+        {
+            var props = new Dictionary<PropKey, string>() {
+                { PropKey.PlanetIsLifeBearing, true.ToString() },
+                { PropKey.Habitat, terrain.terrainType.ToString() }
+            };
+            switch (terrain.terrainType)
+            {
+                case Terrain.TerrainType.VerdantTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.Ocean:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Cetacean, true, props: props)
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.1, props: props),
+                                new TerrainRule(Terrain.TerrainType.Arthropod, true, 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Fish, true, 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Radiate, true, 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Mollusk, true, 0.2, props: props),
+                            };
+
+                        case -19:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Eukaryote, false, props: props)
+                            };
+                        case -21:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Prokaryote, false, props: props)
+                            };
+                    }
+                    break;
+            }
+        }
+
+        return new TerrainRule[] { };
     }
 }
