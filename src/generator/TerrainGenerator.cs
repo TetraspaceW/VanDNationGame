@@ -20,12 +20,16 @@ class TerrainGenerator
         switch (terrain.terrainType)
         {
             case Terrain.TerrainType.InteruniversalSpace:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InteruniversalSpace) });
-                if (scale == 11)
+                if (scale > 11)
                 {
-                    AddOneRandomly(Tiles, new[] {
-                        new TerrainRule(Terrain.TerrainType.Universe, zoomable: true)
-                    }, new List<Terrain.TerrainType> { });
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InteruniversalSpace, zoomable: true) });
+                }
+                else
+                {
+                    Fill(Tiles, new[] {
+                        new TerrainRule(Terrain.TerrainType.InteruniversalSpace),
+                        new TerrainRule(Terrain.TerrainType.Universe, zoomable: true, 0.01)
+                        });
                 }
                 break;
             case Terrain.TerrainType.Universe:
