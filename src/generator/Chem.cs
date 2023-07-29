@@ -9,6 +9,9 @@ class Chem
     private static readonly TerrainRule[] hydr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()}
     })};
+    private static readonly TerrainRule[] heli = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()}
+    })};
     private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()}
     })};
@@ -25,6 +28,19 @@ class Chem
         {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
     })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
+
+    public static readonly Structure HYDROGEN = new Structure(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, hydr, molc },
+        { molc, hydr, molc },
+        { null, molc, null }
+    }, "hydrogen");
+
+    public static readonly Structure HELIUM = new Structure(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, heli, molc },
+        { null, molc, null },
+    }, "helium");
 
     public static readonly Structure WATER = new Structure(new TerrainRule[,][] {
         { molc, molc, molc, null },

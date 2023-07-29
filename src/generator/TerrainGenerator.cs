@@ -226,7 +226,7 @@ class TerrainGenerator
                 }
                 else
                 {
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, props: terrain.props) });
+                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, true, props: terrain.props) });
                 }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
@@ -255,7 +255,30 @@ class TerrainGenerator
                         })
                 }, planetaryCenter, planetaryTileSize < 5 ? planetaryTileSize : 10, true);
                 break;
+            case Terrain.TerrainType.GasGiant:
+                var gasGiantCenter = TerrainGenRule.ArbitraryCenter(Tiles);
 
+                double gasGiantRadius = double.Parse(terrain.props[PropKey.PlanetRadius]);
+                var gasGiantTileSize = (int)Math.Round(gasGiantRadius / 1000);
+
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.LunarOrbit) });
+                AddCircle(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.GasGiantTerrain, true)
+                }, gasGiantCenter, gasGiantTileSize < 5 ? gasGiantTileSize : 10, true);
+                break;
+            case Terrain.TerrainType.GasGiantTerrain:
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = NonMetalFill(Tiles);
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.GasGiantTerrain, true)
+                        });
+                        break;
+                }
+                break;
             case Terrain.TerrainType.BarrenTerrain:
                 switch (tile.scale)
                 {
@@ -275,6 +298,11 @@ class TerrainGenerator
             case Terrain.TerrainType.VerdantTerrain:
                 switch (tile.scale)
                 {
+                    case -20:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.BarrenTerrain, true, props: terrain.props)
+                        });
+                        break;
                     case -25:
                         Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
                             , new[] {
@@ -593,6 +621,13 @@ class TerrainGenerator
     {
         return StructureFill(tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
                             , 0.5, new[] {
+                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+    }
+    private TileModel[,] NonMetalFill(TileModel[,] tiles)
+    {
+        return StructureFill(tiles, Chem.HYDROGEN.RotateAll(1.5).Concat(Chem.HELIUM.RotateAll(1)).ToArray()
+                            , 0, new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                         }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }

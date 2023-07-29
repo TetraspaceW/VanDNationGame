@@ -104,6 +104,8 @@ public class Terrain
                 return "ice";
             case TerrainType.BarrenTerrain:
                 return "barren";
+            case TerrainType.GasGiantTerrain:
+                return "gas_giant_terrain";
             case TerrainType.Dinosaur:
             case TerrainType.Cetacean:
             case TerrainType.Mammal:
@@ -267,6 +269,7 @@ public class Terrain
         InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem,
         // -9   10k km across
         TerrestrialPlanet,
+        GasGiantTerrain,
         // -10  1k km across
         BarrenTerrain, VerdantTerrain, Ocean, IceSheet,
         // -11  100 km across
