@@ -266,6 +266,7 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.GasGiantTerrain, true)
                 }, gasGiantCenter, gasGiantTileSize < 5 ? gasGiantTileSize : 10, true);
                 break;
+            case Terrain.TerrainType.StellarTerrain:
             case Terrain.TerrainType.GasGiantTerrain:
                 switch (tile.scale)
                 {
@@ -274,7 +275,7 @@ class TerrainGenerator
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.GasGiantTerrain, true)
+                            new TerrainRule(terrain.terrainType, true)
                         });
                         break;
                 }

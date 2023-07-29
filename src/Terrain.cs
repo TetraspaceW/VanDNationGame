@@ -94,7 +94,7 @@ public class Terrain
             case TerrainType.EpiepiepistellarSolarSystem:
             case TerrainType.Star:
                 return "stars/star_" + props[PropKey.SpectralClass].ToLower();
-            case TerrainType.StarSurface:
+            case TerrainType.StellarTerrain:
                 return "stars/starstuff";
             case TerrainType.VerdantTerrain:
                 return "land";
@@ -264,7 +264,7 @@ public class Terrain
         Star, InnerSystemBody, AsteroidBeltBodies, EpistellarSolarSystem,
         // -6   10m km across
         // -7   1m km across / Earth SOI
-        OuterLunarSystem, EpiepistellarSolarSystem, StarSurface,
+        OuterLunarSystem, EpiepistellarSolarSystem, StellarTerrain,
         // -8   100k km across
         InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem,
         // -9   10k km across

@@ -146,7 +146,7 @@ class SolarSystemGenerator : CelestialGenerator
         TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
 
         TerrainGenRule.AddCircle(parent, Tiles, new[] {
-            new TerrainRule(Terrain.TerrainType.StarSurface, false, props: new Dictionary<PropKey, string>() {
+            new TerrainRule(Terrain.TerrainType.StellarTerrain, true, props: new Dictionary<PropKey, string>() {
                 {PropKey.SpectralClass, spectralClass.ToString()}
             })
         }, center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
@@ -260,7 +260,7 @@ class SolarSystemGenerator : CelestialGenerator
             mask: new List<Terrain.TerrainType> {
                 Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.OuterSystemBody, Terrain.TerrainType.FarfarfarSystemBody, Terrain.TerrainType.FarfarSystemBody, Terrain.TerrainType.FarSystemBody,
                 Terrain.TerrainType.Star, Terrain.TerrainType.InnerSolarSystem, Terrain.TerrainType.OuterSolarSystem, Terrain.TerrainType.ScatteredDisk, Terrain.TerrainType.HillsCloud,
-                Terrain.TerrainType.StarSurface
+                Terrain.TerrainType.StellarTerrain
             });
         }
     }

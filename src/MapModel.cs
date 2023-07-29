@@ -34,6 +34,7 @@ public class MapModel
                 if (tile.zoomable && tile.scale >= -10)
                 {
                     string prop;
+                    if (parent.terrain.terrainType == Terrain.TerrainType.Star || parent.terrain.terrainType == Terrain.TerrainType.GasGiant) { return null; }
                     if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out prop) && !bool.Parse(prop)) { return null; }
                     if (parent.terrain.props.TryGetValue(PropKey.PlanetHydrosphereCoverage, out prop) && (double.Parse(prop) < 25 || double.Parse(prop) > 75)) { return null; }
 
@@ -130,12 +131,12 @@ public class MapModel
     public void NextTurn()
     {
         parent.BuildingResourcesTick();
-//        foreach (var tile in Tiles)
-//        {
-//            if (tile.internalMap != null)
-//            {
-//                tile.internalMap.NextTurn();
-//            }
-//        }
+        //        foreach (var tile in Tiles)
+        //        {
+        //            if (tile.internalMap != null)
+        //            {
+        //                tile.internalMap.NextTurn();
+        //            }
+        //        }
     }
 }
