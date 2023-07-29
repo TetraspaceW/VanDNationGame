@@ -81,6 +81,10 @@
             "resource": "Metal",
             "amount": 15
         },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
+        },
         "technology": "Globalisation",
         "transport": {
             "range": -9,
@@ -101,6 +105,10 @@
         "cost": {
             "resource": "Metal",
             "amount": 150
+        },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 1.5
         },
         "technology": "Satellites",
         "transport": {
@@ -142,6 +150,10 @@
             "resource": "Metamaterials",
             "amount": 150
         },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 1.5
+        },
         "technology": "Space Elevator",
         "transport": {
             "range": -3,
@@ -163,6 +175,10 @@
             "resource": "Metal",
             "amount": 15
         },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
+        },
         "technology": "Combustion",
         "extraction": {
             "resource": "Metal",
@@ -178,6 +194,10 @@
         "cost": {
             "resource": "Metal",
             "amount": 15
+        },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
         },
         "technology": "Transistors",
         "process": {
@@ -198,6 +218,10 @@
             "resource": "Metal",
             "amount": 0.15
         },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.0015
+        },
         "technology": "Combustion",
         "extraction": {
             "resource": "Metal",
@@ -214,6 +238,10 @@
         "cost": {
             "resource": "Metal",
             "amount": 150
+        },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 1.5
         },
         "technology": "Nanoassembly",
         "process": {
