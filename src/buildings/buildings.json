@@ -14,6 +14,13 @@
         "extraction": {
             "resource": "Energy",
             "rate": 2
+        },
+        "transport": {
+            "range": -9,
+            "amount": 2,
+            "resources": [
+                "Energy"
+            ]
         }
     },
     {
@@ -31,6 +38,13 @@
         "extraction": {
             "resource": "Energy",
             "rate": 2
+        },
+        "transport": {
+            "range": -9,
+            "amount": 2,
+            "resources": [
+                "Energy"
+            ]
         }
     },
     {
@@ -48,6 +62,13 @@
         "extraction": {
             "resource": "Energy",
             "rate": 3
+        },
+        "transport": {
+            "range": -9,
+            "amount": 3,
+            "resources": [
+                "Energy"
+            ]
         }
     },
     {
@@ -67,7 +88,7 @@
             "resources": [
                 "Metal",
                 "Electronics",
-                "Metamaterials",
+                "Metamaterials"
             ]
         }
     },
@@ -88,7 +109,7 @@
             "resources": [
                 "Metal",
                 "Electronics",
-                "Metamaterials",
+                "Metamaterials"
             ]
         }
     },
@@ -128,7 +149,7 @@
             "resources": [
                 "Metal",
                 "Electronics",
-                "Metamaterials",
+                "Metamaterials"
             ]
         }
     },
