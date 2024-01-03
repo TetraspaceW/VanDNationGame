@@ -6,7 +6,7 @@ class TerrainGenRule
 {
     static public (int, int) ArbitraryCenter(TileModel[,] tiles)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
 
         var centerX = (width % 2 == 0) ? width / 2 - RND.Next(0, 2) : width / 2;
         var centerY = (height % 2 == 0) ? height / 2 - RND.Next(0, 2) : height / 2;
@@ -22,7 +22,7 @@ class TerrainGenRule
 
     static public void AddAtDistance(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, List<Terrain.TerrainType> mask)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         var (centerX, centerY) = center;
         List<(int, int)> possibleLocations = new List<(int, int)>();
 
@@ -51,7 +51,7 @@ class TerrainGenRule
 
     static public void AddOneRandomly(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, List<Terrain.TerrainType> mask)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         List<(int, int)> possibleLocations = new List<(int, int)>();
 
         for (int x = 0; x < width; x++)
@@ -71,7 +71,7 @@ class TerrainGenRule
 
     static public void Fill(TileModel parent, TileModel[,] tiles, TerrainRule[] rules)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
 
         for (int x = 0; x < width; x++)
         {
@@ -84,7 +84,7 @@ class TerrainGenRule
 
     static public void AddCircle(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool filled, (int, int)? mask = null)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         var (centerX, centerY) = center;
 
         for (int x = Math.Max(centerX - radius - 1, 0); x < Math.Min(centerX + radius + 1, width); x++)
@@ -146,7 +146,7 @@ class TerrainGenRule
 
     static public TileModel[,] StructureFill(TileModel parent, TileModel[,] tiles, StructureRule[] rules, double chanceNone, TerrainRule[] baseFill, Terrain.TerrainType[] replace = null)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         if (replace == null)
         {
             tiles = new TileModel[width, height];
@@ -192,7 +192,7 @@ class TerrainGenRule
 
     static public TileModel[,] StructureTile(TileModel parent, TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         tiles = new TileModel[width, height];
 
         int tileLength = rules[0].structure.rules.GetLength(0);
@@ -233,7 +233,7 @@ class TerrainGenRule
     }
     static public TileModel[,] PlaceStructure(TileModel parent, TileModel[,] tiles, StructureRule[] rules, int initX, int initY, TerrainRule[] baseFill, int rotate, Terrain.TerrainType[] replace)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         if (replace == null)
         {
             tiles = new TileModel[width, height];
@@ -269,5 +269,5 @@ class TerrainGenRule
         }
         return tiles;
     }
-    static private (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
+    static private (int, int) Shape3D<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
 }

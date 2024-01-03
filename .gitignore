@@ -3,7 +3,7 @@
 .vs/
 
 # Godot-specific ignores
-.import/
+.godot/
 export.cfg
 
 # Mono-specific ignores

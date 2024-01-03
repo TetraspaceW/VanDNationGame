@@ -1,39 +1,37 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://c1k8v6n2y732f"]
 
-[ext_resource path="res://src/BuildingButton.cs" type="Script" id=1]
+[ext_resource type="Script" path="res://src/BuildingButton.cs" id="1"]
 
 [node name="BuildingButton" type="Button"]
-margin_right = 268.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 0, 80 )
+custom_minimum_size = Vector2(0, 80)
+offset_right = 268.0
+offset_bottom = 80.0
 size_flags_horizontal = 3
 size_flags_vertical = 0
 toggle_mode = true
-script = ExtResource( 1 )
+script = ExtResource("1")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
-margin_left = 8.0
-margin_top = 8.0
-margin_right = 260.0
-mouse_filter = 1
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 260.0
 size_flags_horizontal = 3
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-margin_right = 252.0
-margin_bottom = 64.0
-custom_constants/separation = 16
+layout_mode = 2
+theme_override_constants/separation = 16
 
 [node name="BuildingButtonTexture" type="TextureRect" parent="MarginContainer/HBoxContainer"]
-margin_right = 64.0
-margin_bottom = 64.0
-rect_min_size = Vector2( 64, 64 )
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 4
 
 [node name="BuildingButtonLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer"]
-margin_left = 80.0
-margin_right = 252.0
-margin_bottom = 64.0
-mouse_filter = 1
+layout_mode = 2
 size_flags_horizontal = 3
-fit_content_height = true
+mouse_filter = 1
+bbcode_enabled = true
+fit_content = true
 
 [connection signal="pressed" from="." to="." method="_OnBuildingButtonPressed"]

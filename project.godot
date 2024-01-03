@@ -6,22 +6,24 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[  ]
-_global_script_class_icons={
-}
+config_version=5
 
 [application]
 
 config/name="VanDNationGame"
 run/main_scene="res://src/MapView.tscn"
+config/features=PackedStringArray("4.1", "C#")
 config/icon="res://icon.png"
 
 [display]
 
-window/size/width=940
-window/size/height=656
+window/size/viewport_width=940
+window/size/viewport_height=656
+window/size/resizable=false
+
+[dotnet]
+
+project/assembly_name="VanDNationGame"
 
 [global]
 
@@ -30,4 +32,4 @@ resolution=false
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+environment/defaults/default_environment="res://default_env.tres"

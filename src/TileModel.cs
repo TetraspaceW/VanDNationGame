@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Godot;
 using System.Diagnostics;
 
-public class TileModel
+public partial class TileModel
 {
     public Terrain terrain;
     public MapModel internalMap;
