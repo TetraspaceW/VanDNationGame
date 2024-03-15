@@ -61,9 +61,9 @@ public partial class MapView : Area2D
 						}
 					}
 					if (mouseClickEvent.ButtonIndex == MouseButton.Right && !mouseClickEvent.Pressed)
-                    {
-                        var Tile = TileAt((int)x, (int)y);
-                        ZoomOutToExternalMap(Tile);
+					{
+						var Tile = TileAt((int)x, (int)y);
+						ZoomOutToExternalMap(Tile);
 					}
 				}
 				else if (!mouseClickEvent.Pressed)
@@ -107,29 +107,29 @@ public partial class MapView : Area2D
 
 		BuildingTiles = new TileMap();
 		BuildingTiles.TileSet = mapTileset.buildingTileset;
-        AddChild(BuildingTiles);
+		AddChild(BuildingTiles);
 
 		grid = new TileMap();
 		grid.TileSet = CreateGridTileset();
-        AddChild(grid);
+		AddChild(grid);
 	}
 
 	void UpdateTileAtLocation(TileModel newTile, int x, int y)
 	{
 		Model.Tiles[x, y] = newTile;
 		Tiles.SetCell(0, new Vector2I(x, y), FindTileByName(Tiles.TileSet,"tiles/" + newTile.image), Vector2I.Zero);
-        var building = Model.GetBuildingAt(x, y);
+		var building = Model.GetBuildingAt(x, y);
 		if (building != null)
 		{
 			BuildingTiles.SetCell(0, new Vector2I(x, y), FindTileByName(BuildingTiles.TileSet, "buildings/" + building.template.image), Vector2I.Zero);
-        }
+		}
 		else
 		{
 			BuildingTiles.SetCell(0, new Vector2I(x, y), -1);
 		}
 
 		grid.SetCell(0, new Vector2I(x, y), FindTileByName(grid.TileSet,"border"), Vector2I.Zero);
-    }
+	}
 
 	public static int FindTileByName(TileSet tileSet, string name)
 	{
@@ -209,8 +209,8 @@ public partial class MapView : Area2D
 		s.CreateTile(Vector2I.Zero, new Vector2I(1, 1));
 		s.ResourceName = "border";
 		tileset.AddSource(s, -1);
-        tileset.TileSize = new Vector2I(64, 64);
-        return tileset;
+		tileset.TileSize = new Vector2I(64, 64);
+		return tileset;
 	}
 
 	private void ZoomInToInternalMap(TileModel Tile)
