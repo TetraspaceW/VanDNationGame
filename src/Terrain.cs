@@ -158,6 +158,8 @@ public partial class Terrain
                 return "atom/" + props[PropKey.AtomElement].ToLower();
             case TerrainType.ElectronCloud:
                 return "atom/electron_cloud";
+            case TerrainType.FreeElectron:
+                return "atom/free_electron";
             case TerrainType.Nucleus:
                 return "atom/nucleus";
             case TerrainType.Proton:
@@ -301,7 +303,7 @@ public partial class Terrain
         // -25  1 nm across
         Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid, Histone,
         // -26  100 pm across / 1 angstrom
-        Atom, IntermolecularSpace,
+        Atom, IntermolecularSpace, FreeElectron,
         // -27  10 pm across
         ElectronCloud,
         // -28  1 pm across
@@ -371,7 +373,7 @@ public enum PropKey
     // Quarks
     QuarkColour, QuarkFlavour,
     // Atoms
-    AtomElement,
+    AtomElement, AtomIsIonized,
     // DNA
     Nucleobase, NucleicBackbone,
     // Lifeforms
