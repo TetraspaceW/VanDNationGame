@@ -7,10 +7,21 @@ using System.Threading.Tasks;
 class Chem
 {
     private static readonly TerrainRule[] hydr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()}
+        {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()},
+        {PropKey.AtomIsIonized, "False"}
     })};
     private static readonly TerrainRule[] heli = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()}
+        {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()},
+        {PropKey.AtomIsIonized, "False"}
+    })};
+    
+    private static readonly TerrainRule[] hydrIon = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] heliIon = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()},
+        {PropKey.AtomIsIonized, "True"}
     })};
     private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()}
@@ -28,6 +39,7 @@ class Chem
         {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
     })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
+    private static readonly TerrainRule[] freeElec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
 
     public static readonly Structure HYDROGEN = new Structure(new TerrainRule[,][] {
         { null, molc, null },
@@ -41,6 +53,24 @@ class Chem
         { molc, heli, molc },
         { null, molc, null },
     }, "helium");
+    
+    public static readonly Structure HYDROGEN_IONIZED = new Structure(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, hydrIon, molc },
+        { null, molc, null }
+    }, "hydrogen_ionized");
+
+    public static readonly Structure HELIUM_IONIZED = new Structure(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, heliIon, molc },
+        { null, molc, null },
+    }, "helium_ionized");
+    
+    public static readonly Structure FREE_ELECTRON = new Structure(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, freeElec, molc },
+        { null, molc, null },
+    }, "free_electron");
 
     public static readonly Structure WATER = new Structure(new TerrainRule[,][] {
         { molc, molc, molc, null },

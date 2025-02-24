@@ -463,15 +463,51 @@ class TerrainGenerator
                 Tiles = WaterFill(Tiles);
                 break;
             case Terrain.TerrainType.Atom:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                // Check if the atom is ionized
+                bool isIonized = terrain.props.ContainsKey(PropKey.AtomIsIonized) && 
+                    bool.Parse(terrain.props[PropKey.AtomIsIonized]);
+                
+                if (isIonized)
+                {
+                    // Ionized atoms have no electron cloud, just a nucleus in plasma
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
+                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                }
+                else
+                {
+                    // Normal atoms have electron clouds
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                }
                 break;
+            case Terrain.TerrainType.FreeElectron:
+                // A free electron doesn't have an internal structure like an atom does
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
+                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                break;
+                
             case Terrain.TerrainType.Nucleus:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                // Check if the parent atom is ionized
+                bool isIonized = terrain.props.ContainsKey(PropKey.AtomIsIonized) && 
+                    bool.Parse(terrain.props[PropKey.AtomIsIonized]);
+                
+                if (isIonized)
+                {
+                    // Ionized atoms have no electron cloud inside the nucleus view either
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
+                }
+                else
+                {
+                    // Regular atoms show electron cloud in nucleus view
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                }
+                
                 switch (tile.scale)
                 {
                     case -30:
-                        var nucleusCenter = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                        var nucleusCenter = isIonized
+                            ? AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) })
+                            : AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
 
                         double massNumber = AtomGenerator.GetMassNumber(terrain);
 
@@ -627,10 +663,38 @@ class TerrainGenerator
     }
     private TileModel[,] NonMetalFill(TileModel[,] tiles)
     {
-        return StructureFill(tiles, Chem.HYDROGEN.RotateAll(1.5).Concat(Chem.HELIUM.RotateAll(1)).ToArray()
-                            , 0, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        // Check if this is a star environment
+        bool isStarEnvironment = tile.terrain.terrainType == Terrain.TerrainType.StellarTerrain;
+        
+        if (isStarEnvironment)
+        {
+            // For stars, create plasma with:
+            // - 75% hydrogen nuclei (ionized H)
+            // - 25% helium nuclei (ionized He)
+            // - Free electrons in the correct ratio (1 per H, 2 per He = 5 electrons per 4 nuclei)
+            // This creates a realistic plasma environment
+            
+            // Create stellar plasma with the correct ratio of particles
+            return StructureFill(tiles, 
+                // 3 hydrogen ions
+                Chem.HYDROGEN_IONIZED.RotateAll(1.5)
+                // 1 helium ion
+                .Concat(Chem.HELIUM_IONIZED.RotateAll(1))
+                // 5 free electrons (1 for each H, 2 for each He)
+                .Concat(Chem.FREE_ELECTRON.RotateAll(2.5))
+                .ToArray()
+                , 0, new[] {
+                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        }
+        else
+        {
+            // For non-stellar environments (including gas giants' upper atmospheres), use normal atoms
+            return StructureFill(tiles, Chem.HYDROGEN.RotateAll(1.5).Concat(Chem.HELIUM.RotateAll(1)).ToArray()
+                                , 0, new[] {
+                                new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                            }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        }
     }
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
