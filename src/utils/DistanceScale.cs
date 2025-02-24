@@ -1,5 +1,5 @@
 
-public class DistanceScale
+public partial class DistanceScale
 {
     private static string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion", " octillion", " nonillion", };
     private static (int, string)[] units = {

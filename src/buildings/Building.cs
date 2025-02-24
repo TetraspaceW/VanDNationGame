@@ -1,6 +1,6 @@
 using System;
 
-public class Building
+public partial class Building
 {
     public (int, int) coords;
     public BuildingTemplate template;

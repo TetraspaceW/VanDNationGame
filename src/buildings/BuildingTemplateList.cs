@@ -12,7 +12,7 @@ class BuildingTemplateList
         public BuildingTemplateListLoader()
         {
             var buildingFile = System.IO.File.ReadAllText("./src/buildings/buildings.json");
-            buildingTemplates = (JsonConvert.DeserializeObject<List<BuildingTemplate>>(buildingFile));
+            buildingTemplates = JsonConvert.DeserializeObject<List<BuildingTemplate>>(buildingFile);
         }
 
     }

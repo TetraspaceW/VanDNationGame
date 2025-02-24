@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.Linq;
 using System;
-public class BuildingTemplate
+public partial class BuildingTemplate
 {
     [JsonConstructor]
     BuildingTemplate(string name, string image, int size, List<string> terrainTypes, string technology, BuildingCost cost, Extraction extraction, Transport transport, Process process, Maintenance maintenance)
@@ -29,30 +29,30 @@ public class BuildingTemplate
     public Process process;
     public Maintenance maintenance;
 
-    public class BuildingCost
+    public partial class BuildingCost
     {
         public string resource;
         public decimal amount;
     }
-    public class Extraction
+    public partial class Extraction
     {
         public string resource;
         public decimal rate;
     }
-    public class Transport
+    public partial class Transport
     {
         public int range;
         public int amount;
         public string[] resources;
     }
-    public class Process
+    public partial class Process
     {
         public string input;
         public string output;
         public decimal amount;
         public decimal rate;
     }
-    public class Maintenance
+    public partial class Maintenance
     {
         public string resource;
         public decimal amount;

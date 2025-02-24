@@ -530,7 +530,7 @@ class TerrainGenerator
     }
     private void AddArms(TileModel[,] tiles, TerrainRule[] rules, (int, int) center, int radius, bool counterclockwise, int numArms, bool barred, (int, int)? mask = null)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
         var (centerX, centerY) = center;
         var turn = RND.NextDouble() * Math.PI * 2;
         for (double j = 0; j < numArms; j++)
@@ -584,7 +584,7 @@ class TerrainGenerator
     }
     private void AddBorder(TileModel[,] tiles, TerrainRule[] rules)
     {
-        var (width, height) = Shape(tiles);
+        var (width, height) = Shape3D(tiles);
 
         for (int x = 0; x < width; x++)
         {
@@ -652,7 +652,7 @@ class TerrainGenerator
         return TerrainGenRule.RandomTileFromRule(parent: tile, rules);
     }
 
-    public static (int, int) Shape<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
+    public static (int, int) Shape3D<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
 
     private bool PlanetIsTerrestrial(string planetType)
     {

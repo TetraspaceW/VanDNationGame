@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System;
-public class Terrain
+public partial class Terrain
 {
     public TerrainType terrainType;
     public Dictionary<PropKey, string> props;

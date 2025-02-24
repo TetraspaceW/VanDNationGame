@@ -3,7 +3,7 @@ using System.Linq;
 using System;
 using System.Runtime.CompilerServices;
 
-public class TileResources
+public partial class TileResources
 {
     public Dictionary<string, decimal> resources = new Dictionary<string, decimal>();
 

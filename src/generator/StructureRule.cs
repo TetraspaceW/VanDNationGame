@@ -1,4 +1,4 @@
-﻿class StructureRule
+class StructureRule
 {
     public double weight;
     public Structure structure;
