@@ -17,6 +17,9 @@ public partial class MapView : Area2D
 	private TileModel root;
 
 	private int date = 2030;
+	private double turns = 0;
+	private double localEpoch = 2030;
+	private double localYearLength = 1.0; // Default to Earth's year (1 turn per year)
 	public override void _Ready()
 	{
 		TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
@@ -29,13 +32,28 @@ public partial class MapView : Area2D
 		collision = (CollisionShape2D)GetNode("CollisionShape2D");
 		CreateTileMap();
 
-		UpdateWholeMapTo(Model.FindHabitablePlanet().parent.internalMap);
+		// Find habitable planet and set local year length
+		TileModel habitablePlanet = Model.FindHabitablePlanet();
+		if (double.TryParse(habitablePlanet.parent.terrain.props[PropKey.OrbitalPeriod], out double period) && period > 0)
+		{
+			localYearLength = period;
+			localEpoch = RND.Next(1, 10001);
+			date = (int)(localEpoch / localYearLength);
+		}
+
+		UpdateWholeMapTo(habitablePlanet.parent.internalMap);
+
 		PlaceStartingBuildings();
 		SetRootTo(startingTile);
 
 		UpdateWholeMapTo(Model);
 
 		sidebar.SetDateLabelText(date + " CE");
+
+		GD.Print("Located habitable planet");
+
+
+
 	}
 
 	// Handling zooming in and out
@@ -51,7 +69,7 @@ public partial class MapView : Area2D
 			{
 				if (sidebar.selectedBuilding == null)
 				{
-					
+
 					if (mouseClickEvent.ButtonIndex == MouseButton.Left)
 					{
 						var Tile = TileAt((int)x, (int)y);
@@ -117,7 +135,7 @@ public partial class MapView : Area2D
 	void UpdateTileAtLocation(TileModel newTile, int x, int y)
 	{
 		Model.Tiles[x, y] = newTile;
-		Tiles.SetCell(0, new Vector2I(x, y), FindTileByName(Tiles.TileSet,"tiles/" + newTile.image), Vector2I.Zero);
+		Tiles.SetCell(0, new Vector2I(x, y), FindTileByName(Tiles.TileSet, "tiles/" + newTile.image), Vector2I.Zero);
 		var building = Model.GetBuildingAt(x, y);
 		if (building != null)
 		{
@@ -128,7 +146,7 @@ public partial class MapView : Area2D
 			BuildingTiles.SetCell(0, new Vector2I(x, y), -1);
 		}
 
-		grid.SetCell(0, new Vector2I(x, y), FindTileByName(grid.TileSet,"border"), Vector2I.Zero);
+		grid.SetCell(0, new Vector2I(x, y), FindTileByName(grid.TileSet, "border"), Vector2I.Zero);
 	}
 
 	public static int FindTileByName(TileSet tileSet, string name)
@@ -263,9 +281,15 @@ public partial class MapView : Area2D
 		Model.parent.UpdateHighestTransportInside();
 		Model.parent.CalculateTotalChildResources();
 		Model.parent.CalculateTotalChildCapacity();
-		date += 1;
+
+		// Increment total turns
+		turns += 1.0;
+
+		// Calculate the current year based on turns and local year length
+		date = (int)(localEpoch + turns / localYearLength);
+
 		UpdateSidePanelLabelText();
 		sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
-		sidebar.SetDateLabelText(date + " AD");
+		sidebar.SetDateLabelText(date + " CE");
 	}
 }

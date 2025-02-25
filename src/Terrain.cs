@@ -381,7 +381,7 @@ public enum PropKey
     // Terrestrial Planets
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
     // Planets
-    PlanetType,
+    PlanetType, OrbitalPeriod,
     // Stars
     SpectralClass,
     // Star Clusters

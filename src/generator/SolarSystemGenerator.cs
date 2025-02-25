@@ -252,7 +252,8 @@ class SolarSystemGenerator : CelestialGenerator
                     { PropKey.PlanetHydrosphereType, body.hydrosphere.ToString() },
                     { PropKey.PlanetHydrosphereCoverage, body.hydrosphereCoverage.ToString() },
                     { PropKey.PlanetRadius, body.radius.ToString() },
-                    { PropKey.PlanetTemperature, (body.temperature - 273.15).ToString() }
+                    { PropKey.PlanetTemperature, (body.temperature - 273.15).ToString() },
+                    { PropKey.OrbitalPeriod, body.orbit.orbitalPeriod.ToString() }
                 })
             },
             center,
@@ -436,10 +437,17 @@ class SolarSystemGenerator : CelestialGenerator
         public double distance;
         public bool inner = false;
         public Star star;
+        public double orbitalPeriod; // Orbital period in Earth years
+        
         public Orbit(double R, Star star)
         {
             this.star = star;
             this.distance = R;
+
+            // Calculate orbital period using Kepler's Third Law
+            // P^2 = (4π²/G(M+m)) * a^3, but since m << M, we can use P^2 = (4π²/GM) * a^3
+            // Simplified for Solar System where period is in Earth years, distance in AU, and mass in Solar masses
+            this.orbitalPeriod = Math.Sqrt(Math.Pow(distance, 3) / star.mass);
 
             var vaporised = (R <= Math.Sqrt(star.luminosity) * 0.025);
             inner = (R <= Math.Sqrt(star.luminosity) * 4);
@@ -501,6 +509,9 @@ class SolarSystemGenerator : CelestialGenerator
         public Orbit(double R, World body)
         {
             this.distance = R;
+            // For moons, calculate orbital period using Kepler's law but with the planet's mass
+            // This is a simplification since we're using the planet's mass in Earth masses
+            this.orbitalPeriod = Math.Sqrt(Math.Pow(distance / 400, 3) / (body.mass / 330000)); // Scale distance (to AU) and mass (to solar masses)
         }
     }
 
@@ -512,6 +523,7 @@ class SolarSystemGenerator : CelestialGenerator
         public double density;
         public double mass;
         public Orbit[] moons;
+        public Orbit orbit; // Store reference to the orbit
         public Type bodyType;
         public Atmosphere atmosphere;
         public Hydrosphere hydrosphere;
@@ -521,6 +533,7 @@ class SolarSystemGenerator : CelestialGenerator
         {
             this.bodyType = bodyType;
             this.temperature = T;
+            this.orbit = orbit; // Store the orbit reference
 
             var sizeRoll = d(10);
             var innerSizeRoll = d(10);
@@ -593,6 +606,12 @@ class SolarSystemGenerator : CelestialGenerator
             this.temperature = T;
             (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(inner, true);
             hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
+        }
+        
+        // Save the orbit reference when creating Orbit for a moon
+        public void SetOrbit(Orbit orbit)
+        {
+            this.orbit = orbit;
         }
 
         (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner, bool terrestrial)
@@ -748,7 +767,9 @@ class SolarSystemGenerator : CelestialGenerator
                         break;
                 }
 
-                orbits[i].body = new World(lunarRadius, temperature, inner);
+                var moonWorld = new World(lunarRadius, temperature, inner);
+                orbits[i].body = moonWorld;
+                moonWorld.SetOrbit(orbits[i]);
             }
 
             return orbits;
