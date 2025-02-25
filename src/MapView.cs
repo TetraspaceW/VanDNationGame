@@ -49,11 +49,6 @@ public partial class MapView : Area2D
 		UpdateWholeMapTo(Model);
 
 		sidebar.SetDateLabelText(date + " CE");
-
-		GD.Print("Located habitable planet");
-
-
-
 	}
 
 	// Handling zooming in and out
