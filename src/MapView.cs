@@ -281,7 +281,7 @@ public partial class MapView : Area2D
 		turns += 1.0;
 
 		// Calculate the current year based on turns and local year length
-		date = (int)(localEpoch + turns / localYearLength);
+		date = (int)((localEpoch + turns) / localYearLength);
 
 		UpdateSidePanelLabelText();
 		sidebar.SetAvailableBuildingsList(GetAvailableBuildingsList());
