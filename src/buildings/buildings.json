@@ -258,5 +258,117 @@
             "amount": 0.1,
             "rate": 15
         }
+    },
+    {
+        "name": "Inner System Probe",
+        "size": -5,
+        "terrainTypes": [
+            "InnerSolarSystem"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1
+        },
+        "technology": "Satellites",
+        "research": {
+            "research": "Astronomical",
+            "rate": 1
+        }
+    },
+    {
+        "name": "Outer System Probe",
+        "size": -4,
+        "terrainTypes": [
+            "OuterSolarSystem"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 1
+        },
+        "technology": "Satellites",
+        "research": {
+            "research": "Astronomical",
+            "rate": 1
+        }
+    },
+    {
+        "name": "Space Station",
+        "size": -9,
+        "terrainTypes": [
+            "LunarOrbit"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Satellites",
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
+        },
+        "research": {
+            "research": "Space Habitation",
+            "rate": 1
+        }
+    },
+    {
+        "name": "Space Telescope",
+        "size": -9,
+        "terrainTypes": [
+            "LunarOrbit"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Satellites",
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
+        },
+        "research": {
+            "research": "Astronomical",
+            "rate": 1
+        }
+    },
+    {
+        "name": "Lunar Base",
+        "size": -10,
+        "terrainTypes": [
+            "BarrenTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 15
+        },
+        "technology": "Satellites",
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
+        },
+        "research": {
+            "research": "Planetary Habitation",
+            "rate": 1
+        }
+    },
+    {
+        "name": "Automated Mine",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 150
+        },
+        "maintenance": {
+            "resource": "Energy",
+            "amount": 0.15
+        },
+        "technology": "Artificial Intelligence",
+        "extraction": {
+            "resource": "Metal",
+            "rate": 15
+        }
     }
 ]

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 class CelestialGenerator { }
 class SolarSystemGenerator : CelestialGenerator
 {
@@ -438,7 +439,7 @@ class SolarSystemGenerator : CelestialGenerator
         public bool inner = false;
         public Star star;
         public double orbitalPeriod; // Orbital period in Earth years
-        
+
         public Orbit(double R, Star star)
         {
             this.star = star;
@@ -580,13 +581,21 @@ class SolarSystemGenerator : CelestialGenerator
 
             mass = Math.Pow(radius / 6380, 3) * density;
 
-            if (SolarSystemGenerator.IsTerrestrial(bodyType))
+            if (IsTerrestrial(bodyType))
             {
-                (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, SolarSystemGenerator.IsTerrestrial(bodyType));
+                (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(orbit.inner, IsTerrestrial(bodyType));
 
                 atmosphere = new Atmosphere(temperature, mass, radius);
                 hydrosphereCoverage = atmosphere.pressure <= 0.006 ? 0 : hydrosphereCoverage;
                 hydrosphere = (hydrosphereCoverage == 0 && hydrosphere != Hydrosphere.Crustal) ? Hydrosphere.None : hydrosphere;
+
+
+                temperature = UpdateTemperature(temperature, atmosphere, hydrosphere, hydrosphereCoverage, orbit);
+                if (temperature > 373.15)
+                {
+                    hydrosphere = Hydrosphere.None;
+                    hydrosphereCoverage = 0;
+                }
 
                 hasLife = hydrosphere == Hydrosphere.Liquid && atmosphere.HasCO2() && d(10) <= 3;
             }
@@ -607,7 +616,7 @@ class SolarSystemGenerator : CelestialGenerator
             (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(inner, true);
             hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
         }
-        
+
         // Save the orbit reference when creating Orbit for a moon
         public void SetOrbit(Orbit orbit)
         {
@@ -773,6 +782,33 @@ class SolarSystemGenerator : CelestialGenerator
             }
 
             return orbits;
+        }
+
+        double UpdateTemperature(double temperature, Atmosphere atmosphere, Hydrosphere hydrosphere, int hydrosphereCoverage, Orbit orbit)
+        {
+            int outerAlbedoRoll = d(10) +
+                (orbit.inner ? (
+                (atmosphere.pressure == 0 ? -2 : 0)
+                + (atmosphere.pressure >= 5 ? 2 : (atmosphere.pressure >= 50 ? 4 : 0))
+                + (hydrosphere == Hydrosphere.IceSheet ? (hydrosphereCoverage >= 50 ? -2 : (hydrosphereCoverage >= 90 ? -4 : 0)) : 0))
+                : (atmosphere.pressure >= 1 ? 1 : 0));
+            int innerAlbedoRoll = d(10);
+
+            double albedoFactor = 1;
+
+            switch (outerAlbedoRoll)
+            {
+                case -7: case -6: case -5: case -4: case -3: case -2: case -1: case 0: case 1: albedoFactor = innerAlbedoRoll * 0.01 + 0.75; break;
+                case 2: case 3: albedoFactor = innerAlbedoRoll * 0.01 + (orbit.inner ? 0.85 : 0.75); break;
+                case 4: case 5: albedoFactor = innerAlbedoRoll * 0.01 + (orbit.inner ? 0.95 : 0.85); break;
+                case 6: albedoFactor = innerAlbedoRoll * 0.01 + 0.95; break;
+                case 7: albedoFactor = innerAlbedoRoll * 0.01 + (orbit.inner ? 1.05 : 0.95); break;
+                case 8: case 9: albedoFactor = innerAlbedoRoll * 0.01 + 1.05; break;
+                case 10: case 11: case 12: albedoFactor = innerAlbedoRoll * 0.01 + 1.15; break;
+            }
+
+            double vapourFactor = Math.Max((temperature - 240) / 100 * hydrosphereCoverage / 100 * d(10), 0);
+            return temperature * albedoFactor * (1 + (Math.Pow(atmosphere.pressure, 0.5) * 0.01 * d(10)) + vapourFactor * 0.1);
         }
 
         int d(int n, int N = 1)
