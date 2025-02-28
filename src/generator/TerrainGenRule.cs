@@ -24,13 +24,13 @@ class TerrainGenRule
     {
         var (width, height) = Shape3D(tiles);
         var (centerX, centerY) = center;
-        List<(int, int)> possibleLocations = new List<(int, int)>();
+        List<(int, int)> possibleLocations = new();
 
         for (int x = Math.Max(centerX - radius - 1, 0); x < Math.Min(centerX + radius + 1, width); x++)
         {
             for (int y = Math.Max(centerY - radius - 1, 0); y < Math.Min(centerY + radius + 1, height); y++)
             {
-                var distance = Math.Pow(((float)x - centerX), 2) + Math.Pow(((float)y - centerY), 2);
+                var distance = Math.Pow((float)x - centerX, 2) + Math.Pow((float)y - centerY, 2);
                 if (distance <= Math.Pow(radius, 2) && distance > Math.Pow(radius - 1, 2))
                 {
                     if (tiles[x, y] == null || !mask.Contains(tiles[x, y].terrain.terrainType))
@@ -52,7 +52,7 @@ class TerrainGenRule
     static public void AddOneRandomly(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, List<Terrain.TerrainType> mask)
     {
         var (width, height) = Shape3D(tiles);
-        List<(int, int)> possibleLocations = new List<(int, int)>();
+        List<(int, int)> possibleLocations = new();
 
         for (int x = 0; x < width; x++)
         {
@@ -91,7 +91,7 @@ class TerrainGenRule
         {
             for (int y = Math.Max(centerY - radius - 1, 0); y < Math.Min(centerY + radius + 1, height); y++)
             {
-                var distance = Math.Pow(((float)x - centerX), 2) + Math.Pow(((float)y - centerY), 2);
+                var distance = Math.Pow((float)x - centerX, 2) + Math.Pow((float)y - centerY, 2);
                 if (distance <= Math.Pow(radius, 2) && (filled || (distance > Math.Pow(radius - 1, 2))))
                 {
                     if (!mask.HasValue || mask.Value != (x, y))

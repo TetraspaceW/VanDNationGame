@@ -7,7 +7,7 @@ class TerrainGenerator
     TileModel tile;
     public TerrainGenerator(TileModel insideTile)
     {
-        this.tile = insideTile;
+        tile = insideTile;
     }
 
     public TileModel[,] GenerateTerrain()
@@ -77,7 +77,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
-                AddCenter(Tiles, new[] {
+                _ = AddCenter(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
                 });
                 break;
@@ -195,9 +195,9 @@ class TerrainGenerator
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
                 switch (tile.scale)
                 {
-                    case -6: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }); break;
-                    case -7: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }); break;
-                    default: AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }); break;
+                    case -6: _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }); break;
+                    case -7: _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }); break;
+                    default: _ = AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }); break;
                 }
                 break;
             case Terrain.TerrainType.OuterLunarSystem:
@@ -209,7 +209,7 @@ class TerrainGenerator
                         {PropKey.PlanetHydrosphereType, SolarSystemGenerator.Hydrosphere.None.ToString()}
                     })
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
+                _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.InnerLunarSystem:
                 Fill(Tiles, new[] {
@@ -222,11 +222,11 @@ class TerrainGenerator
                 });
                 if (PlanetIsTerrestrial(terrain.props[PropKey.PlanetType]))
                 {
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
                 }
                 else
                 {
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, true, props: terrain.props) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, true, props: terrain.props) });
                 }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
@@ -471,19 +471,19 @@ class TerrainGenerator
                 {
                     // Ionized atoms have no electron cloud, just a nucleus in plasma
                     Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 }
                 else
                 {
                     // Normal atoms have electron clouds
                     Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 }
                 break;
             case Terrain.TerrainType.FreeElectron:
                 // A free electron doesn't have an internal structure like an atom does
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 break;
 
             case Terrain.TerrainType.Nucleus:
@@ -521,7 +521,7 @@ class TerrainGenerator
                         );
                         break;
 
-                    default: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) }); break;
+                    default: _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) }); break;
                 }
                 break;
             case Terrain.TerrainType.Proton:
@@ -535,9 +535,9 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -34:
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }); break;
+                        _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }); break;
                     default:
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
+                        _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
                 }
                 break;
             case Terrain.TerrainType.Sandbox:
@@ -596,7 +596,7 @@ class TerrainGenerator
             for (double j = -1; j <= 1; j++)
             {
                 double ang = turn + Math.PI / 2;
-                var x1 = (counterclockwise ? -j * Math.Cos(ang) : j * Math.Cos(ang));
+                var x1 = counterclockwise ? -j * Math.Cos(ang) : j * Math.Cos(ang);
                 var y1 = j * Math.Sin(ang);
                 for (double i = -2; i < 2; i += 0.01)
                 {

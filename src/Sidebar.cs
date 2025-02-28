@@ -34,7 +34,7 @@ public partial class Sidebar : CanvasLayer
 
 	private void SetLabelText(RichTextLabel label, params object[] what)
 	{
-		var text = what.Select((it) => (it.ToString())).Aggregate((acc, it) => acc + it);
+		var text = what.Select((it) => it.ToString()).Aggregate((acc, it) => acc + it);
 		label.Text = "";
 		label.PushColor(new Color(1, 1, 1));
 		label.ParseBbcode(text);
@@ -63,7 +63,7 @@ public partial class Sidebar : CanvasLayer
 		selectedBuilding = building;
 		foreach (BuildingButton button in availableBuildingsTable.GetChildren())
 		{
-			button.ButtonPressed = (building != null && button.building.name == building.name);
+			button.ButtonPressed = building != null && button.building.name == building.name;
 		}
 	}
 }

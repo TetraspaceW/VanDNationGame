@@ -8,8 +8,8 @@ public partial class MapTileset
 	public TileSet buildingTileset;
 	public MapTileset()
 	{
-		this.tileset = GetTilesetWithImages("/tiles");
-		this.buildingTileset = GetTilesetWithImages("/buildings");
+		tileset = GetTilesetWithImages("/tiles");
+		buildingTileset = GetTilesetWithImages("/buildings");
 	}
 
 	TileSet GetTilesetWithImages(string folder)
@@ -18,19 +18,21 @@ public partial class MapTileset
 		var newTileset = new TileSet();
 		foreach (var image in images)
 		{
-			var s = new TileSetAtlasSource();
-			s.Texture = GD.Load<Texture2D>("res://assets/" + image + ".png");
-			s.TextureRegionSize = new Vector2I(64, 64);
+			var s = new TileSetAtlasSource
+			{
+				Texture = GD.Load<Texture2D>("res://assets/" + image + ".png"),
+				TextureRegionSize = new Vector2I(64, 64)
+			};
 			s.CreateTile(Vector2I.Zero, new Vector2I(1, 1));
 			s.ResourceName = image.ToLower();
-			newTileset.AddSource(s, -1);
+			_ = newTileset.AddSource(s, -1);
 			//var id = newTileset.GetLastUnusedTileId();
 			//newTileset.CreateTile(id);
 			//newTileset.TileSetName(id, image.ToLower());
 			//newTileset.TileSetTexture(id, GD.Load<Texture2D>("res://assets/" + image + ".png"));
 			//newTileset.TileSetRegion(id, new Rect2(0, 0, 64, 64));
 		}
-		newTileset.TileSize = new Vector2I(64,64);
+		newTileset.TileSize = new Vector2I(64, 64);
 
 		return newTileset;
 	}
@@ -39,9 +41,9 @@ public partial class MapTileset
 	{
 		string extension = ".png";
 
-		List<String> filesInFolder = new List<string>();
+		List<String> filesInFolder = new();
 		var dir = DirAccess.Open("res://assets" + folder);
-		dir.ListDirBegin();
+		_ = dir.ListDirBegin();
 		while (true)
 		{
 			var open = dir.GetNext();

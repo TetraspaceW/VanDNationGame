@@ -4,7 +4,7 @@ public partial class MapModel
 {
 	public TileModel[,] Tiles;
 	public TileModel parent;
-	public List<Building> Buildings = new List<Building>();
+	public List<Building> Buildings = new();
 
 	public MapModel(TileModel parent)
 	{
@@ -18,7 +18,7 @@ public partial class MapModel
 	public MapModel(TileModel parent, TileModel[,] tiles)
 	{
 		this.parent = parent;
-		this.Tiles = tiles;
+		Tiles = tiles;
 	}
 
 	public TileModel FindHabitablePlanet()
@@ -33,12 +33,11 @@ public partial class MapModel
 				TileModel foundHabitablePlanet = null;
 				if (tile.zoomable && tile.scale >= -10)
 				{
-					string prop;
 					if (parent.terrain.terrainType == Terrain.TerrainType.Star || parent.terrain.terrainType == Terrain.TerrainType.GasGiant) { return null; }
-					if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out prop) && !bool.Parse(prop)) { return null; }
+					if (parent.terrain.props.TryGetValue(PropKey.PlanetIsLifeBearing, out string prop) && !bool.Parse(prop)) { return null; }
 					if (parent.terrain.props.TryGetValue(PropKey.PlanetHydrosphereCoverage, out prop) && (double.Parse(prop) < 25 || double.Parse(prop) > 75)) { return null; }
 
-					if (tile.internalMap == null) { tile.internalMap = new MapModel(tile); }
+					tile.internalMap ??= new MapModel(tile);
 					foundHabitablePlanet = tile.internalMap.FindHabitablePlanet();
 				}
 
@@ -52,7 +51,7 @@ public partial class MapModel
 	{
 		buildings.ForEach((building) =>
 		{
-			TryPlaceBuildingAt(
+			_ = TryPlaceBuildingAt(
 				BuildingTemplateList.Get(building),
 				GetUnoccupiedTileOfType(Terrain.TerrainType.VerdantTerrain),
 				ignoreCost: true
@@ -69,18 +68,18 @@ public partial class MapModel
 				coords,
 				building
 			));
-			parent.CalculateStorageBuildings(false);
-			parent.CalculateTotalChildCapacity();
-			parent.CalculateTotalChildResources();
+			_ = parent.CalculateStorageBuildings(false);
+			_ = parent.CalculateTotalChildCapacity();
+			_ = parent.CalculateTotalChildResources();
 			if (!ignoreCost)
 			{
 				parent.SubtractResource(building.cost.resource, building.cost.amount);
 			}
-			TileModel.activeTiles.Add(parent);
-			parent.UpdateHighestTransportInside(false);
-			parent.CalculateStorageBuildings(false);
-			parent.CalculateTotalChildCapacity();
-			parent.CalculateTotalChildResources();
+			_ = TileModel.activeTiles.Add(parent);
+			_ = parent.UpdateHighestTransportInside(false);
+			_ = parent.CalculateStorageBuildings(false);
+			_ = parent.CalculateTotalChildCapacity();
+			_ = parent.CalculateTotalChildResources();
 		}
 		return canPlaceBuildingHere;
 
@@ -88,13 +87,13 @@ public partial class MapModel
 
 	public Building GetBuildingAt(int x, int y)
 	{
-		return Buildings.FirstOrDefault((building) => { return (building.coords.Item1 == x && building.coords.Item2 == y); });
+		return Buildings.FirstOrDefault((building) => { return building.coords.Item1 == x && building.coords.Item2 == y; });
 	}
 
 	private (int, int) GetUnoccupiedTileOfType(Terrain.TerrainType type)
 	{
 		var (width, height) = TerrainGenerator.Shape3D(Tiles);
-		List<(int, int)> possibleLocations = new List<(int, int)>();
+		List<(int, int)> possibleLocations = new();
 
 		for (int x = 0; x < width; x++)
 		{
@@ -121,7 +120,7 @@ public partial class MapModel
 		{
 			for (int y = 0; y < height; y++)
 			{
-				terrainTypes.Add(Tiles[x, y].terrain.terrainType);
+				_ = terrainTypes.Add(Tiles[x, y].terrain.terrainType);
 			}
 		}
 

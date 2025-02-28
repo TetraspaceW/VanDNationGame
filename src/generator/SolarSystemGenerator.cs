@@ -20,7 +20,7 @@ class SolarSystemGenerator : CelestialGenerator
 
         this.tile = tile;
         this.spectralClass = spectralClass;
-        this.star = StarData(spectralClass);
+        star = StarData(spectralClass);
         int orbitsTableRoll = RND.d(10) + ((spectralClass == SpectralClass.K) ? 1 : 0) + ((spectralClass == SpectralClass.M) ? 3 : 0);
         int numOrbits = 0;
         if (orbitsTableRoll <= 1)
@@ -64,7 +64,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     private static bool IsSingleBody(World.Type bodyType)
     {
-        return (bodyType != World.Type.AsteroidBelt);
+        return bodyType != World.Type.AsteroidBelt;
     }
 
     private static bool IsPlanet(World.Type bodyType)
@@ -85,7 +85,7 @@ class SolarSystemGenerator : CelestialGenerator
         Terrain.TerrainType centerPieceMaterial;
         bool centerIsZoomable = true;
 
-        double innerRadiusAU = (Math.Pow(10, parent.scale + 4) * 6.324) / 10 / 2;
+        double innerRadiusAU = Math.Pow(10, parent.scale + 4) * 6.324 / 10 / 2;
         double centralBodyRadius = star.radius * 0.00465;
 
         switch (systemArea)
@@ -137,7 +137,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     TileModel[,] GenerateEpiSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, double stellarRadius, double innerRadiusAU)
     {
-        bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
+        bool isWholeSystem = systemArea == Terrain.TerrainType.SolarSystem;
         double outermostPlanetDistance = OutermostPlanetDistance();
 
         var Tiles = new TileModel[10, 10];
@@ -159,7 +159,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     TileModel[,] GenerateStandardSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, Terrain.TerrainType centerPieceMaterial, bool centerIsZoomable, double innerRadiusAU)
     {
-        bool isWholeSystem = (systemArea == Terrain.TerrainType.SolarSystem);
+        bool isWholeSystem = systemArea == Terrain.TerrainType.SolarSystem;
         double outermostPlanetDistance = OutermostPlanetDistance();
 
         var Tiles = new TileModel[10, 10];
@@ -313,12 +313,12 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Atmosphere
     {
-        List<G> gasesPresent = new List<G>();
+        List<G> gasesPresent = new();
         public double pressure = 0;
 
         public Atmosphere(double temperature, double mass, double radius)
         {
-            var gravity = mass / Math.Pow((radius / 6380), 2);
+            var gravity = mass / Math.Pow(radius / 6380, 2);
             var escapeVelocity = Math.Sqrt(19600 * gravity * radius) / 11200;
 
             var mwr = 0.02783 * temperature / Math.Pow(escapeVelocity, 2);
@@ -443,15 +443,15 @@ class SolarSystemGenerator : CelestialGenerator
         public Orbit(double R, Star star)
         {
             this.star = star;
-            this.distance = R;
+            distance = R;
 
             // Calculate orbital period using Kepler's Third Law
             // P^2 = (4π²/G(M+m)) * a^3, but since m << M, we can use P^2 = (4π²/GM) * a^3
             // Simplified for Solar System where period is in Earth years, distance in AU, and mass in Solar masses
-            this.orbitalPeriod = Math.Sqrt(Math.Pow(distance, 3) / star.mass);
+            orbitalPeriod = Math.Sqrt(Math.Pow(distance, 3) / star.mass);
 
-            var vaporised = (R <= Math.Sqrt(star.luminosity) * 0.025);
-            inner = (R <= Math.Sqrt(star.luminosity) * 4);
+            var vaporised = R <= Math.Sqrt(star.luminosity) * 0.025;
+            inner = R <= Math.Sqrt(star.luminosity) * 4;
 
             var orbitRoll = RND.d(95);
             var T = 255.0 / Math.Sqrt(distance / Math.Sqrt(star.luminosity));
@@ -509,10 +509,10 @@ class SolarSystemGenerator : CelestialGenerator
 
         public Orbit(double R, World body)
         {
-            this.distance = R;
+            distance = R;
             // For moons, calculate orbital period using Kepler's law but with the planet's mass
             // This is a simplification since we're using the planet's mass in Earth masses
-            this.orbitalPeriod = Math.Sqrt(Math.Pow(distance / 400, 3) / (body.mass / 330000)); // Scale distance (to AU) and mass (to solar masses)
+            orbitalPeriod = Math.Sqrt(Math.Pow(distance / 400, 3) / (body.mass / 330000)); // Scale distance (to AU) and mass (to solar masses)
         }
     }
 
@@ -533,7 +533,7 @@ class SolarSystemGenerator : CelestialGenerator
         public World(Type bodyType, double T, Orbit orbit)
         {
             this.bodyType = bodyType;
-            this.temperature = T;
+            temperature = T;
             this.orbit = orbit; // Store the orbit reference
 
             var sizeRoll = d(10);
@@ -608,8 +608,8 @@ class SolarSystemGenerator : CelestialGenerator
 
         public World(double R, double T, bool inner)
         {
-            this.radius = R;
-            this.temperature = T;
+            radius = R;
+            temperature = T;
             (hydrosphere, hydrosphereCoverage) = GenerateHydrosphere(inner, true);
             hasLife = hydrosphere == Hydrosphere.Liquid && d(10) <= 3;
         }
@@ -839,31 +839,31 @@ class SolarSystemGenerator : CelestialGenerator
         public int abundance;
         public Star(double R, double L, double M, double age)
         {
-            this.radius = R;
-            this.luminosity = L;
-            this.mass = M;
+            radius = R;
+            luminosity = L;
+            mass = M;
             this.age = (int)age;
 
             var abundanceRoll = RND.d(10, N: 2) + this.age;
             if (abundanceRoll <= 9)
             {
-                this.abundance = 2;
+                abundance = 2;
             }
             else if (abundanceRoll <= 12)
             {
-                this.abundance = 1;
+                abundance = 1;
             }
             else if (abundanceRoll <= 18)
             {
-                this.abundance = 0;
+                abundance = 0;
             }
             else if (abundanceRoll <= 21)
             {
-                this.abundance = -1;
+                abundance = -1;
             }
             else
             {
-                this.abundance = -3;
+                abundance = -3;
             }
         }
     }

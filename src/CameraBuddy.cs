@@ -6,7 +6,7 @@ public partial class CameraBuddy : Node2D
 
 	public override void _Ready()
 	{
-		this.camera = (Camera2D)GetNode("MapCamera");
+		camera = (Camera2D)GetNode("MapCamera");
 	}
 
 	public override void _Process(double delta)

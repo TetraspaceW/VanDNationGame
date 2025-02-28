@@ -22,7 +22,7 @@ public partial class MapView : Area2D
 	private double localYearLength = 1.0; // Default to Earth's year (1 turn per year)
 	public override void _Ready()
 	{
-		TileModel startingTile = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
+		TileModel startingTile = new(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
 
 		// universe start
 		Model = new MapModel(startingTile);
@@ -99,10 +99,10 @@ public partial class MapView : Area2D
 	void SetRootTo(TileModel newRoot)
 	{
 		root = newRoot;
-		root.UpdateHighestTransportInside(false);
-		root.CalculateTotalChildResources();
-		root.CalculateTotalChildCapacity();
-		root.CalculateStorageBuildings();
+		_ = root.UpdateHighestTransportInside(false);
+		_ = root.CalculateTotalChildResources();
+		_ = root.CalculateTotalChildCapacity();
+		_ = root.CalculateStorageBuildings();
 	}
 
 	void PlaceStartingBuildings()
@@ -114,16 +114,22 @@ public partial class MapView : Area2D
 	{
 		var mapTileset = new MapTileset();
 
-		Tiles = new TileMap();
-		Tiles.TileSet = mapTileset.tileset;
+		Tiles = new TileMap
+		{
+			TileSet = mapTileset.tileset
+		};
 		AddChild(Tiles);
 
-		BuildingTiles = new TileMap();
-		BuildingTiles.TileSet = mapTileset.buildingTileset;
+		BuildingTiles = new TileMap
+		{
+			TileSet = mapTileset.buildingTileset
+		};
 		AddChild(BuildingTiles);
 
-		grid = new TileMap();
-		grid.TileSet = CreateGridTileset();
+		grid = new TileMap
+		{
+			TileSet = CreateGridTileset()
+		};
 		AddChild(grid);
 	}
 
@@ -162,7 +168,7 @@ public partial class MapView : Area2D
 		var (width, height) = (newModel.Tiles.GetLength(0), newModel.Tiles.GetLength(1));
 		var (oldWidth, oldHeight) = (Model.Tiles != null) ? (Model.Tiles.GetLength(0), Model.Tiles.GetLength(1)) : (0, 0);
 
-		var newShape = ((oldHeight != height) && (oldWidth != width));
+		var newShape = (oldHeight != height) && (oldWidth != width);
 
 		if (newShape)
 		{
@@ -208,7 +214,7 @@ public partial class MapView : Area2D
 
 	public void CreateSidebar()
 	{
-		this.sidebar = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instantiate() as Sidebar;
+		sidebar = GD.Load<PackedScene>("res://src/Sidebar.tscn").Instantiate() as Sidebar;
 		AddChild(sidebar);
 		sidebar.mapView = this;
 	}
@@ -216,26 +222,25 @@ public partial class MapView : Area2D
 	TileSet CreateGridTileset()
 	{
 		var tileset = new TileSet();
-		var s = new TileSetAtlasSource();
-		s.Texture = GD.Load<Texture2D>("res://assets/border.png");
-		s.TextureRegionSize = new Vector2I(64, 64);
+		var s = new TileSetAtlasSource
+		{
+			Texture = GD.Load<Texture2D>("res://assets/border.png"),
+			TextureRegionSize = new Vector2I(64, 64)
+		};
 		s.CreateTile(Vector2I.Zero, new Vector2I(1, 1));
 		s.ResourceName = "border";
-		tileset.AddSource(s, -1);
+		_ = tileset.AddSource(s, -1);
 		tileset.TileSize = new Vector2I(64, 64);
 		return tileset;
 	}
 
 	private void ZoomInToInternalMap(TileModel Tile)
 	{
-		if (Tile.internalMap == null)
-		{
-			Tile.internalMap = new MapModel(Tile);
-		}
-		Tile.UpdateHighestTransportInside();
-		Tile.CalculateStorageBuildings();
-		Tile.CalculateTotalChildResources();
-		Tile.CalculateTotalChildCapacity();
+		Tile.internalMap ??= new MapModel(Tile);
+		_ = Tile.UpdateHighestTransportInside();
+		_ = Tile.CalculateStorageBuildings();
+		_ = Tile.CalculateTotalChildResources();
+		_ = Tile.CalculateTotalChildCapacity();
 		UpdateWholeMapTo(Tile.internalMap);
 	}
 
@@ -252,10 +257,10 @@ public partial class MapView : Area2D
 			MapModel grandparentMap = Tile.parent.parent.internalMap;
 			grandparentMap.Tiles[RND.Next(0, 10), RND.Next(0, 10)] = Tile.parent;
 		}
-		Tile.parent.parent.UpdateHighestTransportInside();
-		Tile.parent.parent.CalculateStorageBuildings();
-		Tile.parent.parent.CalculateTotalChildResources();
-		Tile.parent.parent.CalculateTotalChildCapacity();
+		_ = Tile.parent.parent.UpdateHighestTransportInside();
+		_ = Tile.parent.parent.CalculateStorageBuildings();
+		_ = Tile.parent.parent.CalculateTotalChildResources();
+		_ = Tile.parent.parent.CalculateTotalChildCapacity();
 		UpdateWholeMapTo(Tile.parent.parent.internalMap);
 	}
 
@@ -268,14 +273,14 @@ public partial class MapView : Area2D
 	{
 		foreach (TileModel tile in TileModel.activeTiles)
 		{
-			tile.UpdateHighestTransportInside();
-			tile.CalculateTotalChildResources();
-			tile.CalculateTotalChildCapacity();
+			_ = tile.UpdateHighestTransportInside();
+			_ = tile.CalculateTotalChildResources();
+			_ = tile.CalculateTotalChildCapacity();
 			tile.internalMap.NextTurn();
 		}
-		Model.parent.UpdateHighestTransportInside();
-		Model.parent.CalculateTotalChildResources();
-		Model.parent.CalculateTotalChildCapacity();
+		_ = Model.parent.UpdateHighestTransportInside();
+		_ = Model.parent.CalculateTotalChildResources();
+		_ = Model.parent.CalculateTotalChildCapacity();
 
 		// Increment total turns
 		turns += 1.0;

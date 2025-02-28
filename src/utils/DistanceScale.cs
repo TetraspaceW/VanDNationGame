@@ -25,6 +25,6 @@ public partial class DistanceScale
 
     private static string NumberStringForScale(int value)
     {
-        return (value / 3) < numberNames.Length ? "1" + new string('0', value % 3) + numberNames[(value / 3)] : null;
+        return (value / 3) < numberNames.Length ? "1" + new string('0', value % 3) + numberNames[value / 3] : null;
     }
 }

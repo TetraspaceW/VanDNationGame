@@ -14,12 +14,12 @@ public partial class TileModel
     public string image;
     public TileResources localResources;
 
-    public static HashSet<TileModel> activeTiles = new HashSet<TileModel>();
-    public HashSet<Building> storageBuildings = new HashSet<Building>();
+    public static HashSet<TileModel> activeTiles = new();
+    public HashSet<Building> storageBuildings = new();
 
     // recursive
-    public TileResources totalChildResources = new TileResources();
-    public TileResources totalChildCapacity = new TileResources();
+    public TileResources totalChildResources = new();
+    public TileResources totalChildCapacity = new();
     public int highestTransportInside = int.MinValue;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
@@ -28,8 +28,8 @@ public partial class TileModel
         this.parent = parent;
         this.scale = scale;
         this.zoomable = zoomable;
-        this.image = terrain.filenameForTileType();
-        this.localResources = GetResources(terrain, scale);
+        image = terrain.filenameForTileType();
+        localResources = GetResources(terrain, scale);
     }
 
     public void SetTerrainType(Terrain.TerrainType terrainType)
@@ -186,8 +186,8 @@ public partial class TileModel
         {
             it.Item1.SubtractResourceFromStorage(resource, amount * (it.Item2 / totalAmountInChildren));
         });
-        CalculateTotalChildCapacity();
-        CalculateTotalChildResources();
+        _ = CalculateTotalChildCapacity();
+        _ = CalculateTotalChildResources();
 
     }
 
@@ -203,8 +203,8 @@ public partial class TileModel
         {
             it.Item1.AddResourceToStorage(resource, amount * (it.Item2 / totalCapcityInChildren));
         });
-        CalculateTotalChildCapacity();
-        CalculateTotalChildResources();
+        _ = CalculateTotalChildCapacity();
+        _ = CalculateTotalChildResources();
     }
 
     private void AddToAllParents(string resource, decimal amount)

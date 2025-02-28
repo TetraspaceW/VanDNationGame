@@ -3,10 +3,10 @@ using System.Linq;
 class Structure
 {
     public TerrainRule[,][] rules;
-    public static Dictionary<string, Structure> structureDict = new Dictionary<string, Structure>();
+    public static Dictionary<string, Structure> structureDict = new();
     public string name;
 
-    public static readonly Structure NULL = new Structure(new TerrainRule[,][] {
+    public static readonly Structure NULL = new(new TerrainRule[,][] {
         { null }, }, "null");
 
     public Structure(TerrainRule[,][] rules, string name = null)
@@ -137,7 +137,7 @@ class Structure
                         {
                             if (result[rules.GetLength(1) - 1 - j, i][k].props != null && result[rules.GetLength(1) - 1 - j, i][k].props.ContainsKey(PropKey.Rotation))
                             {
-                                result[rules.GetLength(1) - 1 - j, i][k] = result[rules.GetLength(1) - 1 - j, i][k].rotate(rot);
+                                result[rules.GetLength(1) - 1 - j, i][k] = result[rules.GetLength(1) - 1 - j, i][k].Rotate(rot);
                             }
                         }
                     }
@@ -163,7 +163,7 @@ class Structure
                         {
                             if (result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j][k].props != null && result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j][k].props.ContainsKey(PropKey.Rotation))
                             {
-                                result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j][k] = result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j][k].rotate(rot);
+                                result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j][k] = result[rules.GetLength(0) - 1 - i, rules.GetLength(1) - 1 - j][k].Rotate(rot);
                             }
                         }
                     }
@@ -189,7 +189,7 @@ class Structure
                         {
                             if (result[j, rules.GetLength(0) - 1 - i][k].props != null && result[j, rules.GetLength(0) - 1 - i][k].props.ContainsKey(PropKey.Rotation))
                             {
-                                result[j, rules.GetLength(0) - 1 - i][k] = result[j, rules.GetLength(0) - 1 - i][k].rotate(rot);
+                                result[j, rules.GetLength(0) - 1 - i][k] = result[j, rules.GetLength(0) - 1 - i][k].Rotate(rot);
                             }
                         }
                     }
@@ -209,7 +209,7 @@ class Structure
 
     public Structure AddAt(int x, int y, TerrainRule[] rule)
     {
-        TerrainRule[,][] result = (TerrainRule[,][])this.rules.Clone();
+        TerrainRule[,][] result = (TerrainRule[,][])rules.Clone();
         result[y, x] = rule;
         return new Structure(result);
     }
@@ -218,7 +218,7 @@ class Structure
         return new[] { new StructureRule(this, weight / 4), new StructureRule(Rotate(1), weight / 4), new StructureRule(Rotate(2), weight / 4), new StructureRule(Rotate(3), weight / 4) };
     }
 
-    public static TerrainRule CreateStructureTile(string name, int shiftX, int shiftY, int rot=0, double weight=1)
+    public static TerrainRule CreateStructureTile(string name, int shiftX, int shiftY, int rot = 0, double weight = 1)
     {
         return new TerrainRule(Terrain.TerrainType.StructureTile, true, weight, props: new Dictionary<PropKey, string>() {
             {PropKey.StructureType, name },
