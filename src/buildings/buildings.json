@@ -94,6 +94,10 @@
                 "Electronics",
                 "Metamaterials"
             ]
+        },
+        "research": {
+            "research": "Postindustrial",
+            "rate": 1
         }
     },
     {
@@ -135,6 +139,10 @@
         "maintenance": {
             "resource": "Electronics",
             "amount": 0.1
+        },
+        "research": {
+            "research": "Orbital",
+            "rate": 1
         }
     },
     {

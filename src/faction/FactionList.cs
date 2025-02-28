@@ -15,7 +15,7 @@ class FactionList
         public FactionListLoader()
         {
             var factionFile = System.IO.File.ReadAllText("./src/faction/faction.json");
-            factions = (JsonConvert.DeserializeObject<List<Faction>>(factionFile));
+            factions = JsonConvert.DeserializeObject<List<Faction>>(factionFile);
         }
 
     }
