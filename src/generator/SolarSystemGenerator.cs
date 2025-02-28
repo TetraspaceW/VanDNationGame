@@ -591,11 +591,8 @@ class SolarSystemGenerator : CelestialGenerator
 
 
                 temperature = UpdateTemperature(temperature, atmosphere, hydrosphere, hydrosphereCoverage, orbit);
-                if (temperature > 373.15)
-                {
-                    hydrosphere = Hydrosphere.None;
-                    hydrosphereCoverage = 0;
-                }
+                hydrosphere = HydrosphereFromTemperature(temperature, orbit.inner);
+                hydrosphereCoverage = hydrosphere != Hydrosphere.None ? hydrosphereCoverage : 0;
 
                 hasLife = hydrosphere == Hydrosphere.Liquid && atmosphere.HasCO2() && d(10) <= 3;
             }
@@ -621,6 +618,17 @@ class SolarSystemGenerator : CelestialGenerator
         public void SetOrbit(Orbit orbit)
         {
             this.orbit = orbit;
+        }
+
+        Hydrosphere HydrosphereFromTemperature(double temperature, bool inner)
+        {
+            if (inner)
+            {
+                if (temperature <= 273.15) { return Hydrosphere.IceSheet; }
+                else if (temperature <= 373.15) { return Hydrosphere.Liquid; }
+                else { return Hydrosphere.None; }
+            }
+            else { return Hydrosphere.Crustal; }
         }
 
         (Hydrosphere, int hydrosphereCoverage) GenerateHydrosphere(bool inner, bool terrestrial)
