@@ -29,7 +29,7 @@ class AtomGenerator
             Terrain.AtomElement.Chlorine => 35.45,
             Terrain.AtomElement.Argon => 39.95,
             Terrain.AtomElement.Iron => 55.85,
-            _ => 1.0,
+            _ => 1.75,
         };
         return massNumber;
     }

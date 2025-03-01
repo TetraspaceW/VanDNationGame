@@ -127,7 +127,7 @@ public partial class Terrain
             case TerrainType.Tissue:
                 return "biology/meat";
             case TerrainType.Cell:
-                return "life/eukaryote";
+                return "biology/cell";
             case TerrainType.SilicaMineral:
                 return "barren";
             case TerrainType.IceMineral:

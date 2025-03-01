@@ -136,7 +136,6 @@ class SolarSystemGenerator : CelestialGenerator
 
     TileModel[,] GenerateEpiSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, double stellarRadius, double innerRadiusAU)
     {
-        bool isWholeSystem = systemArea == Terrain.TerrainType.SolarSystem;
         double outermostPlanetDistance = OutermostPlanetDistance();
 
         var Tiles = new TileModel[10, 10];
@@ -437,16 +436,13 @@ class SolarSystemGenerator : CelestialGenerator
         public double distance;
         public bool inner = false;
         public Star star;
-        public double orbitalPeriod; // Orbital period in Earth years
+        public double orbitalPeriod;
 
         public Orbit(double R, Star star)
         {
             this.star = star;
             distance = R;
 
-            // Calculate orbital period using Kepler's Third Law
-            // P^2 = (4π²/G(M+m)) * a^3, but since m << M, we can use P^2 = (4π²/GM) * a^3
-            // Simplified for Solar System where period is in Earth years, distance in AU, and mass in Solar masses
             orbitalPeriod = Math.Sqrt(Math.Pow(distance, 3) / star.mass);
 
             var vaporised = R <= Math.Sqrt(star.luminosity) * 0.025;
@@ -506,10 +502,8 @@ class SolarSystemGenerator : CelestialGenerator
 
         public Orbit(double R, World body)
         {
+            this.body = body;
             distance = R;
-            // For moons, calculate orbital period using Kepler's law but with the planet's mass
-            // This is a simplification since we're using the planet's mass in Earth masses
-            orbitalPeriod = Math.Sqrt(Math.Pow(distance / 400, 3) / (body.mass / 330000)); // Scale distance (to AU) and mass (to solar masses)
         }
     }
 
