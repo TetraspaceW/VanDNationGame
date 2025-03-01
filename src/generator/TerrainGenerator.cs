@@ -394,11 +394,11 @@ class TerrainGenerator
             case Terrain.TerrainType.Cell:
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Cytoplasm, false),
-                    new TerrainRule(Terrain.TerrainType.Mitochrondrion, false),
-                    new TerrainRule(Terrain.TerrainType.Vesicle, false),
-                    new TerrainRule(Terrain.TerrainType.Vacuole, false),
-                    new TerrainRule(Terrain.TerrainType.Lysosome, false),
-                    new TerrainRule(Terrain.TerrainType.Centrosome, false)
+                    new TerrainRule(Terrain.TerrainType.Mitochrondrion, false, 0.2),
+                    new TerrainRule(Terrain.TerrainType.Vesicle, false, 0.1),
+                    new TerrainRule(Terrain.TerrainType.Vacuole, false, 0.1),
+                    new TerrainRule(Terrain.TerrainType.Lysosome, false, 0.1),
+                    new TerrainRule(Terrain.TerrainType.Centrosome, false, 0.1)
                  });
                 var center = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleolus, false) });
                 AddCircle(Tiles, new[] {
