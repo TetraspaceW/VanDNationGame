@@ -4,7 +4,7 @@ using System.Linq;
 
 class TerrainGenerator
 {
-    TileModel tile;
+    readonly TileModel tile;
     public TerrainGenerator(TileModel insideTile)
     {
         tile = insideTile;

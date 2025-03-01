@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 class ChromatinGenerator
 {
-    TileModel tile;
+    readonly TileModel tile;
     TileModel[,] Tiles;
 
     public ChromatinGenerator(TileModel tile, TileModel[,] Tiles)

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 class CelestialGenerator { }
 class SolarSystemGenerator : CelestialGenerator
 {
-    SpectralClass spectralClass;
-    TileModel tile;
-    Star star;
-    Orbit[] orbits;
+    readonly SpectralClass spectralClass;
+    readonly TileModel tile;
+    readonly Star star;
+    readonly Orbit[] orbits;
     public SolarSystemGenerator(TileModel tile, SpectralClass spectralClass)
     {
         // Object       | Size      | S     | Comparable map object
@@ -312,7 +312,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Atmosphere
     {
-        List<G> gasesPresent = new();
+        readonly List<G> gasesPresent = new();
         public double pressure = 0;
 
         public Atmosphere(double temperature, double mass, double radius)

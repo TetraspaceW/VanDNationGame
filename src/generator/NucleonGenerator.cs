@@ -3,8 +3,8 @@ using System.Linq;
 
 class NucleonGenerator
 {
-    TileModel parent;
-    List<Terrain.QuarkFlavour> quarks;
+    readonly TileModel parent;
+    readonly List<Terrain.QuarkFlavour> quarks;
 
     public NucleonGenerator(TileModel tile, Terrain.QuarkFlavour q1, Terrain.QuarkFlavour q2, Terrain.QuarkFlavour q3)
     {
