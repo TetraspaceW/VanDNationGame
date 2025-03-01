@@ -659,7 +659,7 @@ class TerrainGenerator
     private TileModel[,] StarFill(TileModel[,] tiles)
     {
         return StructureFill(tiles,
-            Chem.HYDROGEN_IONIZED.RotateAll(73.46)
+            Chem.HYDROGEN_IONIZED.RotateAll(73.46 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen))
             .Concat(Chem.HELIUM_IONIZED.RotateAll(24.85 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium)))
             .Concat(Chem.OXYGEN_IONIZED.RotateAll(0.77 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen)))
             .Concat(Chem.CARBON_IONIZED.RotateAll(0.29 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon)))
@@ -669,7 +669,18 @@ class TerrainGenerator
             .Concat(Chem.SILICON_IONIZED.RotateAll(0.07 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Silicon)))
             .Concat(Chem.MAGNESIUM_IONIZED.RotateAll(0.05 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium)))
             .Concat(Chem.SULFUR_IONIZED.RotateAll(0.04 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur)))
-            .Concat(Chem.FREE_ELECTRON.RotateAll(73.46 + 24.85 / 4 * 2 + 0.77 / 16 * 8 + 0.29 / 12 * 6 + 0.16 / 56 * 26 + 0.12 / 20 * 10))
+            .Concat(Chem.FREE_ELECTRON.RotateAll(
+                73.46 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen)
+                + 24.85 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium) * 2
+                + 0.77 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen) * 8
+                + 0.29 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon) * 6
+                + 0.16 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Iron) * 26
+                + 0.12 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Neon) * 10
+                + 0.09 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen) * 7
+                + 0.07 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Silicon) * 14
+                + 0.05 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium) * 12
+                + 0.04 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur) * 16
+            ))
             .ToArray()
             , 0, new[] {
                     new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
