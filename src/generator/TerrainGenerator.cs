@@ -344,8 +344,8 @@ class TerrainGenerator
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.VerdantTerrain, true, 99, props: terrain.props)
-                        }.Concat(GetLifeForTerrain(terrain)).ToArray());
+                            new TerrainRule(Terrain.TerrainType.IceSheet, true, props: terrain.props)
+                        });
                         break;
                 }
                 break;
