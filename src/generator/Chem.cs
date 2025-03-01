@@ -65,6 +65,12 @@ class Chem
     private static readonly TerrainRule[] phos = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
     })};
+    private static readonly TerrainRule[] alum = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Aluminium.ToString()}
+    })};
+    private static readonly TerrainRule[] iron = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()}
+    })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
     private static readonly TerrainRule[] elec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
 
@@ -130,6 +136,9 @@ class Chem
         { molc, hydr, molc, molc },
         { molc, oxyg, hydr, molc },
         { molc, molc, molc, molc }, }, "water");
+    public static readonly Structure ICE = new(new TerrainRule[,][] {
+         { hydr, molc },
+         { oxyg, hydr }, }, "ice");
     public static readonly Structure HYDROXIDE = new(new TerrainRule[,][] {
         { molc, molc, molc },
         { molc, hydr, molc },

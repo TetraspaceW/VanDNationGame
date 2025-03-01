@@ -128,6 +128,10 @@ public partial class Terrain
                 return "biology/meat";
             case TerrainType.Cell:
                 return "life/eukaryote";
+            case TerrainType.SilicaMineral:
+                return "barren";
+            case TerrainType.IceMineral:
+                return "ice";
             case TerrainType.Cytoplasm:
                 return "biomolecules/cytoplasm";
             case TerrainType.Vacuole:
@@ -303,6 +307,7 @@ public partial class Terrain
         // -19  1 mm across
         // -20  100 um across
         Eukaryote,
+        SilicaMineral, IceMineral,
         // -21  10 um across
         Cell,
         // -22  1 um across

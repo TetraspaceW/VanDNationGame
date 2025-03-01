@@ -502,8 +502,6 @@ class SolarSystemGenerator : CelestialGenerator
             }
 
             body = vaporised ? null : body;
-
-            star = null;
         }
 
         public Orbit(double R, World body)
@@ -601,8 +599,6 @@ class SolarSystemGenerator : CelestialGenerator
             }
 
             moons = GenerateMoons(orbit.inner, bodyType);
-
-            orbit = null;
         }
 
         public World(double R, double T, bool inner)
