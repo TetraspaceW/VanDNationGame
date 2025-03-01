@@ -219,7 +219,7 @@ public partial class MapView : Area2D
 		sidebar.mapView = this;
 	}
 
-	TileSet CreateGridTileset()
+	static TileSet CreateGridTileset()
 	{
 		var tileset = new TileSet();
 		var s = new TileSetAtlasSource
