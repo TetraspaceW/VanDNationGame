@@ -130,6 +130,18 @@ public partial class Terrain
                 return "life/eukaryote";
             case TerrainType.Cytoplasm:
                 return "biomolecules/cytoplasm";
+            case TerrainType.Vacuole:
+                return "biomolecules/vacuole";
+            case TerrainType.Vesicle:
+                return "biomolecules/vesicle";
+            case TerrainType.Lysosome:
+                return "biomolecules/lysosome";
+            case TerrainType.Centrosome:
+                return "biomolecules/centrosome";
+            case TerrainType.Mitochrondrion:
+                return "biomolecules/mitochondrion";
+            case TerrainType.Histone:
+                return "biomolecules/histone";
             case TerrainType.Nucleolus:
                 return "biomolecules/nucleolus";
             case TerrainType.LinkerDNA:
@@ -294,7 +306,9 @@ public partial class Terrain
         // -21  10 um across
         Cell,
         // -22  1 um across
-        Nucleoplasm, Cytoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
+        Cytoplasm,
+        Nucleoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
+        Mitochrondrion, Vacuole, Vesicle, Lysosome, Centrosome,
         Prokaryote,
         // -23  100 nm across
         Heterochromatin, Euchromatin,
@@ -342,6 +356,7 @@ public partial class Terrain
         Hydrogen, Helium,
         Lithium, Beryllium, Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon,
         Sodium, Magnesium, Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
+        Iron,
     }
 
     public enum QuarkColour

@@ -40,7 +40,7 @@ class TechTree
             techs = importedTechs;
         }
 
-        private void SetTechCoords(TreeTechnology tech, List<TreeTechnology> techs)
+        private static void SetTechCoords(TreeTechnology tech, List<TreeTechnology> techs)
         {
             var newX = tech.techDef.requirements.Select((req) =>
             {

@@ -13,12 +13,28 @@ class Chem
         {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()}
     })};
 
-    private static readonly TerrainRule[] hydrIon = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    private static readonly TerrainRule[] hion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()},
         {PropKey.AtomIsIonized, "True"}
     })};
-    private static readonly TerrainRule[] heliIon = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    private static readonly TerrainRule[] heio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] oion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] cion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] feio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] neio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Neon.ToString()},
         {PropKey.AtomIsIonized, "True"}
     })};
     private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
@@ -37,7 +53,7 @@ class Chem
         {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
     })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
-    private static readonly TerrainRule[] freeElec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
+    private static readonly TerrainRule[] elec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
 
     public static readonly Structure HYDROGEN = new(new TerrainRule[,][] {
         { null, molc, null },
@@ -53,21 +69,31 @@ class Chem
     }, "helium");
 
     public static readonly Structure HYDROGEN_IONIZED = new(new TerrainRule[,][] {
-        { null, molc, null },
-        { molc, hydrIon, molc },
-        { null, molc, null }
+        { hion }
     }, "hydrogen_ionized");
 
     public static readonly Structure HELIUM_IONIZED = new(new TerrainRule[,][] {
-        { null, molc, null },
-        { molc, heliIon, molc },
-        { null, molc, null },
+        { heio }
     }, "helium_ionized");
 
+    public static readonly Structure OXYGEN_IONIZED = new(new TerrainRule[,][] {
+        { oion }
+    }, "oxygen_ionized");
+
+    public static readonly Structure CARBON_IONIZED = new(new TerrainRule[,][] {
+        { cion }
+    }, "carbon_ionized");
+
+    public static readonly Structure IRON_IONIZED = new(new TerrainRule[,][] {
+        { feio }
+    }, "iron_ionized");
+
+    public static readonly Structure NEON_IONIZED = new(new TerrainRule[,][] {
+        { neio }
+    }, "neon_ionized");
+
     public static readonly Structure FREE_ELECTRON = new(new TerrainRule[,][] {
-        { null, molc, null },
-        { molc, freeElec, molc },
-        { null, molc, null },
+        { elec }
     }, "free_electron");
 
     public static readonly Structure WATER = new(new TerrainRule[,][] {

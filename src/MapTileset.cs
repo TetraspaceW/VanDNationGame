@@ -37,7 +37,7 @@ public partial class MapTileset
 		return newTileset;
 	}
 
-	List<String> GetFilesInFolder(string folder)
+	static List<String> GetFilesInFolder(string folder)
 	{
 		string extension = ".png";
 

@@ -32,7 +32,7 @@ public partial class Sidebar : CanvasLayer
 
 	public void SetSidePanelLabelText(params object[] what) { SetLabelText(sidePanelLabel, what); }
 
-	private void SetLabelText(RichTextLabel label, params object[] what)
+	private static void SetLabelText(RichTextLabel label, params object[] what)
 	{
 		var text = what.Select((it) => it.ToString()).Aggregate((acc, it) => acc + it);
 		label.Text = "";

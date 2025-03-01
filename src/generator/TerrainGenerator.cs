@@ -193,12 +193,12 @@ class TerrainGenerator
             case Terrain.TerrainType.OuterSystemBody:
             case Terrain.TerrainType.InnerSystemBody:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
-                switch (tile.scale)
+                _ = tile.scale switch
                 {
-                    case -6: _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }); break;
-                    case -7: _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }); break;
-                    default: _ = AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }); break;
-                }
+                    -6 => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }),
+                    -7 => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }),
+                    _ => AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }),
+                };
                 break;
             case Terrain.TerrainType.OuterLunarSystem:
                 Fill(Tiles, new[] {
@@ -267,6 +267,18 @@ class TerrainGenerator
                 }, gasGiantCenter, gasGiantTileSize < 5 ? gasGiantTileSize : 10, true);
                 break;
             case Terrain.TerrainType.StellarTerrain:
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = StarFill(Tiles);
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(terrain.terrainType, true)
+                        });
+                        break;
+                }
+                break;
             case Terrain.TerrainType.GasGiantTerrain:
                 switch (tile.scale)
                 {
@@ -380,7 +392,14 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.Cell:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cytoplasm, false) });
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Cytoplasm, false),
+                    new TerrainRule(Terrain.TerrainType.Mitochrondrion, false),
+                    new TerrainRule(Terrain.TerrainType.Vesicle, false),
+                    new TerrainRule(Terrain.TerrainType.Vacuole, false),
+                    new TerrainRule(Terrain.TerrainType.Lysosome, false),
+                    new TerrainRule(Terrain.TerrainType.Centrosome, false)
+                 });
                 var center = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleolus, false) });
                 AddCircle(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
@@ -423,39 +442,23 @@ class TerrainGenerator
 
                 break;
             case Terrain.TerrainType.Nucleotide:
-                TerrainRule[] nucleobase;
                 int rotation = int.Parse(terrain.props[PropKey.Rotation]);
-                switch (terrain.props[PropKey.Nucleobase])
+                TerrainRule[] nucleobase = terrain.props[PropKey.Nucleobase] switch
                 {
-                    case "adenine":
-                        nucleobase = new[] { Structure.CreateStructureTile("adenine", 1, 2, 0) };
-                        break;
-                    case "guanine":
-                        nucleobase = new[] { Structure.CreateStructureTile("guanine", 1, 2, 0) };
-                        break;
-                    case "thymine":
-                        nucleobase = new[] { Structure.CreateStructureTile("thymine", 2, 4, 0) };
-                        break;
-                    case "cytosine":
-                        nucleobase = new[] { Structure.CreateStructureTile("cytosine", 2, 4, 0) };
-                        break;
-                    default:
-                        nucleobase = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+                    "adenine" => new[] { Structure.CreateStructureTile("adenine", 1, 2, 0) },
+                    "guanine" => new[] { Structure.CreateStructureTile("guanine", 1, 2, 0) },
+                    "thymine" => new[] { Structure.CreateStructureTile("thymine", 2, 4, 0) },
+                    "cytosine" => new[] { Structure.CreateStructureTile("cytosine", 2, 4, 0) },
+                    _ => new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
                             { PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString() }
-                        }) };
-                        break;
-                }
+                        }) },
+                };
                 Structure backbone = Structure.NULL;
-                switch (terrain.props[PropKey.NucleicBackbone])
+                backbone = terrain.props[PropKey.NucleicBackbone] switch
                 {
-                    case "RNA":
-                        backbone = Chem.RNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
-                        break;
-                    case "DNA":
-                    default:
-                        backbone = Chem.DNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
-                        break;
-                }
+                    "RNA" => Chem.RNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation),
+                    _ => Chem.DNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation),
+                };
                 Tiles = PlaceStructure(Tiles, new[] { new StructureRule(backbone) },
                            0, 0, new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
@@ -469,36 +472,30 @@ class TerrainGenerator
 
                 if (isIonized)
                 {
-                    // Ionized atoms have no electron cloud, just a nucleus in plasma
                     Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
                     _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 }
                 else
                 {
-                    // Normal atoms have electron clouds
                     Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                     _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 }
                 break;
             case Terrain.TerrainType.FreeElectron:
-                // A free electron doesn't have an internal structure like an atom does
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
                 _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 break;
 
             case Terrain.TerrainType.Nucleus:
-                // Check if the parent atom is ionized
                 bool parentIsIonized = terrain.props.ContainsKey(PropKey.AtomIsIonized) &&
                     bool.Parse(terrain.props[PropKey.AtomIsIonized]);
 
                 if (parentIsIonized)
                 {
-                    // Ionized atoms have no electron cloud inside the nucleus view either
                     Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
                 }
                 else
                 {
-                    // Regular atoms show electron cloud in nucleus view
                     Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 }
 
@@ -532,13 +529,11 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.ValenceQuark:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
-                switch (tile.scale)
+                _ = tile.scale switch
                 {
-                    case -34:
-                        _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }); break;
-                    default:
-                        _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
-                }
+                    -34 => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }),
+                    _ => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }),
+                };
                 break;
             case Terrain.TerrainType.Sandbox:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true), new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1) });
@@ -661,41 +656,30 @@ class TerrainGenerator
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                         }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }
+    private TileModel[,] StarFill(TileModel[,] tiles)
+    {
+        return StructureFill(tiles,
+            Chem.HYDROGEN_IONIZED.RotateAll(73.46)
+            .Concat(Chem.HELIUM_IONIZED.RotateAll(24.85 / 4))
+            .Concat(Chem.OXYGEN_IONIZED.RotateAll(0.77 / 16))
+            .Concat(Chem.CARBON_IONIZED.RotateAll(0.29 / 12))
+            .Concat(Chem.IRON_IONIZED.RotateAll(0.16 / 56))
+            .Concat(Chem.NEON_IONIZED.RotateAll(0.12 / 20))
+            .Concat(Chem.FREE_ELECTRON.RotateAll(73.46 + 24.85 / 4 * 2 + 0.77 / 16 * 8 + 0.29 / 12 * 6 + 0.16 / 56 * 26 + 0.12 / 20 * 10))
+            .ToArray()
+            , 0, new[] {
+                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+            }, new[] { Terrain.TerrainType.IntermolecularSpace });
+    }
+
     private TileModel[,] NonMetalFill(TileModel[,] tiles)
     {
-        // Check if this is a star environment
-        bool isStarEnvironment = tile.terrain.terrainType == Terrain.TerrainType.StellarTerrain;
-
-        if (isStarEnvironment)
-        {
-            // For stars, create plasma with:
-            // - 75% hydrogen nuclei (ionized H)
-            // - 25% helium nuclei (ionized He)
-            // - Free electrons in the correct ratio (1 per H, 2 per He = 5 electrons per 4 nuclei)
-            // This creates a realistic plasma environment
-
-            // Create stellar plasma with the correct ratio of particles
-            return StructureFill(tiles,
-                // 3 hydrogen ions
-                Chem.HYDROGEN_IONIZED.RotateAll(1.5)
-                // 1 helium ion
-                .Concat(Chem.HELIUM_IONIZED.RotateAll(1))
-                // 5 free electrons (1 for each H, 2 for each He)
-                .Concat(Chem.FREE_ELECTRON.RotateAll(2.5))
-                .ToArray()
-                , 0, new[] {
-                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                }, new[] { Terrain.TerrainType.IntermolecularSpace });
-        }
-        else
-        {
-            // For non-stellar environments (including gas giants' upper atmospheres), use normal atoms
-            return StructureFill(tiles, Chem.HYDROGEN.RotateAll(1.5).Concat(Chem.HELIUM.RotateAll(1)).ToArray()
-                                , 0, new[] {
+        return StructureFill(tiles, Chem.HYDROGEN.RotateAll(3).Concat(Chem.HELIUM.RotateAll(0.25)).ToArray()
+                            , 0, new[] {
                                 new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                            }, new[] { Terrain.TerrainType.IntermolecularSpace });
-        }
+                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }
+
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
         return TerrainGenRule.StructureTile(parent: tile, tiles, rules, baseFill);
@@ -718,13 +702,13 @@ class TerrainGenerator
 
     public static (int, int) Shape3D<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
 
-    private bool PlanetIsTerrestrial(string planetType)
+    private static bool PlanetIsTerrestrial(string planetType)
     {
-        switch (Enum.Parse(typeof(Terrain.PlanetType), planetType))
+        return Enum.Parse(typeof(Terrain.PlanetType), planetType) switch
         {
-            default: case Terrain.PlanetType.Jovian: return false;
-            case Terrain.PlanetType.Terrestrial: case Terrain.PlanetType.Chunk: return true;
-        }
+            Terrain.PlanetType.Terrestrial or Terrain.PlanetType.Chunk => true,
+            _ => false,
+        };
     }
 
     private TerrainRule[] GetLifeForTerrain(Terrain terrain)
@@ -790,6 +774,6 @@ class TerrainGenerator
             }
         }
 
-        return new TerrainRule[] { };
+        return Array.Empty<TerrainRule>();
     }
 }

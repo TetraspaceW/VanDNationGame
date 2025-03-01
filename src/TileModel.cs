@@ -38,7 +38,7 @@ public partial class TileModel
         image = terrain.filenameForTileType();
     }
 
-    public TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
+    public static TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
 
     public void BuildingMaintenanceTick()
     {

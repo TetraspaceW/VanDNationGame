@@ -208,20 +208,20 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    private void PlaceWorld(TileModel parent, World body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
+    private static void PlaceWorld(TileModel parent, World body, int distance, Terrain.TerrainType systemDistance, TileModel[,] Tiles, (int, int) center)
     {
         Terrain.TerrainType terrainType;
         if (!IsSingleBody(body.bodyType))
         {
-            switch (systemDistance)
+            terrainType = systemDistance switch
             {
-                case Terrain.TerrainType.SolarSystem: terrainType = Terrain.TerrainType.OortCloudBodies; break;
-                case Terrain.TerrainType.HillsCloud: terrainType = Terrain.TerrainType.HillsCloudBodies; break;
-                case Terrain.TerrainType.ScatteredDisk: terrainType = Terrain.TerrainType.ScatteredDiskBodies; break;
-                case Terrain.TerrainType.OuterSolarSystem: terrainType = Terrain.TerrainType.KuiperBeltBodies; break;
-                case Terrain.TerrainType.InnerSolarSystem: terrainType = Terrain.TerrainType.AsteroidBeltBodies; break;
-                default: terrainType = Terrain.TerrainType.AsteroidBeltBodies; break;
-            }
+                Terrain.TerrainType.SolarSystem => Terrain.TerrainType.OortCloudBodies,
+                Terrain.TerrainType.HillsCloud => Terrain.TerrainType.HillsCloudBodies,
+                Terrain.TerrainType.ScatteredDisk => Terrain.TerrainType.ScatteredDiskBodies,
+                Terrain.TerrainType.OuterSolarSystem => Terrain.TerrainType.KuiperBeltBodies,
+                Terrain.TerrainType.InnerSolarSystem => Terrain.TerrainType.AsteroidBeltBodies,
+                _ => Terrain.TerrainType.AsteroidBeltBodies,
+            };
             TerrainGenRule.AddCircle(parent, Tiles,
             rules: new[] {
                 new TerrainRule(terrainType)
@@ -229,15 +229,15 @@ class SolarSystemGenerator : CelestialGenerator
         }
         else
         {
-            switch (systemDistance)
+            terrainType = systemDistance switch
             {
-                case Terrain.TerrainType.SolarSystem: terrainType = Terrain.TerrainType.FarfarfarSystemBody; break;
-                case Terrain.TerrainType.HillsCloud: terrainType = Terrain.TerrainType.FarfarSystemBody; break;
-                case Terrain.TerrainType.ScatteredDisk: terrainType = Terrain.TerrainType.FarSystemBody; break;
-                case Terrain.TerrainType.OuterSolarSystem: terrainType = Terrain.TerrainType.OuterSystemBody; break;
-                case Terrain.TerrainType.InnerSolarSystem: terrainType = Terrain.TerrainType.InnerSystemBody; break;
-                default: terrainType = Terrain.TerrainType.InnerSystemBody; break;
-            }
+                Terrain.TerrainType.SolarSystem => Terrain.TerrainType.FarfarfarSystemBody,
+                Terrain.TerrainType.HillsCloud => Terrain.TerrainType.FarfarSystemBody,
+                Terrain.TerrainType.ScatteredDisk => Terrain.TerrainType.FarSystemBody,
+                Terrain.TerrainType.OuterSolarSystem => Terrain.TerrainType.OuterSystemBody,
+                Terrain.TerrainType.InnerSolarSystem => Terrain.TerrainType.InnerSystemBody,
+                _ => Terrain.TerrainType.InnerSystemBody,
+            };
             Terrain.PlanetType planetType = Terrain.PlanetType.Terrestrial;
             switch (body.bodyType)
             {
@@ -267,22 +267,22 @@ class SolarSystemGenerator : CelestialGenerator
         }
     }
 
-    private Star StarData(SpectralClass spectralClass)
+    private static Star StarData(SpectralClass spectralClass)
     {
-        switch (spectralClass)
+        return spectralClass switch
         {
-            case SpectralClass.O: return new Star(R: 10, L: 100000.0, M: 50.0, age: 0.005);
-            case SpectralClass.B: return new Star(R: 5, L: 1000.0, M: 10.0, age: 0.05);
-            case SpectralClass.A: return new Star(R: 1.7, L: 20.0, M: 2.0, age: 1);
-            case SpectralClass.F: return new Star(R: 1.3, L: 4.0, M: 1.5, age: 2);
-            case SpectralClass.G: return new Star(R: 1, L: 1.0, M: 1.0, age: 5);
-            case SpectralClass.K: return new Star(R: 0.8, L: 0.20, M: 0.7, age: 5);
-            case SpectralClass.M: return new Star(R: 0.3, L: 0.01, M: 0.2, age: 5);
-            case SpectralClass.D: return new Star(R: 0.01, L: 0.01, M: 1.0, age: 5);
-            case SpectralClass.MIII: return new Star(R: 50, L: 1000, M: 1.0, age: 10);
-            case SpectralClass.KI: return new Star(R: 500, L: 30000, M: 10.0, age: 1);
-            default: return new Star(R: 1, L: 1, M: 1, age: 5);
-        }
+            SpectralClass.O => new Star(R: 10, L: 100000.0, M: 50.0, age: 0.005),
+            SpectralClass.B => new Star(R: 5, L: 1000.0, M: 10.0, age: 0.05),
+            SpectralClass.A => new Star(R: 1.7, L: 20.0, M: 2.0, age: 1),
+            SpectralClass.F => new Star(R: 1.3, L: 4.0, M: 1.5, age: 2),
+            SpectralClass.G => new Star(R: 1, L: 1.0, M: 1.0, age: 5),
+            SpectralClass.K => new Star(R: 0.8, L: 0.20, M: 0.7, age: 5),
+            SpectralClass.M => new Star(R: 0.3, L: 0.01, M: 0.2, age: 5),
+            SpectralClass.D => new Star(R: 0.01, L: 0.01, M: 1.0, age: 5),
+            SpectralClass.MIII => new Star(R: 50, L: 1000, M: 1.0, age: 10),
+            SpectralClass.KI => new Star(R: 500, L: 30000, M: 10.0, age: 1),
+            _ => new Star(R: 1, L: 1, M: 1, age: 5),
+        };
     }
 
     private double OutermostPlanetDistance()
@@ -406,7 +406,7 @@ class SolarSystemGenerator : CelestialGenerator
             SO2
         }
 
-        double MolecularWeight(G gas)
+        static double MolecularWeight(G gas)
         {
             var H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
             var He = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium);
@@ -415,20 +415,20 @@ class SolarSystemGenerator : CelestialGenerator
             var N = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen);
             var O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
             var S = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur);
-            switch (gas)
+            return gas switch
             {
-                case G.H2: return H * 2;
-                case G.He: return He;
-                case G.CH4: return C + H * 4;
-                case G.NH3: return N + H * 3;
-                case G.Ne: return Ne;
-                case G.N2: return N;
-                case G.CO: return C + O;
-                case G.CO2: return C + O * 2;
-                case G.NO2: return N + O * 2;
-                case G.SO2: return S + O * 2;
-                default: return 0;
-            }
+                G.H2 => H * 2,
+                G.He => He,
+                G.CH4 => C + H * 4,
+                G.NH3 => N + H * 3,
+                G.Ne => Ne,
+                G.N2 => N,
+                G.CO => C + O,
+                G.CO2 => C + O * 2,
+                G.NO2 => N + O * 2,
+                G.SO2 => S + O * 2,
+                _ => 0,
+            };
         }
     }
 
@@ -620,7 +620,7 @@ class SolarSystemGenerator : CelestialGenerator
             this.orbit = orbit;
         }
 
-        Hydrosphere HydrosphereFromTemperature(double temperature, bool inner)
+        static Hydrosphere HydrosphereFromTemperature(double temperature, bool inner)
         {
             if (inner)
             {
@@ -819,7 +819,7 @@ class SolarSystemGenerator : CelestialGenerator
             return temperature * albedoFactor * (1 + (Math.Pow(atmosphere.pressure, 0.5) * 0.01 * d(10)) + vapourFactor * 0.1);
         }
 
-        int d(int n, int N = 1)
+        static int d(int n, int N = 1)
         {
             return RND.d(n, N);
         }
