@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Godot;
 class CelestialGenerator { }
 class SolarSystemGenerator : CelestialGenerator
 {

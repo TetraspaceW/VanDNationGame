@@ -1,8 +1,6 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
-using Godot;
-using System.Diagnostics;
 
 public partial class TileModel
 {

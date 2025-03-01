@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 class Structure
 {
     public TerrainRule[,][] rules;

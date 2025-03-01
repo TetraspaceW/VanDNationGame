@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 class Chem
 {
@@ -35,6 +32,22 @@ class Chem
     })};
     private static readonly TerrainRule[] neio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Neon.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] nion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Nitrogen.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] siio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Silicon.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] mgio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Magnesium.ToString()},
+        {PropKey.AtomIsIonized, "True"}
+    })};
+    private static readonly TerrainRule[] sion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Sulfur.ToString()},
         {PropKey.AtomIsIonized, "True"}
     })};
     private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
@@ -91,6 +104,22 @@ class Chem
     public static readonly Structure NEON_IONIZED = new(new TerrainRule[,][] {
         { neio }
     }, "neon_ionized");
+
+    public static readonly Structure NITROGEN_IONIZED = new(new TerrainRule[,][] {
+        { nion }
+    }, "nitrogen_ionized");
+
+    public static readonly Structure SILICON_IONIZED = new(new TerrainRule[,][] {
+        { siio }
+    }, "silicon_ionized");
+
+    public static readonly Structure MAGNESIUM_IONIZED = new(new TerrainRule[,][] {
+        { mgio }
+    }, "magnesium_ionized");
+
+    public static readonly Structure SULFUR_IONIZED = new(new TerrainRule[,][] {
+        { sion }
+    }, "sulfur_ionized");
 
     public static readonly Structure FREE_ELECTRON = new(new TerrainRule[,][] {
         { elec }

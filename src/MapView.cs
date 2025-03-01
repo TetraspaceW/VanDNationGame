@@ -1,8 +1,6 @@
 using Godot;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 public partial class MapView : Area2D
 {

@@ -3,7 +3,7 @@ class AtomGenerator
 {
     public static double GetMassNumber(Terrain terrain)
     {
-        return AtomGenerator.ElementMassNumber((Terrain.AtomElement)Enum.Parse(typeof(Terrain.AtomElement), terrain.props[PropKey.AtomElement]));
+        return ElementMassNumber((Terrain.AtomElement)Enum.Parse(typeof(Terrain.AtomElement), terrain.props[PropKey.AtomElement]));
     }
 
     public static double ElementMassNumber(Terrain.AtomElement nucleusElement)

@@ -660,11 +660,15 @@ class TerrainGenerator
     {
         return StructureFill(tiles,
             Chem.HYDROGEN_IONIZED.RotateAll(73.46)
-            .Concat(Chem.HELIUM_IONIZED.RotateAll(24.85 / 4))
-            .Concat(Chem.OXYGEN_IONIZED.RotateAll(0.77 / 16))
-            .Concat(Chem.CARBON_IONIZED.RotateAll(0.29 / 12))
-            .Concat(Chem.IRON_IONIZED.RotateAll(0.16 / 56))
-            .Concat(Chem.NEON_IONIZED.RotateAll(0.12 / 20))
+            .Concat(Chem.HELIUM_IONIZED.RotateAll(24.85 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium)))
+            .Concat(Chem.OXYGEN_IONIZED.RotateAll(0.77 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen)))
+            .Concat(Chem.CARBON_IONIZED.RotateAll(0.29 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon)))
+            .Concat(Chem.IRON_IONIZED.RotateAll(0.16 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Iron)))
+            .Concat(Chem.NEON_IONIZED.RotateAll(0.12 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Neon)))
+            .Concat(Chem.NITROGEN_IONIZED.RotateAll(0.09 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen)))
+            .Concat(Chem.SILICON_IONIZED.RotateAll(0.07 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Silicon)))
+            .Concat(Chem.MAGNESIUM_IONIZED.RotateAll(0.05 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium)))
+            .Concat(Chem.SULFUR_IONIZED.RotateAll(0.04 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur)))
             .Concat(Chem.FREE_ELECTRON.RotateAll(73.46 + 24.85 / 4 * 2 + 0.77 / 16 * 8 + 0.29 / 12 * 6 + 0.16 / 56 * 26 + 0.12 / 20 * 10))
             .ToArray()
             , 0, new[] {
