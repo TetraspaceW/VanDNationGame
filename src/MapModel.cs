@@ -130,12 +130,5 @@ public partial class MapModel
 	public void NextTurn()
 	{
 		parent.BuildingResourcesTick();
-		//        foreach (var tile in Tiles)
-		//        {
-		//            if (tile.internalMap != null)
-		//            {
-		//                tile.internalMap.NextTurn();
-		//            }
-		//        }
 	}
 }

@@ -9,7 +9,33 @@ class Chem
     private static readonly TerrainRule[] heli = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()}
     })};
-
+    private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()}
+    })};
+    private static readonly TerrainRule[] nitr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Nitrogen.ToString()}
+    })};
+    private static readonly TerrainRule[] oxyg = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()}
+    })};
+    private static readonly TerrainRule[] alum = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Aluminium.ToString()}
+    })};
+    private static readonly TerrainRule[] silc = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Silicon.ToString()}
+    })};
+    private static readonly TerrainRule[] phos = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
+    })};
+    private static readonly TerrainRule[] sulf = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Sulfur.ToString()}
+    })};
+    private static readonly TerrainRule[] iron = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()}
+    })};
+    private static readonly TerrainRule[] seln = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Selenium.ToString()}
+    })};
     private static readonly TerrainRule[] hion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()},
         {PropKey.AtomIsIonized, "True"}
@@ -49,27 +75,6 @@ class Chem
     private static readonly TerrainRule[] sion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Sulfur.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()}
-    })};
-    private static readonly TerrainRule[] nitr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Nitrogen.ToString()}
-    })};
-    private static readonly TerrainRule[] oxyg = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()}
-    })};
-    private static readonly TerrainRule[] silc = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Silicon.ToString()}
-    })};
-    private static readonly TerrainRule[] phos = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
-    })};
-    private static readonly TerrainRule[] alum = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Aluminium.ToString()}
-    })};
-    private static readonly TerrainRule[] iron = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
-        {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()}
     })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
     private static readonly TerrainRule[] elec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
@@ -206,4 +211,135 @@ class Chem
         { oxyg, phos, oxyg, null, oxyg, hydr },
         { null, oxyg, null, null, null, null },
         { null, carb, null, null, null, null } }, "rna_backbone");
+
+    public static readonly Structure ARGININE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, carb },
+        { null, null, carb, null },
+        { null, null, null, nitr },
+        { null, null, nitr, null },
+        { null, null, null, nitr }
+    }, "arginine");
+
+    public static readonly Structure HISTIDINE = new(new TerrainRule[,][] {
+        { null, null, carb, null, null },
+        { null, null, null, carb, null },
+        { null, null, carb, null, nitr },
+        { null, null, nitr, null, carb },
+    }, "histidine");
+
+    public static readonly Structure LYSINE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, carb },
+        { null, null, carb, null },
+        { null, null, null, carb },
+        { null, null, nitr, null },
+    }, "lysine");
+
+    public static readonly Structure ASPARTIC_ACID = new(new TerrainRule[,][] {
+        { null, null, carb, null, null },
+        { null, null, null, carb, oxyg },
+        { null, null, oxyg, null, null },
+    }, "aspartic-acid");
+
+    public static readonly Structure GLUTAMIC_ACID = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, carb },
+        { null, oxyg, carb, null },
+        { null, null, null, oxyg },
+    }, "glutamic-acid");
+
+    public static readonly Structure SERINE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, oxyg },
+    }, "serine");
+
+    public static readonly Structure THREONINE = new(new TerrainRule[,][] {
+        { null, oxyg, carb, null },
+        { null, null, null, carb },
+    }, "threonine");
+
+    public static readonly Structure ASPARAGINE = new(new TerrainRule[,][] {
+        { null, null, carb, null, null },
+        { null, null, null, carb, nitr },
+        { null, null, nitr, null, null }
+    }, "asparagine");
+
+    public static readonly Structure GLUTAMINE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, carb },
+        { null, oxyg, carb, null },
+        { null, null, null, nitr }
+    }, "glutamine");
+
+    public static readonly Structure CYSTEINE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, sulf },
+    }, "cysteine");
+
+    public static readonly Structure SELENOCYSTEINE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, seln },
+    }, "selenocysteine");
+
+    public static readonly Structure GLYCINE = new(new TerrainRule[,][] {
+        { null, null, null },
+    }, "glycine");
+
+    public static readonly Structure PROLINE = new(new TerrainRule[,][] {
+        { null, null, carb, null, carb },
+        { null, null, null, carb, null },
+        { null, null, null, null, null },
+    }, "proline");
+
+    public static readonly Structure ALANINE = new(new TerrainRule[,][] {
+        { null, null, carb }
+    }, "alanine");
+
+    public static readonly Structure VALINE = new(new TerrainRule[,][] {
+        { null, carb, carb, null },
+        { null, null, null, carb },
+    }, "valine");
+
+    public static readonly Structure LEUCINE = new(new TerrainRule[,][] {
+        { null, null, carb, null, null },
+        { null, null, null, carb, carb },
+        { null, null, carb, null, null }
+    }, "leucine");
+
+    public static readonly Structure ISOLEUCINE = new(new TerrainRule[,][] {
+        { null, carb, carb, null },
+        { null, null, null, carb },
+        { null, null, carb, null }
+    }, "isoleucine");
+
+    public static readonly Structure METHIONINE = new(new TerrainRule[,][] {
+        { null, null, carb, null },
+        { null, null, null, carb },
+        { null, null, sulf, null },
+        { null, null, null, carb }
+    }, "methionine");
+
+    public static readonly Structure PHENYLALANINE = new(new TerrainRule[,][] {
+        { null, null, carb, null, null, null },
+        { null, null, null, carb, carb, null },
+        { null, null, carb, null, null, carb },
+        { null, null, null, carb, carb, null }
+    }, "phenylalanine");
+
+    public static readonly Structure TYROSINE = new(new TerrainRule[,][] {
+        { null, null, carb, null, null, null },
+        { null, null, null, carb, carb, null },
+        { null, null, carb, null, null, carb },
+        { null, null, null, carb, carb, null },
+        { null, null, null, null, null, oxyg }
+    }, "tyrosine");
+
+    public static readonly Structure TRYPTOPHAN = new(new TerrainRule[,][] {
+        { null, null, carb, null, null },
+        { null, null, null, carb, carb },
+        { null, carb, carb, null, nitr },
+        { carb, null, null, carb, null },
+        { null, carb, carb, null, null }
+    }, "tryptophan");
 }

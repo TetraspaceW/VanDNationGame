@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
 
 class TerrainGenerator
 {
@@ -472,10 +473,10 @@ class TerrainGenerator
                 });
                 break;
             case Terrain.TerrainType.Euchromatin:
-                Tiles = new ChromatinGenerator(tile, Tiles).GenerateEuchromatin();
+                Tiles = new DNAGenerator(tile, Tiles).GenerateEuchromatin();
                 break;
             case Terrain.TerrainType.Heterochromatin:
-                Tiles = new ChromatinGenerator(tile, Tiles).GenerateHeterochromatin();
+                Tiles = new DNAGenerator(tile, Tiles).GenerateHeterochromatin();
                 break;
             case Terrain.TerrainType.Nucleoplasm:
                 switch (tile.scale)
@@ -489,9 +490,10 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.LinkerDNA:
+                Tiles = new DNAGenerator(tile, Tiles).GenerateDNA(0.99);
+                break;
             case Terrain.TerrainType.Nucleosome:
-                Tiles = new ChromatinGenerator(tile, Tiles).GenerateDNA(terrain.terrainType == Terrain.TerrainType.Nucleosome ? 0.5 : 0.99);
-
+                Tiles = new DNAGenerator(tile, Tiles).GenerateHistone();
                 break;
             case Terrain.TerrainType.Nucleotide:
                 int rotation = int.Parse(terrain.props[PropKey.Rotation]);
@@ -515,6 +517,9 @@ class TerrainGenerator
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                        }, rotation);
                 Tiles = WaterFill(Tiles);
+                break;
+            case Terrain.TerrainType.AlphaHelix:
+                Tiles = new PeptideGenerator(tile, Tiles).GeneratePeptideChain();
                 break;
             case Terrain.TerrainType.Atom:
                 // Check if the atom is ionized

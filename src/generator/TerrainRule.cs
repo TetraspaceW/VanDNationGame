@@ -27,6 +27,20 @@ class TerrainRule
         return rot0;
     }
 
+    public TerrainRule Mirror(int axis)
+    {
+        TerrainRule mirror = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
+        if (props.ContainsKey(PropKey.Mirror))
+        {
+            mirror.props[PropKey.Mirror] = (int.Parse(props[PropKey.Mirror]) + axis) % 2 + "";
+        }
+        else
+        {
+            mirror.props[PropKey.Mirror] = axis + "";
+        }
+        return mirror;
+    }
+
     public TerrainRule[] RotateAll()
     {
         TerrainRule rot0 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));

@@ -26,14 +26,14 @@ public partial class TileModel
         this.parent = parent;
         this.scale = scale;
         this.zoomable = zoomable;
-        image = terrain.filenameForTileType();
+        image = terrain.FilenameForTileType();
         localResources = GetResources(terrain, scale);
     }
 
     public void SetTerrainType(Terrain.TerrainType terrainType)
     {
         terrain.terrainType = terrainType;
-        image = terrain.filenameForTileType();
+        image = terrain.FilenameForTileType();
     }
 
     public static TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
@@ -203,16 +203,6 @@ public partial class TileModel
         });
         _ = CalculateTotalChildCapacity();
         _ = CalculateTotalChildResources();
-    }
-
-    private void AddToAllParents(string resource, decimal amount)
-    {
-        var tile = this;
-        while (tile != null)
-        {
-            tile.totalChildResources.AddAmount(resource, amount);
-            tile = tile.parent;
-        }
     }
 
     public List<(Building, decimal)> GetChildrenWithResource(string resource)

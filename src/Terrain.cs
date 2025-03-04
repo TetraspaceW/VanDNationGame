@@ -8,10 +8,10 @@ public partial class Terrain
     public Terrain(TerrainType type, Dictionary<PropKey, string> props = null)
     {
         terrainType = type;
-        this.props = (props == null) ? new Dictionary<PropKey, string>() : props;
+        this.props = props ?? new Dictionary<PropKey, string>();
     }
 
-    public string filenameForTileType()
+    public string FilenameForTileType()
     {
         switch (terrainType)
         {
@@ -144,8 +144,6 @@ public partial class Terrain
                 return "biomolecules/centrosome";
             case TerrainType.Mitochrondrion:
                 return "biomolecules/mitochondrion";
-            case TerrainType.Histone:
-                return "biomolecules/histone";
             case TerrainType.Nucleolus:
                 return "biomolecules/nucleolus";
             case TerrainType.LinkerDNA:
@@ -160,6 +158,8 @@ public partial class Terrain
             case TerrainType.EuchromatinDomain:
             case TerrainType.Euchromatin:
                 return "biomolecules/chromatin_chain";
+            case TerrainType.AlphaHelix:
+                return "biomolecules/protein";
             case TerrainType.Nucleotide:
                 return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToLower() + "_" + props[PropKey.NucleicBackbone].ToLower() + props[PropKey.Rotation].ToLower();
             case TerrainType.NucleotideBlank:
@@ -320,7 +320,8 @@ public partial class Terrain
         // -24  10 nm across
         Nucleosome, LinkerDNA,
         // -25  1 nm across
-        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid, Histone,
+        Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid,
+        AlphaHelix,
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace, FreeElectron,
         // -27  10 pm across
@@ -358,10 +359,32 @@ public partial class Terrain
 
     public enum AtomElement
     {
+        // period 1
         Hydrogen, Helium,
-        Lithium, Beryllium, Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon,
-        Sodium, Magnesium, Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
-        Iron,
+        // period 2 
+        Lithium, Beryllium,
+        Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon,
+        // period 3
+        Sodium, Magnesium,
+        Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
+        // period 4
+        Potassium, Calcium,
+        Scandium, Titanium, Vanadium, Chromium, Manganese, Iron, Cobalt, Nickel, Copper, Zinc,
+        Gallium, Germanium, Arsenic, Selenium, Bromine, Krypton,
+        // period 5
+        Rubidium, Strontium,
+        Yttrium, Zirconium, Niobium, Molybdenum, Technetium, Ruthenium, Rhodium, Palladium, Silver, Cadmium,
+        Indium, Tin, Antimony, Tellurium, Iodine, Xenon,
+        // period 6
+        Cesium, Barium,
+        Lanthanum, Cerium, Praseodymium, Neodymium, Promethium, Samarium, Europium, Gadolinium, Terbium, Dysprosium, Holmium, Erbium, Thulium, Ytterbium,
+        Lutetium, Hafnium, Tantalum, Tungsten, Rhenium, Osmium, Iridium, Platinum, Gold, Mercury,
+        Thallium, Lead, Bismuth, Polonium, Astatine, Radon,
+        // period 7
+        Francium, Radium,
+        Actinium, Thorium, Protactinium, Uranium, Neptunium, Plutonium, Americium, Curium, Berkelium, Californium, Einsteinium, Fermium, Mendelevium, Nobelium,
+        Lawrencium, Rutherfordium, Dubnium, Seaborgium, Bohrium, Hassium, Meitnerium, Darmstadtium, Roentgenium, Copernicium,
+        Nihonium, Flerovium, Moscovium, Livermorium, Tennessine, Oganesson
     }
 
     public enum QuarkColour
@@ -389,7 +412,7 @@ public partial class Terrain
 public enum PropKey
 {
     // Structures
-    Rotation, StructureType, StructureShiftX, StructureShiftY,
+    Rotation, StructureType, StructureShiftX, StructureShiftY, Mirror,
     // Quarks
     QuarkColour, QuarkFlavour,
     // Atoms
