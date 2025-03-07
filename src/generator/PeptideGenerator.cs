@@ -20,7 +20,7 @@ class PeptideGenerator
         TerrainRule hcChain = Structure.CreateStructureTile("peptide-chain", 0, 0);
 
         TerrainRule[] PCHN = new[] { hcChain };
-        TerrainRule[] PCHI = PCHN.Select((it) => it.Mirror(1)).ToArray();
+        TerrainRule[] PCHI = PCHN.Select((it) => it.Reflect(1)).ToArray();
 
         string[] aminoAcids = new[] {
             "arginine", "histidine", "lysine", "aspartic-acid", "glutamic-acid",

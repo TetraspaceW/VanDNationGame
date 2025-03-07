@@ -13,31 +13,22 @@ class TerrainRule
         this.props = props;
     }
 
+    // TODO: Figure out how to get these transformations to compose
     public TerrainRule Rotate(int rot)
     {
         TerrainRule rot0 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
-        if (props.ContainsKey(PropKey.Rotation))
-        {
-            rot0.props[PropKey.Rotation] = (int.Parse(props[PropKey.Rotation]) + rot) % 4 + "";
-        }
-        else
-        {
-            rot0.props[PropKey.Rotation] = rot + "";
-        }
+        if (props.ContainsKey(PropKey.Rotation)) { rot0.props[PropKey.Rotation] = (int.Parse(props[PropKey.Rotation]) + rot) % 4 + ""; }
+        else { rot0.props[PropKey.Rotation] = rot + ""; }
         return rot0;
     }
 
-    public TerrainRule Mirror(int axis)
+    public TerrainRule Reflect(int? axis)
     {
         TerrainRule mirror = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
-        if (props.ContainsKey(PropKey.Mirror))
-        {
-            mirror.props[PropKey.Mirror] = (int.Parse(props[PropKey.Mirror]) + axis) % 2 + "";
-        }
-        else
-        {
-            mirror.props[PropKey.Mirror] = axis + "";
-        }
+        if (axis == null) { return mirror; }
+
+        if (props.ContainsKey(PropKey.Mirror)) { mirror.props[PropKey.Mirror] = (int.Parse(props[PropKey.Mirror]) + axis) % 2 + ""; }
+        else { mirror.props[PropKey.Mirror] = axis + ""; }
         return mirror;
     }
 

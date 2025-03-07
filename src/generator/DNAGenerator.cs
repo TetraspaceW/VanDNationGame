@@ -139,36 +139,36 @@ class DNAGenerator
     public Dictionary<string, TerrainRule> InitialiseDNAStructures()
     {
         TerrainRule adenine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
-            {PropKey.Nucleobase, "adenine"},
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.Nucleobase, "adenine"},
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
         TerrainRule guanine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
-            {PropKey.Nucleobase, "guanine"},
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.Nucleobase, "guanine"},
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
         TerrainRule thymine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
-            {PropKey.Nucleobase, "thymine"},
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.Nucleobase, "thymine"},
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
         TerrainRule cytosine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
-            {PropKey.Nucleobase, "cytosine"},
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.Nucleobase, "cytosine"},
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
         TerrainRule blank = new(Terrain.TerrainType.NucleotideBlank, props: new Dictionary<PropKey, string>() {
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
         TerrainRule turnInner = new(Terrain.TerrainType.NucleotideTurnInner, props: new Dictionary<PropKey, string>() {
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
         TerrainRule turnOuter = new(Terrain.TerrainType.NucleotideTurnOuter, props: new Dictionary<PropKey, string>() {
-            {PropKey.NucleicBackbone, "DNA"},
-            {PropKey.Rotation, "0"}
+            { PropKey.NucleicBackbone, "DNA"},
+            { PropKey.Rotation, "0"}
         });
 
         TerrainRule adenineThymine = Structure.CreateStructureTile("adenine-thymine", 0, 0, 0);
