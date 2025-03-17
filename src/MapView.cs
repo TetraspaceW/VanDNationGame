@@ -112,22 +112,13 @@ public partial class MapView : Area2D
 	{
 		var mapTileset = new MapTileset();
 
-		Tiles = new TileMap
-		{
-			TileSet = mapTileset.tileset
-		};
+		Tiles = new TileMap { TileSet = mapTileset.tileset };
 		AddChild(Tiles);
 
-		BuildingTiles = new TileMap
-		{
-			TileSet = mapTileset.buildingTileset
-		};
+		BuildingTiles = new TileMap { TileSet = mapTileset.buildingTileset };
 		AddChild(BuildingTiles);
 
-		grid = new TileMap
-		{
-			TileSet = CreateGridTileset()
-		};
+		grid = new TileMap { TileSet = CreateGridTileset() };
 		AddChild(grid);
 	}
 
