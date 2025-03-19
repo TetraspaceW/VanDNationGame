@@ -10,13 +10,18 @@ class AtomGenerator
     {
         var massNumber = nucleusElement switch
         {
-            Terrain.AtomElement.Hydrogen => 1.008,
+            Terrain.AtomElement.Hydrogen => 1,
+            Terrain.AtomElement.Deuterium => 2,
+            Terrain.AtomElement.Tritium => 3,
             Terrain.AtomElement.Helium => 4.0026,
             Terrain.AtomElement.Lithium => 6.94,
             Terrain.AtomElement.Beryllium => 9.0122,
             Terrain.AtomElement.Boron => 10.81,
-            Terrain.AtomElement.Carbon => 12.011,
-            Terrain.AtomElement.Nitrogen => 14.007,
+            Terrain.AtomElement.Carbon => 12,
+            Terrain.AtomElement.Carbon13 => 13,
+            Terrain.AtomElement.Carbon14 => 14,
+            Terrain.AtomElement.Nitrogen => 14,
+            Terrain.AtomElement.Nitrogen15 => 15,
             Terrain.AtomElement.Oxygen => 16.0,
             Terrain.AtomElement.Fluorine => 18.998,
             Terrain.AtomElement.Neon => 20.18,

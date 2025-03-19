@@ -356,18 +356,22 @@ public partial class Terrain
 
     public enum Mineral
     {
-        Ice, CarbonDioxide, Nitrogen, Methane, Ammonia,
-        Silica, //SiO2
-        Anorthite,
-        Wallastonite, Enstatite, Ferrosilite,
-        Forsterite, Fayalite,
-        Ilmenite
+        Ice, CarbonDioxide, Nitrogen, Methane, Ammonia, // ices
+        Ethane, Tholin, // hydrocarbons
+        Silica, // silicates
+        Anorthite, // feldspars
+        Wallastonite, Enstatite, Ferrosilite, // pyroxines
+        Forsterite, Fayalite, // olivines
+        Ilmenite, // titanium
+        Kaolinite, // ferrosilicates
+        Troilite, Magnetite, Wuestite, // iron compounds
+
     }
 
     public enum AtomElement
     {
-        Hydrogen, Helium,
-        Lithium, Beryllium, Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon,
+        Hydrogen, Deuterium, Tritium, Helium,
+        Lithium, Beryllium, Boron, Carbon, Carbon13, Carbon14, Nitrogen, Nitrogen15, Oxygen, Fluorine, Neon,
         Sodium, Magnesium, Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
         Potassium, Calcium,
         Titanium, Iron,
