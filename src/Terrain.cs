@@ -356,7 +356,7 @@ public partial class Terrain
 
     public enum Mineral
     {
-        Ice, // H2O
+        Ice, CarbonDioxide, Nitrogen, Methane, Ammonia,
         Silica, //SiO2
         Anorthite,
         Wallastonite, Enstatite, Ferrosilite,

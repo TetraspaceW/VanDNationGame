@@ -148,6 +148,19 @@ class Chem
     public static readonly Structure ICE = new(new TerrainRule[,][] {
          { hydr, molc },
          { oxyg, hydr }, }, "ice");
+    public static readonly Structure CARBON_DIOXIDE_ICE = new(new TerrainRule[,][] {
+         { oxyg, carb, oxyg } }, "carbon-dioxide-ice");
+    public static readonly Structure NITROGEN_ICE = new(new TerrainRule[,][] {
+         { nitr },
+         { nitr }, }, "nitrogen-ice");
+    public static readonly Structure METHANE_ICE = new(new TerrainRule[,][] {
+         { hydr, null, hydr },
+         { null, carb, null },
+         { hydr, null, hydr } }, "methane-ice");
+    public static readonly Structure AMMONIA_ICE = new(new TerrainRule[,][] {
+         { hydr, null, hydr },
+         { null, nitr, null },
+         { null, hydr, null } }, "methane-ice");
     public static readonly Structure HYDROXIDE = new(new TerrainRule[,][] {
         { molc, molc, molc },
         { molc, hydr, molc },
