@@ -369,7 +369,9 @@ public partial class Terrain
         Hydrogen, Helium,
         Lithium, Beryllium, Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon,
         Sodium, Magnesium, Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
-        Iron,
+        Potassium, Calcium,
+        Titanium, Iron,
+
     }
 
     public enum QuarkColour

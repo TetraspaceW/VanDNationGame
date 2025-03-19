@@ -312,8 +312,26 @@ class TerrainGenerator
                         else
                         {
                             Fill(Tiles, new[] {
-                                new TerrainRule(Terrain.TerrainType.Mineral, true, 1, props: new Dictionary<PropKey, string> {
-                                    { PropKey.Mineral, Terrain.Mineral.Silica.ToString() }
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 80, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Anorthite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 10/3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Wallastonite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 10/3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Enstatite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 10/3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ferrosilite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 3/2, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Forsterite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 3/2, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Fayalite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 2.5, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ilmenite.ToString() }
                                 })
                             });
                         }
@@ -400,6 +418,48 @@ class TerrainGenerator
                                 break;
                             case Terrain.Mineral.Silica:
                                 Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Anorthite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ANORTHITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Wallastonite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.WOLLASTONITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Enstatite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ENSTATITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Ferrosilite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.FERROSILITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Forsterite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.FORSTERITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Fayalite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.FAYALITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Ilmenite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ILMENITE, 1) }
                                     , new[] {
                                     new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
                                 });

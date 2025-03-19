@@ -28,6 +28,7 @@ class AtomGenerator
             Terrain.AtomElement.Sulfur => 32.06,
             Terrain.AtomElement.Chlorine => 35.45,
             Terrain.AtomElement.Argon => 39.95,
+            Terrain.AtomElement.Titanium => 47.87,
             Terrain.AtomElement.Iron => 55.85,
             _ => 1.75,
         };

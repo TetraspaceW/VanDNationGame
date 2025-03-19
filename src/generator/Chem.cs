@@ -65,11 +65,20 @@ class Chem
     private static readonly TerrainRule[] phos = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
     })};
+    private static readonly TerrainRule[] magn = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Magnesium.ToString()}
+    })};
     private static readonly TerrainRule[] alum = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Aluminium.ToString()}
     })};
+    private static readonly TerrainRule[] calc = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Calcium.ToString()}
+    })};
     private static readonly TerrainRule[] iron = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()}
+    })};
+    private static readonly TerrainRule[] tita = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Titanium.ToString()}
     })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
     private static readonly TerrainRule[] elec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
@@ -152,6 +161,41 @@ class Chem
     public static readonly Structure SILICA = new(new TerrainRule[,][] {
         { silc, oxyg },
         { oxyg, molc }, }, "silica");
+    public static readonly Structure ANORTHITE = new(new TerrainRule[,][] {
+        { oxyg, null, oxyg },
+        { null, silc, alum },
+        { oxyg, null, oxyg },
+        { oxyg, alum, oxyg },
+        { null, silc, null },
+        { oxyg, calc, oxyg }, }, "anorthite");
+    public static readonly Structure WOLLASTONITE = new(new TerrainRule[,][] {
+        { null, null, oxyg },
+        { oxyg, silc, null },
+        { calc, oxyg, null }, }, "wollastonite");
+    public static readonly Structure ENSTATITE = new(new TerrainRule[,][] {
+        { oxyg, magn, oxyg },
+        { null, silc, null },
+        { null, oxyg, null }, }, "enstatite");
+    public static readonly Structure FERROSILITE = new(new TerrainRule[,][] {
+        { oxyg, iron, oxyg },
+        { null, silc, null },
+        { null, oxyg, null }, }, "ferrosilite");
+    public static readonly Structure FORSTERITE = new(new TerrainRule[,][] {
+        { null, magn, null },
+        { oxyg, null, oxyg },
+        { null, silc, null },
+        { oxyg, null, oxyg },
+        { null, magn, null }, }, "forsterite");
+
+    public static readonly Structure FAYALITE = new(new TerrainRule[,][] {
+        { oxyg, null, oxyg, iron },
+        { null, silc, null, null  },
+        { oxyg, null, oxyg, iron } }, "fayalite");
+
+    public static readonly Structure ILMENITE = new(new TerrainRule[,][] {
+        { null, null, oxyg },
+        { iron, tita, oxyg  },
+        { null, null, oxyg } }, "ilmenite");
     public static readonly Structure ADENINE = new(new TerrainRule[,][] {
         { hydr, null, null, null, hydr, null },
         { null, carb, nitr, null, nitr, hydr },
