@@ -42,7 +42,7 @@ public partial class Sidebar : CanvasLayer
 
 	public void SetAvailableBuildingsList(List<(BuildingTemplate, bool)> buildings)
 	{
-		foreach (BuildingButton button in availableBuildingsTable.GetChildren())
+		foreach (BuildingButton button in availableBuildingsTable.GetChildren().Cast<BuildingButton>())
 		{
 			availableBuildingsTable.RemoveChild(button);
 		}
@@ -61,7 +61,7 @@ public partial class Sidebar : CanvasLayer
 	public void SetSelectedBuilding(BuildingTemplate building)
 	{
 		selectedBuilding = building;
-		foreach (BuildingButton button in availableBuildingsTable.GetChildren())
+		foreach (BuildingButton button in availableBuildingsTable.GetChildren().Cast<BuildingButton>())
 		{
 			button.ButtonPressed = building != null && button.building.name == building.name;
 		}

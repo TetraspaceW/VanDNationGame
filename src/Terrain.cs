@@ -128,10 +128,8 @@ public partial class Terrain
                 return "biology/meat";
             case TerrainType.Cell:
                 return "biology/cell";
-            case TerrainType.SilicaMineral:
-                return "barren";
-            case TerrainType.IceMineral:
-                return "ice";
+            case TerrainType.Mineral:
+                return "minerals/" + props[PropKey.Mineral].ToLower();
             case TerrainType.Cytoplasm:
                 return "biomolecules/cytoplasm";
             case TerrainType.Vacuole:
@@ -305,9 +303,9 @@ public partial class Terrain
         // -18  1 cm across
         Insect,
         // -19  1 mm across
+        Mineral,
         // -20  100 um across
         Eukaryote,
-        SilicaMineral, IceMineral,
         // -21  10 um across
         Cell,
         // -22  1 um across
@@ -356,6 +354,16 @@ public partial class Terrain
         E, S0, S, SB, Irr
     }
 
+    public enum Mineral
+    {
+        Ice, // H2O
+        Silica, //SiO2
+        Anorthite,
+        Wallastonite, Enstatite, Ferrosilite,
+        Forsterite, Fayalite,
+        Ilmenite
+    }
+
     public enum AtomElement
     {
         Hydrogen, Helium,
@@ -396,6 +404,8 @@ public enum PropKey
     AtomElement, AtomIsIonized,
     // DNA
     Nucleobase, NucleicBackbone,
+    // Minerals
+    Mineral,
     // Lifeforms
     Habitat,
     // Terrestrial Planets

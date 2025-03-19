@@ -296,19 +296,25 @@ class TerrainGenerator
             case Terrain.TerrainType.BarrenTerrain:
                 switch (tile.scale)
                 {
-                    case -19:
+                    case -18:
                         SolarSystemGenerator.Hydrosphere barrenTerrainParentHydrosphereType = (SolarSystemGenerator.Hydrosphere)Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), terrain.props[PropKey.PlanetHydrosphereType]);
                         if (barrenTerrainParentHydrosphereType == SolarSystemGenerator.Hydrosphere.Crustal)
                         {
                             Fill(Tiles, new[] {
-                                new TerrainRule(Terrain.TerrainType.IceMineral, true, 1),
-                                new TerrainRule(Terrain.TerrainType.SilicaMineral, true, 1)
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 1, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ice.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 1, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Silica.ToString() }
+                                }),
                             });
                         }
                         else
                         {
                             Fill(Tiles, new[] {
-                                new TerrainRule(Terrain.TerrainType.SilicaMineral, true, 1)
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 1, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Silica.ToString() }
+                                })
                             });
                         }
                         break;
@@ -322,9 +328,11 @@ class TerrainGenerator
             case Terrain.TerrainType.VerdantTerrain:
                 switch (tile.scale)
                 {
-                    case -19:
+                    case -18:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.SilicaMineral, true, props: terrain.props)
+                            new TerrainRule(Terrain.TerrainType.Mineral, true, props: new Dictionary<PropKey, string> {
+                                { PropKey.Mineral, Terrain.Mineral.Silica.ToString() }
+                            })
                         });
                         break;
                     default:
@@ -337,9 +345,11 @@ class TerrainGenerator
             case Terrain.TerrainType.IceSheet:
                 switch (tile.scale)
                 {
-                    case -19:
+                    case -18:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.IceMineral, true, props: terrain.props)
+                            new TerrainRule(Terrain.TerrainType.Mineral, true, props: new Dictionary<PropKey, string> {
+                                { PropKey.Mineral, Terrain.Mineral.Ice.ToString() }
+                            })
                         });
                         break;
                     default:
@@ -375,34 +385,35 @@ class TerrainGenerator
                         break;
                 }
                 break;
-            case Terrain.TerrainType.SilicaMineral:
+            case Terrain.TerrainType.Mineral:
+                Terrain.Mineral mineralType = (Terrain.Mineral)Enum.Parse(typeof(Terrain.Mineral), terrain.props[PropKey.Mineral]);
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
-                            , new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        });
+                        switch (mineralType)
+                        {
+                            case Terrain.Mineral.Ice:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Silica:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            default:
+                                Fill(Tiles, new[] {
+                                    new TerrainRule(Terrain.TerrainType.Mineral, true, props: tile.terrain.props)
+                                });
+                                break;
+                        }
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.SilicaMineral, true, props: tile.terrain.props)
-                        });
-                        break;
-                }
-                break;
-            case Terrain.TerrainType.IceMineral:
-                switch (tile.scale)
-                {
-                    case -25:
-                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ICE, 1) }
-                            , new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        });
-                        break;
-                    default:
-                        Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.IceMineral, true, props: tile.terrain.props)
+                            new TerrainRule(Terrain.TerrainType.Mineral, true, props: tile.terrain.props)
                         });
                         break;
                 }
