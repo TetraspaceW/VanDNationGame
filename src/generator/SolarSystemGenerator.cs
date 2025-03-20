@@ -11,9 +11,11 @@ class SolarSystemGenerator : CelestialGenerator
     {
         // Object       | Size      | S     | Comparable map object
         // -------------+-----------+-------+----------------------
-        // M-Class      | 300 Mm    | -8×5  | 5 epiepiepistellar system tiles
-        // G-Class      | 1 Gm      | -7    | Epiepistellar system tile
-        // O-Class      | 10 Gm     | -6    | Epistellar system tile 
+        // n-Class      | 10 km     | -12   |
+        // D-Class      | 10 Mm     | -9    |
+        // M-Class      | 300 Mm    | -8×5  |
+        // G-Class      | 1 Gm      | -7    | 
+        // O-Class      | 10 Gm     | -6    | 
         //              | 100 Gm    | -5    | Inner system map tile
         // Supergiant   | 500 Gm    | -5×5  | 5 inner system tiles
 
@@ -107,16 +109,7 @@ class SolarSystemGenerator : CelestialGenerator
                 smallBodiesMaterial = Terrain.TerrainType.KuiperBeltBodies;
                 break;
             case Terrain.TerrainType.InnerSolarSystem:
-                centerPieceMaterial = Terrain.TerrainType.EpistellarSolarSystem;
-                break;
-            case Terrain.TerrainType.EpistellarSolarSystem:
-                centerPieceMaterial = Terrain.TerrainType.EpiepistellarSolarSystem;
-                break;
-            case Terrain.TerrainType.EpiepistellarSolarSystem:
-                centerPieceMaterial = Terrain.TerrainType.EpiepiepistellarSolarSystem;
-                break;
-            case Terrain.TerrainType.EpiepiepistellarSolarSystem:
-                centerPieceMaterial = Terrain.TerrainType.Star;
+                centerPieceMaterial = Terrain.TerrainType.InnerSolarSystem;
                 break;
             default:
                 throw new Exception();

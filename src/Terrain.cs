@@ -62,7 +62,6 @@ public partial class Terrain
             case TerrainType.SolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.OuterSolarSystem:
-            case TerrainType.InnerSolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToLower() + "_noletter";
             case TerrainType.FarfarfarSystemBody:
             case TerrainType.FarfarSystemBody:
@@ -89,9 +88,7 @@ public partial class Terrain
                 return planetFileName;
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
-            case TerrainType.EpistellarSolarSystem:
-            case TerrainType.EpiepistellarSolarSystem:
-            case TerrainType.EpiepiepistellarSolarSystem:
+            case TerrainType.InnerSolarSystem:
             case TerrainType.Star:
                 return "stars/star_" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.StellarTerrain:
@@ -277,12 +274,12 @@ public partial class Terrain
         // -4   1g km across / 6 AU
         InnerSolarSystem, OuterSystemBody, KuiperBeltBodies,
         // -5   100m km across / 0.6 AU
-        Star, InnerSystemBody, AsteroidBeltBodies, EpistellarSolarSystem,
+        Star, InnerSystemBody, AsteroidBeltBodies,
         // -6   10m km across
         // -7   1m km across / Earth SOI
-        OuterLunarSystem, EpiepistellarSolarSystem, StellarTerrain,
+        OuterLunarSystem, StellarTerrain,
         // -8   100k km across
-        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem,
+        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant,
         // -9   10k km across
         TerrestrialPlanet,
         GasGiantTerrain,
