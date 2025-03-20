@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 
 class Chem
@@ -99,6 +100,27 @@ class Chem
     private static readonly TerrainRule[] tita = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Titanium.ToString()}
     })};
+    private static readonly TerrainRule[] boro = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Boron.ToString()}
+    })};
+    private static readonly TerrainRule[] sodi = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Sodium.ToString()}
+    })};
+    private static readonly TerrainRule[] pota = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Potassium.ToString()}
+    })};
+    private static readonly TerrainRule[] stro = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Strontium.ToString()}
+    })};
+    private static readonly TerrainRule[] chlo = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Chlorine.ToString()}
+    })};
+    private static readonly TerrainRule[] brom = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Bromine.ToString()}
+    })};
+    private static readonly TerrainRule[] flur = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+        {PropKey.AtomElement, Terrain.AtomElement.Fluorine.ToString()}
+    })};
     private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
     private static readonly TerrainRule[] elec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
 
@@ -182,7 +204,67 @@ class Chem
     public static readonly Structure FREE_ELECTRON = new(new TerrainRule[,][] {
         { elec }
     }, "free_electron");
-
+    public static readonly Structure SODIUM = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, sodi, molc },
+        { null, molc, null }
+    }, "sodium");
+    public static readonly Structure MAGNESIUM = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, magn, molc },
+        { null, molc, null }
+    }, "magnesium");
+    public static readonly Structure CALCIUM = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, calc, molc },
+        { null, molc, null }
+    }, "calcium");
+    public static readonly Structure POTASSIUM = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, pota, molc },
+        { null, molc, null }
+    }, "potassium");
+    public static readonly Structure STRONTIUM = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, stro, molc },
+        { null, molc, null }
+    }, "strontium");
+    public static readonly Structure CHLORIDE = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, chlo, molc },
+        { null, molc, null }
+    }, "chloride");
+    public static readonly Structure SULFATE = new(new TerrainRule[,][] {
+        { null, molc, null, molc, null },
+        { molc, oxyg, molc, oxyg, molc },
+        { null, molc, sulf, molc, null },
+        { molc, oxyg, molc, oxyg, molc },
+        { null, molc, null, molc, null }
+    }, "sulfate");
+    public static readonly Structure BICARBONATE = new(new TerrainRule[,][] {
+        { null, molc, null, molc, null, null },
+        { molc, oxyg, molc, oxyg, molc, null },
+        { null, molc, carb, molc, hydr, molc },
+        { null, molc, oxyg, molc, molc, null },
+        { null, null, molc, null, null, null }
+    }, "bicarbonate");
+    public static readonly Structure BROMIDE = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, brom, molc },
+        { null, molc, null }
+    }, "bromide");
+    public static readonly Structure BORATE = new(new TerrainRule[,][] {
+        { null, molc, null, molc, null },
+        { molc, oxyg, molc, oxyg, molc },
+        { null, molc, boro, molc, null },
+        { null, molc, oxyg, molc, null },
+        { null, null, molc, null, null }
+    }, "borate");
+    public static readonly Structure FLUORIDE = new(new TerrainRule[,][] {
+        { null, molc, null },
+        { molc, flur, molc },
+        { null, molc, null }
+    }, "fluoride");
     public static readonly Structure WATER = new(new TerrainRule[,][] {
         { null, molc, null, null },
         { molc, hydr, molc, null },
@@ -222,20 +304,20 @@ class Chem
         { null, null, hydr, null, null }
     }, "tholin");
     public static readonly Structure HYDROXIDE = new(new TerrainRule[,][] {
-        { molc, molc, molc },
+        { null, molc, null },
         { molc, hydr, molc },
         { molc, oxyg, molc },
-        { molc, molc, molc },
+        { null, molc, null },
     }, "hydroxide");
     public static readonly Structure HYDRONIUM = new(new TerrainRule[,][] {
-        { null, molc, molc, molc, null },
-        { molc, molc, hydr, molc, molc },
+        { null, null, molc, null, null },
+        { null, molc, hydr, molc, null },
         { molc, hydr, oxyg, hydr, molc },
-        { molc, molc, molc, molc, molc },
+        { null, molc, molc, molc, null },
     }, "hydronium");
     public static readonly Structure SILICA = new(new TerrainRule[,][] {
         { silc, oxyg },
-        { oxyg, molc },
+        { oxyg, null },
     }, "silica");
     public static readonly Structure ANORTHITE = new(new TerrainRule[,][] {
         { oxyg, null, oxyg },

@@ -375,6 +375,8 @@ public partial class Terrain
         Sodium, Magnesium, Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
         Potassium, Calcium,
         Titanium, Iron,
+        Bromine,
+        Strontium,
 
     }
 

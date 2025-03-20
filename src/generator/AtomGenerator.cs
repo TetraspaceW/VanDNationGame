@@ -33,8 +33,12 @@ class AtomGenerator
             Terrain.AtomElement.Sulfur => 32.06,
             Terrain.AtomElement.Chlorine => 35.45,
             Terrain.AtomElement.Argon => 39.95,
+            Terrain.AtomElement.Potassium => 39.098,
+            Terrain.AtomElement.Calcium => 40.078,
             Terrain.AtomElement.Titanium => 47.87,
             Terrain.AtomElement.Iron => 55.85,
+            Terrain.AtomElement.Bromine => 79.904,
+            Terrain.AtomElement.Strontium => 87.62,
             _ => 1.75,
         };
         return massNumber;

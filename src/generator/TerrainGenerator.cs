@@ -894,10 +894,39 @@ class TerrainGenerator
 
     private TileModel[,] WaterFill(TileModel[,] tiles)
     {
-        return StructureFill(tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
-                            , 0.5, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        double H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
+        double O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
+        double Na = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sodium);
+        double Cl = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Chlorine);
+        double Mg = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium);
+        double Ca = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Calcium);
+        double K = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Potassium);
+        double Sr = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Strontium);
+        double S = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur);
+        double Br = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Bromine);
+        double B = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Boron);
+        double F = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Fluorine);
+        double C = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon);
+        return StructureFill(tiles,
+            Chem.WATER.RotateAll(1 / (H * 2 + O))
+            .Concat(Chem.HYDROXIDE.RotateAll(0.0000017 / (H + O)))
+            .Concat(Chem.HYDRONIUM.RotateAll(0.0000019 / (H * 3 + O)))
+            .Concat(Chem.SODIUM.RotateAll(10800e-6 / Na))
+            .Concat(Chem.MAGNESIUM.RotateAll(1290e-6 / Mg))
+            .Concat(Chem.CALCIUM.RotateAll(412e-6 / Ca))
+            .Concat(Chem.POTASSIUM.RotateAll(399e-6 / K))
+            .Concat(Chem.STRONTIUM.RotateAll(8e-6 / Sr))
+            .Concat(Chem.CHLORIDE.RotateAll(19400e-6 / Cl))
+            .Concat(Chem.SULFATE.RotateAll(2700e-6 / (S + O * 4)))
+            .Concat(Chem.BICARBONATE.RotateAll(145e-6 / (H + C + O * 3)))
+            .Concat(Chem.BROMIDE.RotateAll(67e-6 / Br))
+            .Concat(Chem.BORATE.RotateAll(26e-6 / (B + O * 3)))
+            .Concat(Chem.FLUORIDE.RotateAll(1.3e-6 / F))
+            .ToArray(),
+            0,
+            new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) },
+            new[] { Terrain.TerrainType.IntermolecularSpace }
+        );
     }
     private TileModel[,] StarFill(TileModel[,] tiles)
     {
