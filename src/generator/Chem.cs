@@ -115,6 +115,30 @@ class Chem
         { null, molc, null },
     }, "helium");
 
+    public static readonly Structure METHANE = new(new TerrainRule[,][] {
+        { null, molc, null, molc, null },
+        { molc, hydr, molc, hydr, molc },
+        { null, molc, carb, molc, null },
+        { molc, hydr, molc, hydr, molc },
+        { null, molc, null, molc, null }
+    }, "methane");
+
+    public static readonly Structure AMMONIA = new(new TerrainRule[,][] {
+        { null, molc, null, molc, null },
+        { molc, hydr, molc, hydr, molc },
+        { null, molc, nitr, molc, null },
+        { null, molc, hydr, molc, null },
+        { null, null, molc, null, null }
+    }, "ammonia");
+
+    public static readonly Structure ETHANE = new(new TerrainRule[,][] {
+        { null, null, molc, molc, null, null },
+        { null, molc, hydr, hydr, molc, null },
+        { molc, hydr, carb, carb, hydr, molc },
+        { null, molc, hydr, hydr, molc, null },
+        { null, null, molc, molc, null, null }
+    }, "ethane");
+
     public static readonly Structure HYDROGEN_IONIZED = new(new TerrainRule[,][] {
         { hion }
     }, "hydrogen_ionized");
@@ -160,105 +184,128 @@ class Chem
     }, "free_electron");
 
     public static readonly Structure WATER = new(new TerrainRule[,][] {
-        { molc, molc, molc, null },
-        { molc, hydr, molc, molc },
+        { null, molc, null, null },
+        { molc, hydr, molc, null },
         { molc, oxyg, hydr, molc },
-        { molc, molc, molc, molc }, }, "water");
+        { null, molc, molc, null },
+    }, "water");
     public static readonly Structure ICE = new(new TerrainRule[,][] {
-         { hydr, molc },
-         { oxyg, hydr }, }, "ice");
+        { hydr, null },
+        { oxyg, hydr },
+    }, "ice");
     public static readonly Structure CARBON_DIOXIDE_ICE = new(new TerrainRule[,][] {
-         { oxyg, carb, oxyg } }, "carbon-dioxide-ice");
+        { oxyg, carb, oxyg }
+    }, "carbon-dioxide-ice");
     public static readonly Structure NITROGEN_ICE = new(new TerrainRule[,][] {
-         { nitr, nitr } }, "nitrogen-ice");
+        { nitr, nitr }
+    }, "nitrogen-ice");
     public static readonly Structure METHANE_ICE = new(new TerrainRule[,][] {
-         { hydr, null, hydr },
-         { null, carb, null },
-         { hydr, null, hydr } }, "methane-ice");
+        { hydr, null, hydr },
+        { null, carb, null },
+        { hydr, null, hydr }
+    }, "methane-ice");
     public static readonly Structure AMMONIA_ICE = new(new TerrainRule[,][] {
-         { hydr, null, hydr },
-         { null, nitr, null },
-         { null, hydr, null } }, "ammonia-ice");
+        { hydr, null, hydr },
+        { null, nitr, null },
+        { null, hydr, null }
+    }, "ammonia-ice");
     public static readonly Structure ETHANE_ICE = new(new TerrainRule[,][] {
-         { null, hydr, hydr, null },
-         { hydr, carb, carb, hydr },
-         { null, hydr, hydr, null } }, "ethane-ice");
+        { null, hydr, hydr, null },
+        { hydr, carb, carb, hydr },
+        { null, hydr, hydr, null }
+    }, "ethane-ice");
     public static readonly Structure THOLIN = new(new TerrainRule[,][] {
-         { hydr, null, nitr, null, hydr },
-         { null, carb, null, carb, null },
-         { null, carb, null, carb, null },
-         { hydr, null, carb, null, hydr },
-         { null, null, hydr, null, null } }, "tholin");
+        { hydr, null, nitr, null, hydr },
+        { null, carb, null, carb, null },
+        { null, carb, null, carb, null },
+        { hydr, null, carb, null, hydr },
+        { null, null, hydr, null, null }
+    }, "tholin");
     public static readonly Structure HYDROXIDE = new(new TerrainRule[,][] {
         { molc, molc, molc },
         { molc, hydr, molc },
         { molc, oxyg, molc },
-        { molc, molc, molc }, }, "hydroxide");
+        { molc, molc, molc },
+    }, "hydroxide");
     public static readonly Structure HYDRONIUM = new(new TerrainRule[,][] {
         { null, molc, molc, molc, null },
         { molc, molc, hydr, molc, molc },
         { molc, hydr, oxyg, hydr, molc },
-        { molc, molc, molc, molc, molc }, }, "hydronium");
+        { molc, molc, molc, molc, molc },
+    }, "hydronium");
     public static readonly Structure SILICA = new(new TerrainRule[,][] {
         { silc, oxyg },
-        { oxyg, molc }, }, "silica");
+        { oxyg, molc },
+    }, "silica");
     public static readonly Structure ANORTHITE = new(new TerrainRule[,][] {
         { oxyg, null, oxyg },
         { null, silc, alum },
         { oxyg, null, oxyg },
         { oxyg, alum, oxyg },
         { null, silc, null },
-        { oxyg, calc, oxyg }, }, "anorthite");
+        { oxyg, calc, oxyg },
+    }, "anorthite");
     public static readonly Structure WOLLASTONITE = new(new TerrainRule[,][] {
         { null, null, oxyg },
         { oxyg, silc, null },
-        { calc, oxyg, null }, }, "wollastonite");
+        { calc, oxyg, null },
+    }, "wollastonite");
     public static readonly Structure ENSTATITE = new(new TerrainRule[,][] {
         { oxyg, magn, oxyg },
         { null, silc, null },
-        { null, oxyg, null }, }, "enstatite");
+        { null, oxyg, null },
+    }, "enstatite");
     public static readonly Structure FERROSILITE = new(new TerrainRule[,][] {
         { oxyg, iron, oxyg },
         { null, silc, null },
-        { null, oxyg, null }, }, "ferrosilite");
+        { null, oxyg, null },
+    }, "ferrosilite");
     public static readonly Structure FORSTERITE = new(new TerrainRule[,][] {
         { null, magn, null },
         { oxyg, null, oxyg },
         { null, silc, null },
         { oxyg, null, oxyg },
-        { null, magn, null }, }, "forsterite");
+        { null, magn, null },
+    }, "forsterite");
 
     public static readonly Structure FAYALITE = new(new TerrainRule[,][] {
         { oxyg, null, oxyg, iron },
         { null, silc, null, null  },
-        { oxyg, null, oxyg, iron } }, "fayalite");
+        { oxyg, null, oxyg, iron }
+    }, "fayalite");
 
     public static readonly Structure ILMENITE = new(new TerrainRule[,][] {
         { null, null, oxyg },
-        { iron, tita, oxyg  },
-        { null, null, oxyg } }, "ilmenite");
+        { iron, tita, oxyg },
+        { null, null, oxyg }
+    }, "ilmenite");
     public static readonly Structure KAOLINITE = new(new TerrainRule[,][] {
         { hydr, oxyg, alum, oxyg, hydr },
         { null, hydr, oxyg, null, null },
         { oxyg, null, oxyg, null, oxyg },
         { null, silc, null, silc, null },
         { null, oxyg, null, oxyg, null },
-        { hydr, oxyg, alum, null, null } }, "kaolinite");
+        { hydr, oxyg, alum, null, null }
+    }, "kaolinite");
     public static readonly Structure TROILITE = new(new TerrainRule[,][] {
-        { sulf, iron } }, "troilite");
+        { sulf, iron }
+    }, "troilite");
     public static readonly Structure MAGNETITE = new(new TerrainRule[,][] {
         { oxyg, iron, oxyg, iron },
         { iron, oxyg, null, null },
-        { oxyg, null, null, null }}, "magnetite");
+        { oxyg, null, null, null }
+    }, "magnetite");
     public static readonly Structure WUESTITE = new(new TerrainRule[,][] {
-        { oxyg, iron } }, "wuestite");
+        { oxyg, iron }
+    }, "wuestite");
     public static readonly Structure ADENINE = new(new TerrainRule[,][] {
         { hydr, null, null, null, hydr, null },
         { null, carb, nitr, null, nitr, hydr },
         { null, nitr, null, carb, carb, null }, //attatchment point 1,2
         { null, null, carb, null, null, nitr },
         { null, null, null, nitr, carb, null },
-        { null, null, null, null, hydr, null } }, "adenine");
+        { null, null, null, null, hydr, null }
+    }, "adenine");
 
     public static readonly Structure GUANINE = new(new TerrainRule[,][] {
         { hydr, null, null, null, null, null },
@@ -267,21 +314,24 @@ class Chem
         { null, null, carb, null, nitr, hydr },
         { null, null, null, nitr, carb, null },
         { null, null, null, null, nitr, hydr },
-        { null, null, null, null, hydr, null } }, "guanine");
+        { null, null, null, null, hydr, null }
+    }, "guanine");
     public static readonly Structure THYMINE = new(new TerrainRule[,][] {
         { null, hydr, hydr, null, null},
         { null, hydr, carb, null, oxyg},
         { hydr, null, carb, carb, null},
         { null, carb, null, nitr, hydr},
         { null, null, nitr, carb, null}, //attatchment point 2,4
-        { null, null, null, oxyg, null} }, "thymine");
+        { null, null, null, oxyg, null}
+    }, "thymine");
     public static readonly Structure CYTOSINE = new(new TerrainRule[,][] {
         { null, null, null, hydr, null},
         { null, hydr, null, nitr, hydr},
         { hydr, null, carb, carb, null},
         { null, carb, null, null, nitr},
         { null, null, nitr, carb, null}, //attatchment point 2,4
-        { null, null, null, null, oxyg} }, "cytosine");
+        { null, null, null, null, oxyg}
+    }, "cytosine");
 
     public static readonly Structure DNA_BACKBONE = new(new TerrainRule[,][] {
         { null, oxyg, null, null, null, null },
@@ -293,7 +343,8 @@ class Chem
         { null, oxyg, null, carb, hydr, hydr },
         { oxyg, phos, oxyg, null, hydr, null },
         { null, oxyg, null, null, null, null },
-        { null, carb, null, null, null, null } }, "dna_backbone");
+        { null, carb, null, null, null, null }
+    }, "dna_backbone");
 
     public static readonly Structure RNA_BACKBONE = new(new TerrainRule[,][] {
         { null, oxyg, null, null, null, null },
@@ -305,5 +356,6 @@ class Chem
         { null, oxyg, null, carb, hydr, hydr },
         { oxyg, phos, oxyg, null, oxyg, hydr },
         { null, oxyg, null, null, null, null },
-        { null, carb, null, null, null, null } }, "rna_backbone");
+        { null, carb, null, null, null, null }
+    }, "rna_backbone");
 }

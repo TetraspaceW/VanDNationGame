@@ -284,7 +284,7 @@ class TerrainGenerator
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = NonMetalFill(Tiles);
+                        Tiles = GasGiantFill(Tiles);
                         break;
                     default:
                         Fill(Tiles, new[] {
@@ -930,12 +930,26 @@ class TerrainGenerator
             }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }
 
-    private TileModel[,] NonMetalFill(TileModel[,] tiles)
+    private TileModel[,] GasGiantFill(TileModel[,] tiles)
     {
-        return StructureFill(tiles, Chem.HYDROGEN.RotateAll(3).Concat(Chem.HELIUM.RotateAll(0.25)).ToArray()
-                            , 0, new[] {
-                                new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        double H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
+        double He = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium);
+        double C = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon);
+        double N = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen);
+        double O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
+
+        return StructureFill(tiles,
+            Chem.HYDROGEN.RotateAll(0.898 / H * 2)
+                .Concat(Chem.HELIUM.RotateAll(0.102 / He))
+                .Concat(Chem.METHANE.RotateAll(300e-6 / (C + H * 4)))
+                .Concat(Chem.AMMONIA.RotateAll(260e-6 / (N + H * 3)))
+                .Concat(Chem.ETHANE.RotateAll(5.8e-6 / (C * 2 + H * 6)))
+                .Concat(Chem.WATER.RotateAll(4e-6 / (H * 2 + O)))
+                .ToArray(),
+            0,
+            new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) },
+            new[] { Terrain.TerrainType.IntermolecularSpace }
+        );
     }
 
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
