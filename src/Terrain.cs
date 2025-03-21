@@ -93,6 +93,8 @@ public partial class Terrain
                 return "stars/star_" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.StellarTerrain:
                 return "stars/starstuff";
+            case TerrainType.WhiteDwarfTerrain:
+                return "stars/starstuff_d";
             case TerrainType.VerdantTerrain:
                 return "land";
             case TerrainType.Ocean:
@@ -165,6 +167,8 @@ public partial class Terrain
                 return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_turn_outer" + props[PropKey.Rotation].ToLower();
             case TerrainType.IntermolecularFluid:
                 return "biomolecules/intermolecular_fluid";
+            case TerrainType.ElectronDegenerateMatter:
+                return "stars/starstuff_d";
             case TerrainType.Atom:
                 return "atom/" + props[PropKey.AtomElement].ToLower();
             case TerrainType.ElectronCloud:
@@ -285,9 +289,11 @@ public partial class Terrain
         GasGiantTerrain,
         // -10  1k km across
         BarrenTerrain, VerdantTerrain, Ocean, IceSheet,
+        WhiteDwarfTerrain,
         // -11  100 km across
         // -12  10 km across
         // -13  1 km across
+        NeutronStarTerrain,
         // -14  100 m across
         // -15  10 m across
         Dinosaur, Cetacean,
@@ -319,7 +325,7 @@ public partial class Terrain
         // -26  100 pm across / 1 angstrom
         Atom, IntermolecularSpace, FreeElectron,
         // -27  10 pm across
-        ElectronCloud,
+        ElectronCloud, ElectronDegenerateMatter,
         // -28  1 pm across
         // -29  100 fm across
         // -30  10 fm across

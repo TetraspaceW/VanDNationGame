@@ -11,13 +11,14 @@ class SolarSystemGenerator : CelestialGenerator
     {
         // Object       | Size      | S     | Comparable map object
         // -------------+-----------+-------+----------------------
+        // Ω-class      | 3 km      | -12.5 |
         // n-Class      | 10 km     | -12   |
         // D-Class      | 10 Mm     | -9    |
-        // M-Class      | 300 Mm    | -8×5  |
+        // M-Class      | 300 Mm    | -7.5  |
         // G-Class      | 1 Gm      | -7    | 
         // O-Class      | 10 Gm     | -6    | 
         //              | 100 Gm    | -5    | Inner system map tile
-        // Supergiant   | 500 Gm    | -5×5  | 5 inner system tiles
+        // Supergiant   | 500 Gm    | -4.5  | 5 inner system tiles
 
         this.tile = tile;
         this.spectralClass = spectralClass;
@@ -138,7 +139,7 @@ class SolarSystemGenerator : CelestialGenerator
         TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
 
         TerrainGenRule.AddCircle(parent, Tiles, new[] {
-            new TerrainRule(Terrain.TerrainType.StellarTerrain, true, props: new Dictionary<PropKey, string>() {
+            new TerrainRule(star.spectralClass == SpectralClass.D ? Terrain.TerrainType.WhiteDwarfTerrain : Terrain.TerrainType.StellarTerrain, true, props: new Dictionary<PropKey, string>() {
                 {PropKey.SpectralClass, spectralClass.ToString()}
             })
         }, center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
@@ -262,17 +263,17 @@ class SolarSystemGenerator : CelestialGenerator
     {
         return spectralClass switch
         {
-            SpectralClass.O => new Star(R: 10, L: 100000.0, M: 50.0, age: 0.005),
-            SpectralClass.B => new Star(R: 5, L: 1000.0, M: 10.0, age: 0.05),
-            SpectralClass.A => new Star(R: 1.7, L: 20.0, M: 2.0, age: 1),
-            SpectralClass.F => new Star(R: 1.3, L: 4.0, M: 1.5, age: 2),
-            SpectralClass.G => new Star(R: 1, L: 1.0, M: 1.0, age: 5),
-            SpectralClass.K => new Star(R: 0.8, L: 0.20, M: 0.7, age: 5),
-            SpectralClass.M => new Star(R: 0.3, L: 0.01, M: 0.2, age: 5),
-            SpectralClass.D => new Star(R: 0.01, L: 0.01, M: 1.0, age: 5),
-            SpectralClass.MIII => new Star(R: 50, L: 1000, M: 1.0, age: 10),
-            SpectralClass.KI => new Star(R: 500, L: 30000, M: 10.0, age: 1),
-            _ => new Star(R: 1, L: 1, M: 1, age: 5),
+            SpectralClass.O => new Star(R: 10, L: 100000.0, M: 50.0, age: 0.005, spectralClass: SpectralClass.O),
+            SpectralClass.B => new Star(R: 5, L: 1000.0, M: 10.0, age: 0.05, spectralClass: SpectralClass.B),
+            SpectralClass.A => new Star(R: 1.7, L: 20.0, M: 2.0, age: 1, spectralClass: SpectralClass.A),
+            SpectralClass.F => new Star(R: 1.3, L: 4.0, M: 1.5, age: 2, spectralClass: SpectralClass.F),
+            SpectralClass.G => new Star(R: 1, L: 1.0, M: 1.0, age: 5, spectralClass: SpectralClass.G),
+            SpectralClass.K => new Star(R: 0.8, L: 0.20, M: 0.7, age: 5, spectralClass: SpectralClass.K),
+            SpectralClass.M => new Star(R: 0.3, L: 0.01, M: 0.2, age: 5, spectralClass: SpectralClass.M),
+            SpectralClass.D => new Star(R: 0.01, L: 0.01, M: 1.0, age: 5, spectralClass: SpectralClass.D),
+            SpectralClass.MIII => new Star(R: 50, L: 1000, M: 1.0, age: 10, spectralClass: SpectralClass.M),
+            SpectralClass.KI => new Star(R: 500, L: 30000, M: 10.0, age: 1, spectralClass: SpectralClass.K),
+            _ => new Star(R: 1, L: 1, M: 1, age: 5, spectralClass: SpectralClass.G),
         };
     }
 
@@ -438,8 +439,8 @@ class SolarSystemGenerator : CelestialGenerator
 
             orbitalPeriod = Math.Sqrt(Math.Pow(distance, 3) / star.mass);
 
-            var vaporised = R <= Math.Sqrt(star.luminosity) * 0.025;
-            inner = R <= Math.Sqrt(star.luminosity) * 4;
+            var vaporised = R <= Math.Sqrt(star.luminosity) * 0.025 || star.spectralClass == SpectralClass.D && R <= Math.Sqrt(1000) * 0.025;
+            inner = R <= Math.Sqrt(star.luminosity) * 4 || star.spectralClass == SpectralClass.D && R <= 4;
 
             var orbitRoll = RND.d(95);
             var T = 255.0 / Math.Sqrt(distance / Math.Sqrt(star.luminosity));
@@ -814,16 +815,18 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Star
     {
+        public SpectralClass spectralClass;
         public double radius;
         public double luminosity;
         public double mass;
         public int age;
         public int abundance;
-        public Star(double R, double L, double M, double age)
+        public Star(double R, double L, double M, double age, SpectralClass spectralClass)
         {
             radius = R;
             luminosity = L;
             mass = M;
+            this.spectralClass = spectralClass;
             this.age = (int)age;
 
             var abundanceRoll = RND.d(10, N: 2) + this.age;

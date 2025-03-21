@@ -168,7 +168,7 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 80, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.M.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, weight: 5, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 5, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.D.ToString()}
                     }),
                     new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 1895)
@@ -272,6 +272,21 @@ class TerrainGenerator
                 {
                     case -25:
                         Tiles = StarFill(Tiles);
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(terrain.terrainType, true)
+                        });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.WhiteDwarfTerrain:
+                switch (tile.scale)
+                {
+                    case -26:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.ElectronDegenerateMatter, true)
+                        });
                         break;
                     default:
                         Fill(Tiles, new[] {
@@ -724,12 +739,26 @@ class TerrainGenerator
                     _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
                 }
                 break;
+            case Terrain.TerrainType.ElectronDegenerateMatter:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.ElectronCloud, false, 8),
+                    new TerrainRule(Terrain.TerrainType.Nucleus, true, 12.0 / (12.0 + 16.0), new Dictionary<PropKey, string> {
+                        { PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString() },
+                        { PropKey.AtomIsIonized, true.ToString() }
+                    }),
+                    new TerrainRule(Terrain.TerrainType.Nucleus, true, 16.0 / (12.0 + 16.0), new Dictionary<PropKey, string> {
+                        { PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString() },
+                        { PropKey.AtomIsIonized, true.ToString() }
+                    }),
+                });
+                break;
             case Terrain.TerrainType.FreeElectron:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
                 _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
                 break;
 
             case Terrain.TerrainType.Nucleus:
+                // TODO: fix this garbage
                 bool parentIsIonized = terrain.props.ContainsKey(PropKey.AtomIsIonized) &&
                     bool.Parse(terrain.props[PropKey.AtomIsIonized]);
 
