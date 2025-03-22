@@ -95,6 +95,8 @@ public partial class Terrain
                 return "stars/starstuff";
             case TerrainType.WhiteDwarfTerrain:
                 return "stars/starstuff_d";
+            case TerrainType.NeutronStarTerrain:
+                return "stars/starstuff_n";
             case TerrainType.VerdantTerrain:
                 return "land";
             case TerrainType.Ocean:
@@ -175,6 +177,8 @@ public partial class Terrain
                 return "atom/electron_cloud";
             case TerrainType.FreeElectron:
                 return "atom/free_electron";
+            case TerrainType.NeutronDegenerateMatter:
+                return "stars/starstuff_n";
             case TerrainType.Nucleus:
                 return "atom/nucleus";
             case TerrainType.Proton:
@@ -328,6 +332,7 @@ public partial class Terrain
         ElectronCloud, ElectronDegenerateMatter,
         // -28  1 pm across
         // -29  100 fm across
+        NeutronDegenerateMatter,
         // -30  10 fm across
         Nucleus,
         // -31  1 fm across
@@ -348,7 +353,8 @@ public partial class Terrain
     }
     public enum StarSpectralClass
     {
-        O, B, A, F, G, K, M, D,
+        O, B, A, F, G, K, M,
+        D, n,
         MIII, KI
     }
 

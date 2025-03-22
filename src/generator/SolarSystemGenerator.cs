@@ -25,7 +25,11 @@ class SolarSystemGenerator : CelestialGenerator
         star = StarData(spectralClass);
         int orbitsTableRoll = RND.d(10) + ((spectralClass == SpectralClass.K) ? 1 : 0) + ((spectralClass == SpectralClass.M) ? 3 : 0);
         int numOrbits = 0;
-        if (orbitsTableRoll <= 1)
+        if (star.spectralClass == SpectralClass.n)
+        {
+            numOrbits = 0;
+        }
+        else if (orbitsTableRoll <= 1)
         {
             numOrbits = RND.d(10) + 10;
         }
@@ -116,6 +120,14 @@ class SolarSystemGenerator : CelestialGenerator
                 throw new Exception();
         }
 
+        switch (star.spectralClass)
+        {
+            case SpectralClass.n:
+                centerPieceMaterial = Terrain.TerrainType.OuterSolarSystem;
+                smallBodiesMaterial = Terrain.TerrainType.SystemOrbit;
+                break;
+        }
+
         if (centralBodyRadius > innerRadiusAU)
         {
             parent.SetTerrainType(Terrain.TerrainType.Star);
@@ -130,6 +142,9 @@ class SolarSystemGenerator : CelestialGenerator
 
     TileModel[,] GenerateEpiSystem(TileModel parent, Terrain.TerrainType systemArea, Terrain.TerrainType fillMaterial, Terrain.TerrainType smallBodiesMaterial, double stellarRadius, double innerRadiusAU)
     {
+        Terrain.TerrainType starTerrain = star.spectralClass == SpectralClass.D ? Terrain.TerrainType.WhiteDwarfTerrain
+            : star.spectralClass == SpectralClass.n ? Terrain.TerrainType.NeutronStarTerrain
+            : Terrain.TerrainType.StellarTerrain;
         double outermostPlanetDistance = OutermostPlanetDistance();
 
         var Tiles = new TileModel[10, 10];
@@ -139,8 +154,8 @@ class SolarSystemGenerator : CelestialGenerator
         TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
 
         TerrainGenRule.AddCircle(parent, Tiles, new[] {
-            new TerrainRule(star.spectralClass == SpectralClass.D ? Terrain.TerrainType.WhiteDwarfTerrain : Terrain.TerrainType.StellarTerrain, true, props: new Dictionary<PropKey, string>() {
-                {PropKey.SpectralClass, spectralClass.ToString()}
+            new TerrainRule(starTerrain, true, props: new Dictionary<PropKey, string>() {
+                { PropKey.SpectralClass, spectralClass.ToString() }
             })
         }, center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
 
@@ -162,12 +177,12 @@ class SolarSystemGenerator : CelestialGenerator
         // add the central tile of the solar system containing the next step in
         var center = TerrainGenRule.AddCenter(parent, Tiles, new[] {
             new TerrainRule(centerPieceMaterial, centerIsZoomable, props: new Dictionary<PropKey, string>() {
-                {PropKey.SpectralClass, spectralClass.ToString()}
+                { PropKey.SpectralClass, spectralClass.ToString() }
             })
         });
 
         // if it's the whole solar system view, add an Oort cloud with r = 5 tiles / 0.5 ly
-        if (isWholeSystem)
+        if (isWholeSystem && spectralClass != SpectralClass.n)
         {
             TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(Terrain.TerrainType.OortCloudBodies) }, center, 5, true, center);
         }
@@ -271,6 +286,7 @@ class SolarSystemGenerator : CelestialGenerator
             SpectralClass.K => new Star(R: 0.8, L: 0.20, M: 0.7, age: 5, spectralClass: SpectralClass.K),
             SpectralClass.M => new Star(R: 0.3, L: 0.01, M: 0.2, age: 5, spectralClass: SpectralClass.M),
             SpectralClass.D => new Star(R: 0.01, L: 0.01, M: 1.0, age: 5, spectralClass: SpectralClass.D),
+            SpectralClass.n => new Star(R: 0.00001, L: 0.000000000004, M: 1.4, age: 5, spectralClass: SpectralClass.n),
             SpectralClass.MIII => new Star(R: 50, L: 1000, M: 1.0, age: 10, spectralClass: SpectralClass.M),
             SpectralClass.KI => new Star(R: 500, L: 30000, M: 10.0, age: 1, spectralClass: SpectralClass.K),
             _ => new Star(R: 1, L: 1, M: 1, age: 5, spectralClass: SpectralClass.G),
@@ -294,7 +310,8 @@ class SolarSystemGenerator : CelestialGenerator
 
     public enum SpectralClass
     {
-        O, B, A, F, G, K, M, D,
+        O, B, A, F, G, K, M,
+        D, n,
         MIII, KI
     }
 
