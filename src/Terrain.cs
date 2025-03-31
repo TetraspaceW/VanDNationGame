@@ -293,6 +293,7 @@ public partial class Terrain
         GasGiantTerrain,
         // -10  1k km across
         BarrenTerrain, VerdantTerrain, Ocean, IceSheet,
+        JungleTerrain, DesertTerrain, TaigaTerrain, ForestTerrain,
         WhiteDwarfTerrain,
         // -11  100 km across
         // -12  10 km across

@@ -1071,6 +1071,101 @@ class TerrainGenerator
             };
             switch (terrain.terrainType)
             {
+                case Terrain.TerrainType.DesertTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1 * 0.2, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1 * 0.2, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 0.2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.JungleTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1 * 2, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.TaigaTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15 * 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.ForestTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1 * 2, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
                 case Terrain.TerrainType.VerdantTerrain:
                     switch (tile.scale)
                     {

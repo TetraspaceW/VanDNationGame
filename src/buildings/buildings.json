@@ -1,103 +1,78 @@
 [
     {
-        "name": "Oil Well",
-        "image": "mine",
+        "name": "Urban Center",
+        "image": "urban",
         "size": -10,
         "terrainTypes": [
             "VerdantTerrain"
         ],
-        "technology": "Electricity",
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "extraction": {
-            "resource": "Energy",
-            "rate": 2
-        },
         "transport": {
             "range": -9,
-            "amount": 2,
-            "resources": [
-                "Energy"
-            ]
-        }
-    },
-    {
-        "name": "Renewable Power Plant",
-        "image": "mine",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "technology": "Computing",
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "extraction": {
-            "resource": "Energy",
-            "rate": 2
-        },
-        "transport": {
-            "range": -9,
-            "amount": 2,
-            "resources": [
-                "Energy"
-            ]
-        }
-    },
-    {
-        "name": "Fission Power Plant",
-        "image": "mine",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "technology": "Nuclear Fission",
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "extraction": {
-            "resource": "Energy",
-            "rate": 3
-        },
-        "transport": {
-            "range": -9,
-            "amount": 3,
-            "resources": [
-                "Energy"
-            ]
-        }
-    },
-    {
-        "name": "Airport",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "technology": "Globalisation",
-        "transport": {
-            "range": -9,
-            "amount": 100,
+            "amount": 1,
             "resources": [
                 "Metal",
-                "Electronics",
-                "Metamaterials"
+                "Metamaterials",
+                "Food",
+                "Goods"
             ]
         },
-        "research": {
-            "research": "Postindustrial",
-            "rate": 1
+        "cost": {
+            "resource": "Metal",
+            "amount": 0.6
+        },
+        "maintenance": {
+            "resource": "Food",
+            "amount": 0.017
+        }
+    },
+    {
+        "name": "Agricultural Heartland",
+        "image": "agriculture",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 0.3
+        },
+        "extraction": {
+            "resource": "Food",
+            "rate": 0.017
+        }
+    },
+    {
+        "name": "Resource Extraction",
+        "image": "resource",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 0.25
+        },
+        "extraction": {
+            "resource": "Metal",
+            "rate": 0.015
+        }
+    },
+    {
+        "name": "Industrial Hub",
+        "image": "industrial",
+        "size": -10,
+        "terrainTypes": [
+            "VerdantTerrain"
+        ],
+        "cost": {
+            "resource": "Metal",
+            "amount": 0.5
+        },
+        "process": {
+            "input": "Metal",
+            "output": "Goods",
+            "amount": 4.5,
+            "rate": 0.01
         }
     },
     {
@@ -108,11 +83,7 @@
         ],
         "cost": {
             "resource": "Metal",
-            "amount": 150
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 1.5
+            "amount": 3
         },
         "technology": "Satellites",
         "transport": {
@@ -120,8 +91,9 @@
             "amount": 10,
             "resources": [
                 "Metal",
-                "Electronics",
-                "Metamaterials"
+                "Metamaterials",
+                "Food",
+                "Goods"
             ]
         }
     },
@@ -137,238 +109,12 @@
         },
         "technology": "Satellites",
         "maintenance": {
-            "resource": "Electronics",
+            "resource": "Metal",
             "amount": 0.1
         },
         "research": {
             "research": "Orbital",
             "rate": 1
-        }
-    },
-    {
-        "name": "Space Elevator",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain",
-            "BarrenTerrain",
-            "IceSheet",
-            "Ocean"
-        ],
-        "cost": {
-            "resource": "Metamaterials",
-            "amount": 150
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 1.5
-        },
-        "technology": "Space Elevator",
-        "transport": {
-            "range": -3,
-            "amount": 100,
-            "resources": [
-                "Metal",
-                "Electronics",
-                "Metamaterials"
-            ]
-        }
-    },
-    {
-        "name": "Mine",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "technology": "Combustion",
-        "extraction": {
-            "resource": "Metal",
-            "rate": 1.5
-        }
-    },
-    {
-        "name": "Electronics Factory",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "technology": "Transistors",
-        "process": {
-            "input": "Metal",
-            "output": "Electronics",
-            "amount": 1,
-            "rate": 1
-        }
-    },
-    {
-        "name": "Small Mine",
-        "image": "mine",
-        "size": -11,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 0.15
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.0015
-        },
-        "technology": "Combustion",
-        "extraction": {
-            "resource": "Metal",
-            "rate": 0.015
-        }
-    },
-    {
-        "name": "Nanofactory",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain",
-            "Ocean"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 150
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 1.5
-        },
-        "technology": "Nanoassembly",
-        "process": {
-            "input": "Metal",
-            "output": "Metamaterials",
-            "amount": 0.1,
-            "rate": 15
-        }
-    },
-    {
-        "name": "Inner System Probe",
-        "size": -5,
-        "terrainTypes": [
-            "InnerSolarSystem"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 1
-        },
-        "technology": "Satellites",
-        "research": {
-            "research": "Astronomical",
-            "rate": 1
-        }
-    },
-    {
-        "name": "Outer System Probe",
-        "size": -4,
-        "terrainTypes": [
-            "OuterSolarSystem"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 1
-        },
-        "technology": "Satellites",
-        "research": {
-            "research": "Astronomical",
-            "rate": 1
-        }
-    },
-    {
-        "name": "Space Station",
-        "size": -9,
-        "terrainTypes": [
-            "LunarOrbit"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "technology": "Satellites",
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "research": {
-            "research": "Space Habitation",
-            "rate": 1
-        }
-    },
-    {
-        "name": "Space Telescope",
-        "size": -9,
-        "terrainTypes": [
-            "LunarOrbit"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "technology": "Satellites",
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "research": {
-            "research": "Astronomical",
-            "rate": 1
-        }
-    },
-    {
-        "name": "Lunar Base",
-        "size": -10,
-        "terrainTypes": [
-            "BarrenTerrain"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 15
-        },
-        "technology": "Satellites",
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "research": {
-            "research": "Planetary Habitation",
-            "rate": 1
-        }
-    },
-    {
-        "name": "Automated Mine",
-        "size": -10,
-        "terrainTypes": [
-            "VerdantTerrain"
-        ],
-        "cost": {
-            "resource": "Metal",
-            "amount": 150
-        },
-        "maintenance": {
-            "resource": "Energy",
-            "amount": 0.15
-        },
-        "technology": "Artificial Intelligence",
-        "extraction": {
-            "resource": "Metal",
-            "rate": 15
         }
     }
 ]
