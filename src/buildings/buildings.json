@@ -23,7 +23,8 @@
         "maintenance": {
             "resource": "Food",
             "amount": 0.017
-        }
+        },
+        "technology": "Globalisation"
     },
     {
         "name": "Agricultural Heartland",
@@ -39,7 +40,8 @@
         "extraction": {
             "resource": "Food",
             "rate": 0.017
-        }
+        },
+        "technology": "Globalisation"
     },
     {
         "name": "Resource Extraction",
@@ -55,7 +57,8 @@
         "extraction": {
             "resource": "Metal",
             "rate": 0.015
-        }
+        },
+        "technology": "Globalisation"
     },
     {
         "name": "Industrial Hub",
@@ -73,7 +76,8 @@
             "output": "Goods",
             "amount": 4.5,
             "rate": 0.01
-        }
+        },
+        "technology": "Globalisation"
     },
     {
         "name": "Spaceport",
