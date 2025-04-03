@@ -21,7 +21,13 @@ public partial class MapTileset
 			var s = new TileSetAtlasSource();
 			s.Texture = GD.Load<Texture2D>("res://assets/" + image + ".png");
 			s.TextureRegionSize = new Vector2I(64, 64);
-			s.CreateTile(Vector2I.Zero, new Vector2I(1, 1));
+			for (int i = 0; i * 64 < s.Texture.GetWidth(); i++)
+			{
+				for (int j = 0; j * 64 < s.Texture.GetWidth(); j++)
+				{
+					s.CreateTile(new Vector2I(i, j), new Vector2I(1, 1));
+				}
+			}
 			s.ResourceName = image.ToLower();
 			newTileset.AddSource(s, -1);
 			//var id = newTileset.GetLastUnusedTileId();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System;
+using Godot;
 public partial class Terrain
 {
     public TerrainType terrainType;
@@ -145,13 +146,10 @@ public partial class Terrain
             case TerrainType.Euchromatin:
                 return "biomolecules/chromatin_chain";
             case TerrainType.Nucleotide:
-                return "biomolecules/nucleotides/" + props[PropKey.Nucleobase].ToLower() + "_" + props[PropKey.NucleicBackbone].ToLower() + props[PropKey.Rotation].ToLower();
             case TerrainType.NucleotideBlank:
-                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_blank" + props[PropKey.Rotation].ToLower();
             case TerrainType.NucleotideTurnInner:
-                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_turn_inner" + props[PropKey.Rotation].ToLower();
             case TerrainType.NucleotideTurnOuter:
-                return "biomolecules/nucleotides/" + props[PropKey.NucleicBackbone].ToLower() + "_turn_outer" + props[PropKey.Rotation].ToLower();
+                return "biomolecules/nucleotides/nucleic_acid";
             case TerrainType.IntermolecularFluid:
                 return "biomolecules/intermolecular_fluid";
             case TerrainType.Atom:
@@ -172,6 +170,75 @@ public partial class Terrain
                 return "atom/quark_" + props[PropKey.QuarkColour].ToLower() + "_" + props[PropKey.QuarkFlavour].ToLower();
             default:
                 return null;
+        }
+    }
+
+    public Vector2I atlasCoordsForTileType()
+    {
+        switch (terrainType)
+        {
+            case TerrainType.Nucleotide:
+                return nucleotidePos(props[PropKey.Nucleobase].ToLower()) + new Vector2I(props[PropKey.Rotation].ToInt(), 0) + backbonePos(props[PropKey.NucleicBackbone].ToLower());
+            case TerrainType.NucleotideBlank:
+                return new Vector2I(0, 4) + new Vector2I(props[PropKey.Rotation].ToInt(), 0) + backbonePos(props[PropKey.NucleicBackbone].ToLower());
+            case TerrainType.NucleotideTurnInner:
+                return new Vector2I(0, 5) + new Vector2I(props[PropKey.Rotation].ToInt(), 0) + backbonePos(props[PropKey.NucleicBackbone].ToLower());
+            case TerrainType.NucleotideTurnOuter:
+                return new Vector2I(0, 6) + new Vector2I(props[PropKey.Rotation].ToInt(), 0) + backbonePos(props[PropKey.NucleicBackbone].ToLower());
+            default:
+                return new Vector2I(0, 0);
+        }
+    }
+
+    private Vector2I nucleotidePos(String type)
+    {
+        switch (type)
+        {
+            case "adenine":
+                return new Vector2I(0, 0);
+            case "cytosine":
+                return new Vector2I(0, 1);
+            case "guanine":
+                return new Vector2I(0, 2);
+            case "thymine":
+            case "uracil":
+                return new Vector2I(0, 3);
+            default:
+                return new Vector2I(0, -1);
+        }
+    }
+    private Vector2I backbonePos(String type)
+    {
+        switch (type)
+        {
+            case "dna":
+                return new Vector2I(0, 0);
+            case "rna":
+                return new Vector2I(4, 0);
+            default:
+                return new Vector2I(0, 0);
+        }
+    }
+
+    public string backgroundnameForTileType()
+    {
+        switch (terrainType)
+        {
+            case TerrainType.Nucleotide:
+            case TerrainType.NucleotideBlank:
+            case TerrainType.NucleotideTurnInner:
+            case TerrainType.NucleotideTurnOuter:
+                return "biomolecules/intermolecular_fluid";
+            default:
+                return "void";
+        }
+    }
+    public Vector2I backgroundAtlasCoordsForTileType()
+    {
+        switch (terrainType)
+        {
+            default:
+                return new Vector2I(0, 0);
         }
     }
 

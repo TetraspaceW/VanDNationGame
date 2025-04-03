@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vgcx2u6phk87"
-path="res://.godot/imported/guanine_dna0.png-cca3bbf40f4c2ccfc7bb57147b7028b0.ctex"
+uid="uid://bq25rb14rmog0"
+path="res://.godot/imported/nucleic_acid.png-0cd13f4a81c670ffedcfd895b677c12e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/biomolecules/nucleotides/guanine_dna0.png"
-dest_files=["res://.godot/imported/guanine_dna0.png-cca3bbf40f4c2ccfc7bb57147b7028b0.ctex"]
+source_file="res://assets/tiles/biomolecules/nucleotides/nucleic_acid.png"
+dest_files=["res://.godot/imported/nucleic_acid.png-0cd13f4a81c670ffedcfd895b677c12e.ctex"]
 
 [params]
 
