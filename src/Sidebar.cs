@@ -32,9 +32,9 @@ public partial class Sidebar : CanvasLayer
 
 	public void SetSidePanelLabelText(params object[] what) { SetLabelText(sidePanelLabel, what); }
 
-	private void SetLabelText(RichTextLabel label, params object[] what)
+	private static void SetLabelText(RichTextLabel label, params object[] what)
 	{
-		var text = what.Select((it) => (it.ToString())).Aggregate((acc, it) => acc + it);
+		var text = what.Select((it) => it.ToString()).Aggregate((acc, it) => acc + it);
 		label.Text = "";
 		label.PushColor(new Color(1, 1, 1));
 		label.ParseBbcode(text);
@@ -42,7 +42,7 @@ public partial class Sidebar : CanvasLayer
 
 	public void SetAvailableBuildingsList(List<(BuildingTemplate, bool)> buildings)
 	{
-		foreach (BuildingButton button in availableBuildingsTable.GetChildren())
+		foreach (BuildingButton button in availableBuildingsTable.GetChildren().Cast<BuildingButton>())
 		{
 			availableBuildingsTable.RemoveChild(button);
 		}
@@ -61,9 +61,9 @@ public partial class Sidebar : CanvasLayer
 	public void SetSelectedBuilding(BuildingTemplate building)
 	{
 		selectedBuilding = building;
-		foreach (BuildingButton button in availableBuildingsTable.GetChildren())
+		foreach (BuildingButton button in availableBuildingsTable.GetChildren().Cast<BuildingButton>())
 		{
-			button.ButtonPressed = (building != null && button.building.name == building.name);
+			button.ButtonPressed = building != null && button.building.name == building.name;
 		}
 	}
 }

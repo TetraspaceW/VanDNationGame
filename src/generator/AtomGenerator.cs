@@ -3,34 +3,44 @@ class AtomGenerator
 {
     public static double GetMassNumber(Terrain terrain)
     {
-        return AtomGenerator.ElementMassNumber((Terrain.AtomElement)Enum.Parse(typeof(Terrain.AtomElement), terrain.props[PropKey.AtomElement]));
+        return ElementMassNumber((Terrain.AtomElement)Enum.Parse(typeof(Terrain.AtomElement), terrain.props[PropKey.AtomElement]));
     }
 
     public static double ElementMassNumber(Terrain.AtomElement nucleusElement)
     {
-        double massNumber;
-        switch (nucleusElement)
+        var massNumber = nucleusElement switch
         {
-            case Terrain.AtomElement.Hydrogen: massNumber = 1.008; break;
-            case Terrain.AtomElement.Helium: massNumber = 4.0026; break;
-            case Terrain.AtomElement.Lithium: massNumber = 6.94; break;
-            case Terrain.AtomElement.Beryllium: massNumber = 9.0122; break;
-            case Terrain.AtomElement.Boron: massNumber = 10.81; break;
-            case Terrain.AtomElement.Carbon: massNumber = 12.011; break;
-            case Terrain.AtomElement.Nitrogen: massNumber = 14.007; break;
-            case Terrain.AtomElement.Oxygen: massNumber = 16.0; break;
-            case Terrain.AtomElement.Fluorine: massNumber = 18.998; break;
-            case Terrain.AtomElement.Neon: massNumber = 20.18; break;
-            case Terrain.AtomElement.Sodium: massNumber = 22.99; break;
-            case Terrain.AtomElement.Magnesium: massNumber = 24.305; break;
-            case Terrain.AtomElement.Aluminium: massNumber = 26.982; break;
-            case Terrain.AtomElement.Silicon: massNumber = 28.085; break;
-            case Terrain.AtomElement.Phosphorus: massNumber = 30.974; break;
-            case Terrain.AtomElement.Sulfur: massNumber = 32.06; break;
-            case Terrain.AtomElement.Chlorine: massNumber = 35.45; break;
-            case Terrain.AtomElement.Argon: massNumber = 39.95; break;
-            default: massNumber = 1.0; break;
-        }
+            Terrain.AtomElement.Hydrogen => 1,
+            Terrain.AtomElement.Deuterium => 2,
+            Terrain.AtomElement.Tritium => 3,
+            Terrain.AtomElement.Helium => 4.0026,
+            Terrain.AtomElement.Lithium => 6.94,
+            Terrain.AtomElement.Beryllium => 9.0122,
+            Terrain.AtomElement.Boron => 10.81,
+            Terrain.AtomElement.Carbon => 12,
+            Terrain.AtomElement.Carbon13 => 13,
+            Terrain.AtomElement.Carbon14 => 14,
+            Terrain.AtomElement.Nitrogen => 14,
+            Terrain.AtomElement.Nitrogen15 => 15,
+            Terrain.AtomElement.Oxygen => 16.0,
+            Terrain.AtomElement.Fluorine => 18.998,
+            Terrain.AtomElement.Neon => 20.18,
+            Terrain.AtomElement.Sodium => 22.99,
+            Terrain.AtomElement.Magnesium => 24.305,
+            Terrain.AtomElement.Aluminium => 26.982,
+            Terrain.AtomElement.Silicon => 28.085,
+            Terrain.AtomElement.Phosphorus => 30.974,
+            Terrain.AtomElement.Sulfur => 32.06,
+            Terrain.AtomElement.Chlorine => 35.45,
+            Terrain.AtomElement.Argon => 39.95,
+            Terrain.AtomElement.Potassium => 39.098,
+            Terrain.AtomElement.Calcium => 40.078,
+            Terrain.AtomElement.Titanium => 47.87,
+            Terrain.AtomElement.Iron => 55.85,
+            Terrain.AtomElement.Bromine => 79.904,
+            Terrain.AtomElement.Strontium => 87.62,
+            _ => 1.75,
+        };
         return massNumber;
     }
 }

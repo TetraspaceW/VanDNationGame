@@ -42,14 +42,12 @@ public partial class Building
     public void SubtractResourceFromStorage(string resource, decimal amount)
     {
         var localChange = Math.Min(amount, storage.GetAmount(resource));
-        amount -= localChange;
         storage.AddAmount(resource, -localChange);
     }
 
     public void AddResourceToStorage(string resource, decimal amount)
     {
         var localChange = Math.Min(amount, capacity.GetAmount(resource) - storage.GetAmount(resource));
-        amount -= localChange;
         storage.AddAmount(resource, localChange);
     }
 

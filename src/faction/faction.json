@@ -30,9 +30,25 @@
             "Nanotechnology"
         ],
         "startingBuildings": [
-            "Airport",
-            "Mine",
-            "Fission Power Plant"
+            "Agricultural Heartland",
+            "Resource Extraction",
+            "Industrial Hub",
+            "Urban Center",
+            "Agricultural Heartland",
+            "Urban Center",
+            "Agricultural Heartland",
+            "Urban Center",
+            "Agricultural Heartland",
+            "Urban Center",
+            "Resource Extraction",
+            "Industrial Hub",
+            "Agricultural Heartland",
+            "Urban Center",
+            "Agricultural Heartland",
+            "Urban Center",
+            "Industrial Hub",
+            "Resource Extraction",
+            "Resource Extraction"
         ]
     }
 ]

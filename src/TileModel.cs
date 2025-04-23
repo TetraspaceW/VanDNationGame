@@ -2,7 +2,6 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using Godot;
-using System.Diagnostics;
 
 public partial class TileModel
 {
@@ -17,12 +16,12 @@ public partial class TileModel
     public Vector2I backgroundAtlasCoords;
     public TileResources localResources;
 
-    public static HashSet<TileModel> activeTiles = new HashSet<TileModel>();
-    public HashSet<Building> storageBuildings = new HashSet<Building>();
+    public static HashSet<TileModel> activeTiles = new();
+    public HashSet<Building> storageBuildings = new();
 
     // recursive
-    public TileResources totalChildResources = new TileResources();
-    public TileResources totalChildCapacity = new TileResources();
+    public TileResources totalChildResources = new();
+    public TileResources totalChildCapacity = new();
     public int highestTransportInside = int.MinValue;
 
     public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
@@ -31,11 +30,11 @@ public partial class TileModel
         this.parent = parent;
         this.scale = scale;
         this.zoomable = zoomable;
-        this.image = terrain.filenameForTileType();
-        this.atlasCoords = terrain.atlasCoordsForTileType();
-        this.background = terrain.backgroundnameForTileType();
-        this.backgroundAtlasCoords = terrain.backgroundAtlasCoordsForTileType();
-        this.localResources = GetResources(terrain, scale);
+        image = terrain.filenameForTileType();
+        atlasCoords = terrain.atlasCoordsForTileType();
+        background = terrain.backgroundnameForTileType();
+        backgroundAtlasCoords = terrain.backgroundAtlasCoordsForTileType();
+        localResources = GetResources(terrain, scale);
     }
 
     public void SetTerrainType(Terrain.TerrainType terrainType)
@@ -47,7 +46,7 @@ public partial class TileModel
         backgroundAtlasCoords = terrain.backgroundAtlasCoordsForTileType();
     }
 
-    public TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
+    public static TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
 
     public void BuildingMaintenanceTick()
     {
@@ -195,8 +194,8 @@ public partial class TileModel
         {
             it.Item1.SubtractResourceFromStorage(resource, amount * (it.Item2 / totalAmountInChildren));
         });
-        CalculateTotalChildCapacity();
-        CalculateTotalChildResources();
+        _ = CalculateTotalChildCapacity();
+        _ = CalculateTotalChildResources();
 
     }
 
@@ -212,8 +211,8 @@ public partial class TileModel
         {
             it.Item1.AddResourceToStorage(resource, amount * (it.Item2 / totalCapcityInChildren));
         });
-        CalculateTotalChildCapacity();
-        CalculateTotalChildResources();
+        _ = CalculateTotalChildCapacity();
+        _ = CalculateTotalChildResources();
     }
 
     private void AddToAllParents(string resource, decimal amount)

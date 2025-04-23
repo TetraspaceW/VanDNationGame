@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 class ChromatinGenerator
 {
-    TileModel tile;
+    readonly TileModel tile;
     TileModel[,] Tiles;
 
     public ChromatinGenerator(TileModel tile, TileModel[,] Tiles)
@@ -19,12 +19,12 @@ class ChromatinGenerator
         TerrainRule hcRight = Structure.CreateStructureTile("30nm-turn-right", 0, 0);
 
         TerrainRule[] HCHN = new[] { hcChain, hcLeft, hcRight };
-        TerrainRule[] HCHL = HCHN.Select((it) => it.rotate(3)).ToArray();
-        TerrainRule[] HCHR = HCHN.Select((it) => it.rotate(1)).ToArray();
+        TerrainRule[] HCHL = HCHN.Select((it) => it.Rotate(3)).ToArray();
+        TerrainRule[] HCHR = HCHN.Select((it) => it.Rotate(1)).ToArray();
 
         if (!Structure.structureDict.ContainsKey("30nm-chain"))
         {
-            new Structure(new TerrainRule[,][] {
+            _ = new Structure(new TerrainRule[,][] {
                 { null, null, HNSM, HNSM, HNSM, null, null },
                 { null, null, HNSM, HNSM, HNSM, null, null },
                 { null, null, HNSM, HNSM, HNSM, null, null },
@@ -33,7 +33,7 @@ class ChromatinGenerator
                 { null, null, null, null, null, null, null },
             }, "30nm-chain");
 
-            new Structure(new TerrainRule[,][] {
+            _ = new Structure(new TerrainRule[,][] {
                 { null, HCHL, HNSM, HNSM, HNSM, null, null },
                 { null, null, HNSM, HNSM, HNSM, null, null },
                 { null, null, HNSM, HNSM, HNSM, null, null },
@@ -43,7 +43,7 @@ class ChromatinGenerator
                 { null, null, null, null, null, null, null },
             }, "30nm-turn-left");
 
-            new Structure(new TerrainRule[,][] {
+            _ = new Structure(new TerrainRule[,][] {
                 { null, null, HNSM, HNSM, HNSM, null, null },
                 { null, null, HNSM, HNSM, HNSM, null, null },
                 { null, null, HNSM, HNSM, HNSM, null, null },
@@ -54,7 +54,7 @@ class ChromatinGenerator
             }, "30nm-turn-right");
         }
 
-        Structure hcChainStart = new Structure(new TerrainRule[,][] {
+        Structure hcChainStart = new(new TerrainRule[,][] {
             { HCHL, null },
             { null, null },
             { null, null },
@@ -65,7 +65,7 @@ class ChromatinGenerator
         });
 
         return StructureFill(Tiles,
-            new StructureRule[] { new StructureRule(hcChainStart, 1), },
+            new StructureRule[] { new(hcChainStart, 1), },
             0.5,
             baseFill: new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true)
         });
@@ -77,45 +77,45 @@ class ChromatinGenerator
         TerrainRule[] LNKV = new[] { new TerrainRule(Terrain.TerrainType.LinkerDNA, true, props: new Dictionary<PropKey, string>() {
             { PropKey.Rotation, "0" }
         }) };
-        TerrainRule[] LNKH = LNKV.Select((it) => it.rotate(1)).ToArray();
+        TerrainRule[] LNKH = LNKV.Select((it) => it.Rotate(1)).ToArray();
 
         TerrainRule ecChain = Structure.CreateStructureTile("10nm-chain", 0, 0, weight: 2);
         TerrainRule ecLeft = Structure.CreateStructureTile("10nm-turn-left", 0, 0);
         TerrainRule ecRight = Structure.CreateStructureTile("10nm-turn-right", 0, 0);
 
         TerrainRule[] ECHN = new[] { ecChain, ecLeft, ecRight };
-        TerrainRule[] ECHL = ECHN.Select((it) => it.rotate(3)).ToArray();
-        TerrainRule[] ECHR = ECHN.Select((it) => it.rotate(1)).ToArray();
+        TerrainRule[] ECHL = ECHN.Select((it) => it.Rotate(3)).ToArray();
+        TerrainRule[] ECHR = ECHN.Select((it) => it.Rotate(1)).ToArray();
 
         if (!Structure.structureDict.ContainsKey("10nm-chain"))
         {
-            new Structure(new TerrainRule[,][] {
+            _ = new Structure(new TerrainRule[,][] {
                 { null, LNKV, null },
                 { null, ENSM, null },
                 { ECHN, null, null }
             }, "10nm-chain");
 
-            new Structure(new TerrainRule[,][] {
+            _ = new Structure(new TerrainRule[,][] {
                 { ECHL, LNKV, null },
                 { null, ENSM, null },
                 { null, null, null }
             }, "10nm-turn-left");
 
-            new Structure(new TerrainRule[,][] {
+            _ = new Structure(new TerrainRule[,][] {
                 { null, LNKV, null },
                 { null, ENSM, null },
                 { null, null, ECHR }
             }, "10nm-turn-right");
         }
 
-        Structure ecChainStart = new Structure(new TerrainRule[,][] {
+        Structure ecChainStart = new(new TerrainRule[,][] {
             { ECHL, null },
             { null, null },
             { null, ECHR },
         });
 
         return StructureFill(Tiles,
-            new StructureRule[] { new StructureRule(ecChainStart, 1), },
+            new StructureRule[] { new(ecChainStart, 1), },
             0.5,
             baseFill: new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true)
         });
@@ -123,35 +123,35 @@ class ChromatinGenerator
 
     public TileModel[,] GenerateDNA(double density)
     {
-        TerrainRule adenine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+        TerrainRule adenine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "adenine"},
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
-        TerrainRule guanine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+        TerrainRule guanine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "guanine"},
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
-        TerrainRule thymine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+        TerrainRule thymine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "thymine"},
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
-        TerrainRule cytosine = new TerrainRule(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
+        TerrainRule cytosine = new(Terrain.TerrainType.Nucleotide, true, props: new Dictionary<PropKey, string>() {
                         {PropKey.Nucleobase, "cytosine"},
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
-        TerrainRule blank = new TerrainRule(Terrain.TerrainType.NucleotideBlank, props: new Dictionary<PropKey, string>() {
+        TerrainRule blank = new(Terrain.TerrainType.NucleotideBlank, props: new Dictionary<PropKey, string>() {
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
-        TerrainRule turnInner = new TerrainRule(Terrain.TerrainType.NucleotideTurnInner, props: new Dictionary<PropKey, string>() {
+        TerrainRule turnInner = new(Terrain.TerrainType.NucleotideTurnInner, props: new Dictionary<PropKey, string>() {
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
-        TerrainRule turnOuter = new TerrainRule(Terrain.TerrainType.NucleotideTurnOuter, props: new Dictionary<PropKey, string>() {
+        TerrainRule turnOuter = new(Terrain.TerrainType.NucleotideTurnOuter, props: new Dictionary<PropKey, string>() {
                         {PropKey.NucleicBackbone, "DNA"},
                         {PropKey.Rotation, "0"}
                     });
@@ -164,45 +164,45 @@ class ChromatinGenerator
         TerrainRule dnaRight = Structure.CreateStructureTile("dna-turn-right", 0, 0, 0, 0.5);
 
         TerrainRule[] nucleotideStructures = new[] { adenineThymine, guanineCytosine, thymineAdenine, cytosineGuanine, dnaLeft, dnaRight };
-        TerrainRule[] nucleotideStructuresLeft = new[] { adenineThymine.rotate(3), guanineCytosine.rotate(3), thymineAdenine.rotate(3), cytosineGuanine.rotate(3), dnaLeft.rotate(3), dnaRight.rotate(3) };
-        TerrainRule[] nucleotideStructuresRight = new[] { adenineThymine.rotate(1), guanineCytosine.rotate(1), thymineAdenine.rotate(1), cytosineGuanine.rotate(1), dnaLeft.rotate(1), dnaRight.rotate(1) };
+        TerrainRule[] nucleotideStructuresLeft = new[] { adenineThymine.Rotate(3), guanineCytosine.Rotate(3), thymineAdenine.Rotate(3), cytosineGuanine.Rotate(3), dnaLeft.Rotate(3), dnaRight.Rotate(3) };
+        TerrainRule[] nucleotideStructuresRight = new[] { adenineThymine.Rotate(1), guanineCytosine.Rotate(1), thymineAdenine.Rotate(1), cytosineGuanine.Rotate(1), dnaLeft.Rotate(1), dnaRight.Rotate(1) };
 
         if (!Structure.structureDict.ContainsKey("adenine-thymine"))
         {
-            new Structure(new TerrainRule[,][] {
-                        { new[] { adenine }, new[] { thymine.rotate(2) } },
+            _ = new Structure(new TerrainRule[,][] {
+                        { new[] { adenine }, new[] { thymine.Rotate(2) } },
                         { nucleotideStructures, null },
                     }, "adenine-thymine");
-            new Structure(new TerrainRule[,][] {
-                        { new[] { thymine }, new[] { adenine.rotate(2) } },
+            _ = new Structure(new TerrainRule[,][] {
+                        { new[] { thymine }, new[] { adenine.Rotate(2) } },
                         { nucleotideStructures, null },
                     }, "thymine-adenine");
-            new Structure(new TerrainRule[,][] {
-                        { new[] { guanine }, new[] { cytosine.rotate(2) } },
+            _ = new Structure(new TerrainRule[,][] {
+                        { new[] { guanine }, new[] { cytosine.Rotate(2) } },
                         { nucleotideStructures, null },
                     }, "guanine-cytosine");
-            new Structure(new TerrainRule[,][] {
-                        { new[] { cytosine }, new[] { guanine.rotate(2) } },
+            _ = new Structure(new TerrainRule[,][] {
+                        { new[] { cytosine }, new[] { guanine.Rotate(2) } },
                         { nucleotideStructures, null },
                     }, "cytosine-guanine");
-            new Structure(new TerrainRule[,][] {
-                        { nucleotideStructuresLeft, new[] { turnInner.rotate(3) }, new[] { blank.rotate(2) } },
-                        { null,  new[] { blank.rotate(1) } , new[] { turnOuter.rotate(3) } },
+            _ = new Structure(new TerrainRule[,][] {
+                        { nucleotideStructuresLeft, new[] { turnInner.Rotate(3) }, new[] { blank.Rotate(2) } },
+                        { null,  new[] { blank.Rotate(1) } , new[] { turnOuter.Rotate(3) } },
                     }, "dna-turn-left");
-            new Structure(new TerrainRule[,][] {
-                        { new[] { blank } , new[] { turnInner.rotate(2) }, null },
-                        { new[] { turnOuter.rotate(2) } , new[] { blank.rotate(1) }, nucleotideStructuresRight },
+            _ = new Structure(new TerrainRule[,][] {
+                        { new[] { blank } , new[] { turnInner.Rotate(2) }, null },
+                        { new[] { turnOuter.Rotate(2) } , new[] { blank.Rotate(1) }, nucleotideStructuresRight },
                     }, "dna-turn-right");
         }
 
-        Structure dnaStart = new Structure(new TerrainRule[,][] {
+        Structure dnaStart = new(new TerrainRule[,][] {
                         { nucleotideStructuresLeft , null },
                         { null , nucleotideStructuresRight },
                     });
 
         Tiles = StructureFill(Tiles, new StructureRule[] {
-                    new StructureRule(dnaStart, 1),
-                    new StructureRule(dnaStart.Rotate(1), 1),
+                    new(dnaStart, 1),
+                    new(dnaStart.Rotate(1), 1),
                     },
             density, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true)
             });

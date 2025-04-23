@@ -13,9 +13,9 @@ class TerrainRule
         this.props = props;
     }
 
-    public TerrainRule rotate(int rot)
+    public TerrainRule Rotate(int rot)
     {
-        TerrainRule rot0 = new TerrainRule(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
+        TerrainRule rot0 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
         if (props.ContainsKey(PropKey.Rotation))
         {
             rot0.props[PropKey.Rotation] = (int.Parse(props[PropKey.Rotation]) + rot) % 4 + "";
@@ -27,12 +27,12 @@ class TerrainRule
         return rot0;
     }
 
-    public TerrainRule[] rotateAll()
+    public TerrainRule[] RotateAll()
     {
-        TerrainRule rot0 = new TerrainRule(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
-        TerrainRule rot1 = new TerrainRule(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
-        TerrainRule rot2 = new TerrainRule(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
-        TerrainRule rot3 = new TerrainRule(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
+        TerrainRule rot0 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
+        TerrainRule rot1 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
+        TerrainRule rot2 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
+        TerrainRule rot3 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
         rot0.props[PropKey.Rotation] = "0";
         rot1.props[PropKey.Rotation] = "1";
         rot2.props[PropKey.Rotation] = "2";

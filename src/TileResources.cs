@@ -1,11 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using System;
-using System.Runtime.CompilerServices;
 
 public partial class TileResources
 {
-    public Dictionary<string, decimal> resources = new Dictionary<string, decimal>();
+    public Dictionary<string, decimal> resources = new();
 
     public string GetResourcesList()
     {
@@ -16,8 +14,7 @@ public partial class TileResources
 
     public decimal GetAmount(string resource)
     {
-        decimal amount;
-        return resources.TryGetValue(resource, out amount) ? amount : 0;
+        return resources.TryGetValue(resource, out decimal amount) ? amount : 0;
     }
 
     public void SetAmount(string resource, decimal amount)

@@ -63,7 +63,6 @@ public partial class Terrain
             case TerrainType.SolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.OuterSolarSystem:
-            case TerrainType.InnerSolarSystem:
                 return "stars/" + props[PropKey.SpectralClass].ToLower() + "_noletter";
             case TerrainType.FarfarfarSystemBody:
             case TerrainType.FarfarSystemBody:
@@ -90,13 +89,15 @@ public partial class Terrain
                 return planetFileName;
             case TerrainType.AsteroidBeltBodies:
                 return "asteroid";
-            case TerrainType.EpistellarSolarSystem:
-            case TerrainType.EpiepistellarSolarSystem:
-            case TerrainType.EpiepiepistellarSolarSystem:
+            case TerrainType.InnerSolarSystem:
             case TerrainType.Star:
                 return "stars/star_" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.StellarTerrain:
                 return "stars/starstuff";
+            case TerrainType.WhiteDwarfTerrain:
+                return "stars/starstuff_d";
+            case TerrainType.NeutronStarTerrain:
+                return "stars/starstuff_n";
             case TerrainType.VerdantTerrain:
                 return "land";
             case TerrainType.Ocean:
@@ -128,9 +129,23 @@ public partial class Terrain
             case TerrainType.Tissue:
                 return "biology/meat";
             case TerrainType.Cell:
-                return "life/eukaryote";
+                return "biology/cell";
+            case TerrainType.Mineral:
+                return "minerals/" + props[PropKey.Mineral].ToLower();
             case TerrainType.Cytoplasm:
                 return "biomolecules/cytoplasm";
+            case TerrainType.Vacuole:
+                return "biomolecules/vacuole";
+            case TerrainType.Vesicle:
+                return "biomolecules/vesicle";
+            case TerrainType.Lysosome:
+                return "biomolecules/lysosome";
+            case TerrainType.Centrosome:
+                return "biomolecules/centrosome";
+            case TerrainType.Mitochrondrion:
+                return "biomolecules/mitochondrion";
+            case TerrainType.Histone:
+                return "biomolecules/histone";
             case TerrainType.Nucleolus:
                 return "biomolecules/nucleolus";
             case TerrainType.LinkerDNA:
@@ -152,10 +167,16 @@ public partial class Terrain
                 return "biomolecules/nucleotides/nucleic_acid";
             case TerrainType.IntermolecularFluid:
                 return "biomolecules/intermolecular_fluid";
+            case TerrainType.ElectronDegenerateMatter:
+                return "stars/starstuff_d";
             case TerrainType.Atom:
                 return "atom/" + props[PropKey.AtomElement].ToLower();
             case TerrainType.ElectronCloud:
                 return "atom/electron_cloud";
+            case TerrainType.FreeElectron:
+                return "atom/free_electron";
+            case TerrainType.NeutronDegenerateMatter:
+                return "stars/starstuff_n";
             case TerrainType.Nucleus:
                 return "atom/nucleus";
             case TerrainType.Proton:
@@ -328,20 +349,23 @@ public partial class Terrain
         // -4   1g km across / 6 AU
         InnerSolarSystem, OuterSystemBody, KuiperBeltBodies,
         // -5   100m km across / 0.6 AU
-        Star, InnerSystemBody, AsteroidBeltBodies, EpistellarSolarSystem,
+        Star, InnerSystemBody, AsteroidBeltBodies,
         // -6   10m km across
         // -7   1m km across / Earth SOI
-        OuterLunarSystem, EpiepistellarSolarSystem, StellarTerrain,
+        OuterLunarSystem, StellarTerrain,
         // -8   100k km across
-        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant, EpiepiepistellarSolarSystem,
+        InnerLunarSystem, LunarOrbit, LunarBody, GasGiant,
         // -9   10k km across
         TerrestrialPlanet,
         GasGiantTerrain,
         // -10  1k km across
         BarrenTerrain, VerdantTerrain, Ocean, IceSheet,
+        JungleTerrain, DesertTerrain, TaigaTerrain, ForestTerrain,
+        WhiteDwarfTerrain,
         // -11  100 km across
         // -12  10 km across
         // -13  1 km across
+        NeutronStarTerrain,
         // -14  100 m across
         // -15  10 m across
         Dinosaur, Cetacean,
@@ -354,12 +378,15 @@ public partial class Terrain
         // -18  1 cm across
         Insect,
         // -19  1 mm across
+        Mineral,
         // -20  100 um across
         Eukaryote,
         // -21  10 um across
         Cell,
         // -22  1 um across
-        Nucleoplasm, Cytoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
+        Cytoplasm,
+        Nucleoplasm, Nucleolus, EuchromatinDomain, HeterochromatinDomain,
+        Mitochrondrion, Vacuole, Vesicle, Lysosome, Centrosome,
         Prokaryote,
         // -23  100 nm across
         Heterochromatin, Euchromatin,
@@ -368,11 +395,12 @@ public partial class Terrain
         // -25  1 nm across
         Nucleotide, NucleotideBlank, NucleotideTurnInner, NucleotideTurnOuter, IntermolecularFluid, Histone,
         // -26  100 pm across / 1 angstrom
-        Atom, IntermolecularSpace,
+        Atom, IntermolecularSpace, FreeElectron,
         // -27  10 pm across
-        ElectronCloud,
+        ElectronCloud, ElectronDegenerateMatter,
         // -28  1 pm across
         // -29  100 fm across
+        NeutronDegenerateMatter,
         // -30  10 fm across
         Nucleus,
         // -31  1 fm across
@@ -393,7 +421,8 @@ public partial class Terrain
     }
     public enum StarSpectralClass
     {
-        O, B, A, F, G, K, M, D,
+        O, B, A, F, G, K, M,
+        D, n,
         MIII, KI
     }
 
@@ -402,11 +431,30 @@ public partial class Terrain
         E, S0, S, SB, Irr
     }
 
+    public enum Mineral
+    {
+        Ice, CarbonDioxide, Nitrogen, Methane, Ammonia, // ices
+        Ethane, Tholin, // hydrocarbons
+        Silica, // silicates
+        Anorthite, // feldspars
+        Wallastonite, Enstatite, Ferrosilite, // pyroxines
+        Forsterite, Fayalite, // olivines
+        Ilmenite, // titanium
+        Kaolinite, // ferrosilicates
+        Troilite, Magnetite, Wuestite, // iron compounds
+
+    }
+
     public enum AtomElement
     {
-        Hydrogen, Helium,
-        Lithium, Beryllium, Boron, Carbon, Nitrogen, Oxygen, Fluorine, Neon,
+        Hydrogen, Deuterium, Tritium, Helium,
+        Lithium, Beryllium, Boron, Carbon, Carbon13, Carbon14, Nitrogen, Nitrogen15, Oxygen, Fluorine, Neon,
         Sodium, Magnesium, Aluminium, Silicon, Phosphorus, Sulfur, Chlorine, Argon,
+        Potassium, Calcium,
+        Titanium, Iron,
+        Bromine,
+        Strontium,
+
     }
 
     public enum QuarkColour
@@ -438,15 +486,17 @@ public enum PropKey
     // Quarks
     QuarkColour, QuarkFlavour,
     // Atoms
-    AtomElement,
+    AtomElement, AtomIsIonized,
     // DNA
     Nucleobase, NucleicBackbone,
+    // Minerals
+    Mineral,
     // Lifeforms
     Habitat,
     // Terrestrial Planets
     PlanetHydrosphereCoverage, PlanetHydrosphereType, PlanetRadius, PlanetIsLifeBearing, PlanetTemperature,
     // Planets
-    PlanetType,
+    PlanetType, OrbitalPeriod,
     // Stars
     SpectralClass,
     // Star Clusters

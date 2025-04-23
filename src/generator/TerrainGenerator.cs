@@ -4,10 +4,10 @@ using System.Linq;
 
 class TerrainGenerator
 {
-    TileModel tile;
+    readonly TileModel tile;
     public TerrainGenerator(TileModel insideTile)
     {
-        this.tile = insideTile;
+        tile = insideTile;
     }
 
     public TileModel[,] GenerateTerrain()
@@ -77,7 +77,7 @@ class TerrainGenerator
                 Fill(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.GalacticHalo, zoomable: false),
                 });
-                AddCenter(Tiles, new[] {
+                _ = AddCenter(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.SpiralArm, zoomable: true)
                 });
                 break;
@@ -168,10 +168,13 @@ class TerrainGenerator
                     new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 80, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.M.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.SolarSystem, weight: 5, props: new Dictionary<PropKey, string>() {
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 5, props: new Dictionary<PropKey, string>() {
                         {PropKey.SpectralClass, Terrain.StarSpectralClass.D.ToString()}
                     }),
-                    new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 1895)
+                    new TerrainRule(Terrain.TerrainType.SolarSystem, zoomable: true, weight: 1, props: new Dictionary<PropKey, string>() {
+                        { PropKey.SpectralClass, Terrain.StarSpectralClass.n.ToString() }
+                    }),
+                    new TerrainRule(Terrain.TerrainType.InterstellarSpace, weight: 1894)
                 });
                 if (terrain.props.ContainsKey(PropKey.SpecialStar))
                 {
@@ -193,12 +196,12 @@ class TerrainGenerator
             case Terrain.TerrainType.OuterSystemBody:
             case Terrain.TerrainType.InnerSystemBody:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.SystemOrbit) });
-                switch (tile.scale)
+                _ = tile.scale switch
                 {
-                    case -6: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }); break;
-                    case -7: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }); break;
-                    default: AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }); break;
-                }
+                    -6 => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.OuterLunarSystem, zoomable: true, props: terrain.props) }),
+                    -7 => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) }),
+                    _ => AddCenter(Tiles, new[] { new TerrainRule(terrain.terrainType, zoomable: true, props: terrain.props) }),
+                };
                 break;
             case Terrain.TerrainType.OuterLunarSystem:
                 Fill(Tiles, new[] {
@@ -209,7 +212,7 @@ class TerrainGenerator
                         {PropKey.PlanetHydrosphereType, SolarSystemGenerator.Hydrosphere.None.ToString()}
                     })
                 });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
+                _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InnerLunarSystem, zoomable: true, props: terrain.props) });
                 break;
             case Terrain.TerrainType.InnerLunarSystem:
                 Fill(Tiles, new[] {
@@ -222,11 +225,11 @@ class TerrainGenerator
                 });
                 if (PlanetIsTerrestrial(terrain.props[PropKey.PlanetType]))
                 {
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.TerrestrialPlanet, zoomable: true, props: terrain.props) });
                 }
                 else
                 {
-                    AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, true, props: terrain.props) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GasGiant, true, props: terrain.props) });
                 }
                 break;
             case Terrain.TerrainType.TerrestrialPlanet:
@@ -244,14 +247,15 @@ class TerrainGenerator
                 AddCircle(Tiles, new[] {
                     new TerrainRule(
                         terrainType: hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid ? Terrain.TerrainType.Ocean : Terrain.TerrainType.IceSheet,
-                        zoomable: hydrosphere == SolarSystemGenerator.Hydrosphere.Liquid,
+                        zoomable: true,
                         weight: oceanWeight,
                         props: new Dictionary<PropKey, string>() {
                             { PropKey.PlanetIsLifeBearing, planetIsLifeBearing.ToString() }
                         }),
                     new TerrainRule(planetIsLifeBearing ? Terrain.TerrainType.VerdantTerrain : Terrain.TerrainType.BarrenTerrain, true, weight: 100 - oceanWeight,
                         props: new Dictionary<PropKey, string>() {
-                            { PropKey.PlanetIsLifeBearing, planetIsLifeBearing.ToString() }
+                            { PropKey.PlanetIsLifeBearing, planetIsLifeBearing.ToString() },
+                            { PropKey.PlanetHydrosphereType, hydrosphere.ToString() }
                         })
                 }, planetaryCenter, planetaryTileSize < 5 ? planetaryTileSize : 10, true);
                 break;
@@ -267,11 +271,53 @@ class TerrainGenerator
                 }, gasGiantCenter, gasGiantTileSize < 5 ? gasGiantTileSize : 10, true);
                 break;
             case Terrain.TerrainType.StellarTerrain:
+                switch (tile.scale)
+                {
+                    case -25:
+                        Tiles = StarFill(Tiles);
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(terrain.terrainType, true)
+                        });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.WhiteDwarfTerrain:
+                switch (tile.scale)
+                {
+                    case -26:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.ElectronDegenerateMatter, true)
+                        });
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(terrain.terrainType, true)
+                        });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.NeutronStarTerrain:
+                switch (tile.scale)
+                {
+                    case -29:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.NeutronDegenerateMatter, true)
+                        });
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(terrain.terrainType, true)
+                        });
+                        break;
+                }
+                break;
             case Terrain.TerrainType.GasGiantTerrain:
                 switch (tile.scale)
                 {
                     case -25:
-                        Tiles = NonMetalFill(Tiles);
+                        Tiles = GasGiantFill(Tiles);
                         break;
                     default:
                         Fill(Tiles, new[] {
@@ -283,15 +329,110 @@ class TerrainGenerator
             case Terrain.TerrainType.BarrenTerrain:
                 switch (tile.scale)
                 {
-                    case -25:
-                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
-                            , new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        });
+                    case -18:
+                        SolarSystemGenerator.Hydrosphere barrenTerrainParentHydrosphereType = (SolarSystemGenerator.Hydrosphere)Enum.Parse(typeof(SolarSystemGenerator.Hydrosphere), terrain.props[PropKey.PlanetHydrosphereType]);
+                        if (barrenTerrainParentHydrosphereType == SolarSystemGenerator.Hydrosphere.Crustal)
+                        {
+                            // Outer system bodies - contain volatiles
+
+                            Fill(Tiles, new[] {
+                                // ices - make up 1/4 of rock (rest is in ice sheets)
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 75/0.882, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ice.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 6/0.882, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.CarbonDioxide.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 3.5/0.882, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Nitrogen.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 2.5/0.882, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Methane.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 1.2/0.882, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ammonia.ToString() }
+                                }),
+                                // rocks - makes up 3/4
+                                // phyllosilicates
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 35 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Kaolinite.ToString() }
+                                }),
+                                // pyroxenes
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 30 / 3 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Wallastonite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 30 / 3 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Enstatite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 30 / 3 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ferrosilite.ToString() }
+                                }),
+                                // olivines
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 20 / 2 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Forsterite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 20 / 2 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Fayalite.ToString() }
+                                }),
+                                // feldspars
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 20 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Anorthite.ToString() }
+                                }),
+                                // iron
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 4 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Troilite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 2.5 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Magnetite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 2.5 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Wuestite.ToString() }
+                                }),
+                                // hydrocarbons 
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 3.5 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ethane.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 7.5 / 1.25 * 3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Tholin.ToString() }
+                                }),
+                            });
+                        }
+                        else
+                        {
+                            // Inner system bodies - no volatiles
+
+                            Fill(Tiles, new[] {
+                                // feldspars
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 80, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Anorthite.ToString() }
+                                }),
+                                // pyroxines
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 10/3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Wallastonite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 10/3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Enstatite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 10/3, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ferrosilite.ToString() }
+                                }),
+                                // olivines
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 3/2, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Forsterite.ToString() }
+                                }),
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 3/2, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Fayalite.ToString() }
+                                }),
+                                // other
+                                new TerrainRule(Terrain.TerrainType.Mineral, true, 2.5, props: new Dictionary<PropKey, string> {
+                                    { PropKey.Mineral, Terrain.Mineral.Ilmenite.ToString() }
+                                })
+                            });
+                        }
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.BarrenTerrain, true)
+                            new TerrainRule(Terrain.TerrainType.BarrenTerrain, true, props: terrain.props)
                         });
                         break;
                 }
@@ -299,21 +440,34 @@ class TerrainGenerator
             case Terrain.TerrainType.VerdantTerrain:
                 switch (tile.scale)
                 {
-                    case -20:
+                    case -18:
                         Fill(Tiles, new[] {
-                            new TerrainRule(Terrain.TerrainType.BarrenTerrain, true, props: terrain.props)
-                        });
-                        break;
-                    case -25:
-                        Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
-                            , new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                            new TerrainRule(Terrain.TerrainType.Mineral, true, props: new Dictionary<PropKey, string> {
+                                { PropKey.Mineral, Terrain.Mineral.Silica.ToString() }
+                            })
                         });
                         break;
                     default:
                         Fill(Tiles, new[] {
                             new TerrainRule(Terrain.TerrainType.VerdantTerrain, true, 99, props: terrain.props)
                         }.Concat(GetLifeForTerrain(terrain)).ToArray());
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.IceSheet:
+                switch (tile.scale)
+                {
+                    case -18:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.Mineral, true, props: new Dictionary<PropKey, string> {
+                                { PropKey.Mineral, Terrain.Mineral.Ice.ToString() }
+                            })
+                        });
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.IceSheet, true, props: terrain.props)
+                        });
                         break;
                 }
                 break;
@@ -339,6 +493,141 @@ class TerrainGenerator
                     default:
                         Fill(Tiles, new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularFluid, true, props: tile.terrain.props)
+                        });
+                        break;
+                }
+                break;
+            case Terrain.TerrainType.Mineral:
+                Terrain.Mineral mineralType = (Terrain.Mineral)Enum.Parse(typeof(Terrain.Mineral), terrain.props[PropKey.Mineral]);
+                switch (tile.scale)
+                {
+                    case -25:
+                        switch (mineralType)
+                        {
+                            case Terrain.Mineral.Ice:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.CarbonDioxide:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.CARBON_DIOXIDE_ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Nitrogen:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.NITROGEN_ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Methane:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.METHANE_ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Ammonia:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.AMMONIA_ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Ethane:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ETHANE_ICE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Tholin:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.THOLIN, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Silica:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.SILICA, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Anorthite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ANORTHITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Wallastonite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.WOLLASTONITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Enstatite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ENSTATITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Ferrosilite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.FERROSILITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Forsterite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.FORSTERITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Fayalite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.FAYALITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Ilmenite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.ILMENITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Kaolinite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.KAOLINITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Troilite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.TROILITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Magnetite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.MAGNETITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            case Terrain.Mineral.Wuestite:
+                                Tiles = StructureTile(Tiles, new[] { new StructureRule(Chem.WUESTITE, 1) }
+                                    , new[] {
+                                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+                                });
+                                break;
+                            default:
+                                Fill(Tiles, new[] {
+                                    new TerrainRule(Terrain.TerrainType.Mineral, true, props: tile.terrain.props)
+                                });
+                                break;
+                        }
+                        break;
+                    default:
+                        Fill(Tiles, new[] {
+                            new TerrainRule(Terrain.TerrainType.Mineral, true, props: tile.terrain.props)
                         });
                         break;
                 }
@@ -380,7 +669,14 @@ class TerrainGenerator
                 }
                 break;
             case Terrain.TerrainType.Cell:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Cytoplasm, false) });
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.Cytoplasm, false),
+                    new TerrainRule(Terrain.TerrainType.Mitochrondrion, false, 0.2),
+                    new TerrainRule(Terrain.TerrainType.Vesicle, false, 0.1),
+                    new TerrainRule(Terrain.TerrainType.Vacuole, false, 0.1),
+                    new TerrainRule(Terrain.TerrainType.Lysosome, false, 0.1),
+                    new TerrainRule(Terrain.TerrainType.Centrosome, false, 0.1)
+                 });
                 var center = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleolus, false) });
                 AddCircle(Tiles, new[] {
                     new TerrainRule(Terrain.TerrainType.Nucleoplasm, true),
@@ -423,39 +719,22 @@ class TerrainGenerator
 
                 break;
             case Terrain.TerrainType.Nucleotide:
-                TerrainRule[] nucleobase;
                 int rotation = int.Parse(terrain.props[PropKey.Rotation]);
-                switch (terrain.props[PropKey.Nucleobase])
+                TerrainRule[] nucleobase = terrain.props[PropKey.Nucleobase] switch
                 {
-                    case "adenine":
-                        nucleobase = new[] { Structure.CreateStructureTile("adenine", 1, 2, 0) };
-                        break;
-                    case "guanine":
-                        nucleobase = new[] { Structure.CreateStructureTile("guanine", 1, 2, 0) };
-                        break;
-                    case "thymine":
-                        nucleobase = new[] { Structure.CreateStructureTile("thymine", 2, 4, 0) };
-                        break;
-                    case "cytosine":
-                        nucleobase = new[] { Structure.CreateStructureTile("cytosine", 2, 4, 0) };
-                        break;
-                    default:
-                        nucleobase = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+                    "adenine" => new[] { Structure.CreateStructureTile("adenine", 1, 2, 0) },
+                    "guanine" => new[] { Structure.CreateStructureTile("guanine", 1, 2, 0) },
+                    "thymine" => new[] { Structure.CreateStructureTile("thymine", 2, 4, 0) },
+                    "cytosine" => new[] { Structure.CreateStructureTile("cytosine", 2, 4, 0) },
+                    _ => new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
                             { PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString() }
-                        }) };
-                        break;
-                }
-                Structure backbone = Structure.NULL;
-                switch (terrain.props[PropKey.NucleicBackbone])
+                        }) },
+                };
+                Structure backbone = terrain.props[PropKey.NucleicBackbone] switch
                 {
-                    case "RNA":
-                        backbone = Chem.RNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
-                        break;
-                    case "DNA":
-                    default:
-                        backbone = Chem.DNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation);
-                        break;
-                }
+                    "RNA" => Chem.RNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation),
+                    _ => Chem.DNA_BACKBONE.AddAt(5, 4, nucleobase).Rotate(rotation),
+                };
                 Tiles = PlaceStructure(Tiles, new[] { new StructureRule(backbone) },
                            0, 0, new[] {
                             new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
@@ -463,15 +742,61 @@ class TerrainGenerator
                 Tiles = WaterFill(Tiles);
                 break;
             case Terrain.TerrainType.Atom:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
-                AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                // Check if the atom is ionized
+                bool isIonized = terrain.props.ContainsKey(PropKey.AtomIsIonized) &&
+                    bool.Parse(terrain.props[PropKey.AtomIsIonized]);
+
+                if (isIonized)
+                {
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                }
+                else
+                {
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                    _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) });
+                }
+                break;
+            case Terrain.TerrainType.ElectronDegenerateMatter:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.ElectronCloud, false, 8),
+                    new TerrainRule(Terrain.TerrainType.Nucleus, true, 12.0 / (12.0 + 16.0), new Dictionary<PropKey, string> {
+                        { PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString() },
+                        { PropKey.AtomIsIonized, true.ToString() }
+                    }),
+                    new TerrainRule(Terrain.TerrainType.Nucleus, true, 16.0 / (12.0 + 16.0), new Dictionary<PropKey, string> {
+                        { PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString() },
+                        { PropKey.AtomIsIonized, true.ToString() }
+                    }),
+                });
+                break;
+            case Terrain.TerrainType.FreeElectron:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
+                _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                break;
+            case Terrain.TerrainType.NeutronDegenerateMatter:
+                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Neutron, true) });
                 break;
             case Terrain.TerrainType.Nucleus:
-                Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                // TODO: fix this garbage
+                bool parentIsIonized = terrain.props.ContainsKey(PropKey.AtomIsIonized) &&
+                    bool.Parse(terrain.props[PropKey.AtomIsIonized]);
+
+                if (parentIsIonized)
+                {
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) });
+                }
+                else
+                {
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                }
+
                 switch (tile.scale)
                 {
                     case -30:
-                        var nucleusCenter = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
+                        var nucleusCenter = parentIsIonized
+                            ? AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) })
+                            : AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
 
                         double massNumber = AtomGenerator.GetMassNumber(terrain);
 
@@ -485,7 +810,7 @@ class TerrainGenerator
                         );
                         break;
 
-                    default: AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) }); break;
+                    default: _ = AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleus, true, props: terrain.props) }); break;
                 }
                 break;
             case Terrain.TerrainType.Proton:
@@ -496,13 +821,11 @@ class TerrainGenerator
                 break;
             case Terrain.TerrainType.ValenceQuark:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.GluonSea) });
-                switch (tile.scale)
+                _ = tile.scale switch
                 {
-                    case -34:
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }); break;
-                    default:
-                        AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }); break;
-                }
+                    -34 => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Quark, false, props: terrain.props) }),
+                    _ => AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ValenceQuark, true, props: terrain.props) }),
+                };
                 break;
             case Terrain.TerrainType.Sandbox:
                 Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Nucleoplasm, true), new TerrainRule(Terrain.TerrainType.Nucleosome, true, 0.1) });
@@ -560,7 +883,7 @@ class TerrainGenerator
             for (double j = -1; j <= 1; j++)
             {
                 double ang = turn + Math.PI / 2;
-                var x1 = (counterclockwise ? -j * Math.Cos(ang) : j * Math.Cos(ang));
+                var x1 = counterclockwise ? -j * Math.Cos(ang) : j * Math.Cos(ang);
                 var y1 = j * Math.Sin(ang);
                 for (double i = -2; i < 2; i += 0.01)
                 {
@@ -620,18 +943,93 @@ class TerrainGenerator
 
     private TileModel[,] WaterFill(TileModel[,] tiles)
     {
-        return StructureFill(tiles, Chem.WATER.RotateAll(1).Concat(Chem.HYDROXIDE.RotateAll(0.0000001)).Concat(Chem.HYDRONIUM.RotateAll(0.0000001)).ToArray()
-                            , 0.5, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        double H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
+        double O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
+        double Na = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sodium);
+        double Cl = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Chlorine);
+        double Mg = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium);
+        double Ca = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Calcium);
+        double K = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Potassium);
+        double Sr = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Strontium);
+        double S = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur);
+        double Br = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Bromine);
+        double B = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Boron);
+        double F = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Fluorine);
+        double C = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon);
+        return StructureFill(tiles,
+            Chem.WATER.RotateAll(1 / (H * 2 + O))
+            .Concat(Chem.HYDROXIDE.RotateAll(0.0000017 / (H + O)))
+            .Concat(Chem.HYDRONIUM.RotateAll(0.0000019 / (H * 3 + O)))
+            .Concat(Chem.SODIUM.RotateAll(10800e-6 / Na))
+            .Concat(Chem.MAGNESIUM.RotateAll(1290e-6 / Mg))
+            .Concat(Chem.CALCIUM.RotateAll(412e-6 / Ca))
+            .Concat(Chem.POTASSIUM.RotateAll(399e-6 / K))
+            .Concat(Chem.STRONTIUM.RotateAll(8e-6 / Sr))
+            .Concat(Chem.CHLORIDE.RotateAll(19400e-6 / Cl))
+            .Concat(Chem.SULFATE.RotateAll(2700e-6 / (S + O * 4)))
+            .Concat(Chem.BICARBONATE.RotateAll(145e-6 / (H + C + O * 3)))
+            .Concat(Chem.BROMIDE.RotateAll(67e-6 / Br))
+            .Concat(Chem.BORATE.RotateAll(26e-6 / (B + O * 3)))
+            .Concat(Chem.FLUORIDE.RotateAll(1.3e-6 / F))
+            .ToArray(),
+            0,
+            new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) },
+            new[] { Terrain.TerrainType.IntermolecularSpace }
+        );
     }
-    private TileModel[,] NonMetalFill(TileModel[,] tiles)
+    private TileModel[,] StarFill(TileModel[,] tiles)
     {
-        return StructureFill(tiles, Chem.HYDROGEN.RotateAll(1.5).Concat(Chem.HELIUM.RotateAll(1)).ToArray()
-                            , 0, new[] {
-                            new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
-                        }, new[] { Terrain.TerrainType.IntermolecularSpace });
+        return StructureFill(tiles,
+            Chem.HYDROGEN_IONIZED.RotateAll(73.46 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen))
+            .Concat(Chem.HELIUM_IONIZED.RotateAll(24.85 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium)))
+            .Concat(Chem.OXYGEN_IONIZED.RotateAll(0.77 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen)))
+            .Concat(Chem.CARBON_IONIZED.RotateAll(0.29 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon)))
+            .Concat(Chem.IRON_IONIZED.RotateAll(0.16 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Iron)))
+            .Concat(Chem.NEON_IONIZED.RotateAll(0.12 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Neon)))
+            .Concat(Chem.NITROGEN_IONIZED.RotateAll(0.09 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen)))
+            .Concat(Chem.SILICON_IONIZED.RotateAll(0.07 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Silicon)))
+            .Concat(Chem.MAGNESIUM_IONIZED.RotateAll(0.05 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium)))
+            .Concat(Chem.SULFUR_IONIZED.RotateAll(0.04 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur)))
+            .Concat(Chem.FREE_ELECTRON.RotateAll(
+                73.46 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen)
+                + 24.85 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium) * 2
+                + 0.77 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen) * 8
+                + 0.29 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon) * 6
+                + 0.16 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Iron) * 26
+                + 0.12 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Neon) * 10
+                + 0.09 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen) * 7
+                + 0.07 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Silicon) * 14
+                + 0.05 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Magnesium) * 12
+                + 0.04 / AtomGenerator.ElementMassNumber(Terrain.AtomElement.Sulfur) * 16
+            ))
+            .ToArray()
+            , 0, new[] {
+                    new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false)
+            }, new[] { Terrain.TerrainType.IntermolecularSpace });
     }
+
+    private TileModel[,] GasGiantFill(TileModel[,] tiles)
+    {
+        double H = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Hydrogen);
+        double He = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Helium);
+        double C = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Carbon);
+        double N = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Nitrogen);
+        double O = AtomGenerator.ElementMassNumber(Terrain.AtomElement.Oxygen);
+
+        return StructureFill(tiles,
+            Chem.HYDROGEN.RotateAll(0.898 / H * 2)
+                .Concat(Chem.HELIUM.RotateAll(0.102 / He))
+                .Concat(Chem.METHANE.RotateAll(300e-6 / (C + H * 4)))
+                .Concat(Chem.AMMONIA.RotateAll(260e-6 / (N + H * 3)))
+                .Concat(Chem.ETHANE.RotateAll(5.8e-6 / (C * 2 + H * 6)))
+                .Concat(Chem.WATER.RotateAll(4e-6 / (H * 2 + O)))
+                .ToArray(),
+            0,
+            new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false) },
+            new[] { Terrain.TerrainType.IntermolecularSpace }
+        );
+    }
+
     private TileModel[,] StructureTile(TileModel[,] tiles, StructureRule[] rules, TerrainRule[] baseFill)
     {
         return TerrainGenRule.StructureTile(parent: tile, tiles, rules, baseFill);
@@ -654,13 +1052,13 @@ class TerrainGenerator
 
     public static (int, int) Shape3D<T>(T[,] array) => (array.GetLength(0), array.GetLength(1));
 
-    private bool PlanetIsTerrestrial(string planetType)
+    private static bool PlanetIsTerrestrial(string planetType)
     {
-        switch (Enum.Parse(typeof(Terrain.PlanetType), planetType))
+        return Enum.Parse(typeof(Terrain.PlanetType), planetType) switch
         {
-            default: case Terrain.PlanetType.Jovian: return false;
-            case Terrain.PlanetType.Terrestrial: case Terrain.PlanetType.Chunk: return true;
-        }
+            Terrain.PlanetType.Terrestrial or Terrain.PlanetType.Chunk => true,
+            _ => false,
+        };
     }
 
     private TerrainRule[] GetLifeForTerrain(Terrain terrain)
@@ -673,6 +1071,101 @@ class TerrainGenerator
             };
             switch (terrain.terrainType)
             {
+                case Terrain.TerrainType.DesertTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1 * 0.2, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1 * 0.2, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 0.2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.JungleTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1 * 2, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.TaigaTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15 * 0.2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
+                case Terrain.TerrainType.ForestTerrain:
+                    switch (tile.scale)
+                    {
+                        case -14:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Dinosaur, true, 1 * 2, props: props)
+                            };
+                        case -15:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Mammal, true, 1, props: props),
+                            };
+                        case -16:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Bird, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Amphibian, true, 0.15, props: props),
+                                new TerrainRule(Terrain.TerrainType.Reptile, true, 0.3 * 2, props: props),
+                                new TerrainRule(Terrain.TerrainType.Trichordate, true, 0.3 * 2, props: props)
+                            };
+                        case -17:
+                            return new[] {
+                                new TerrainRule(Terrain.TerrainType.Insect, true, 1, props: props)
+                            };
+                    }
+                    break;
                 case Terrain.TerrainType.VerdantTerrain:
                     switch (tile.scale)
                     {
@@ -726,6 +1219,6 @@ class TerrainGenerator
             }
         }
 
-        return new TerrainRule[] { };
+        return Array.Empty<TerrainRule>();
     }
 }

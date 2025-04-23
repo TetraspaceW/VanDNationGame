@@ -1,8 +1,8 @@
 
 public partial class DistanceScale
 {
-    private static string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion", " octillion", " nonillion", };
-    private static (int, string)[] units = {
+    private static readonly string[] numberNames = { "", " thousand", " million", " billion", " trillion", " quadrillion", " pentillion", " sextillion", " septillion", " octillion", " nonillion", };
+    private static readonly (int, string)[] units = {
             (-51, "lp"),
             (-40, "ym"), (-37, "zm"), (-34, "am"), (-31, "fm"), (-26, "Å"), (-22, "um"), (-19, "mm"), (-16, "m"),
             (-13, "km"), (-5, "AU"), (0, "ly"),
@@ -25,6 +25,6 @@ public partial class DistanceScale
 
     private static string NumberStringForScale(int value)
     {
-        return (value / 3) < numberNames.Length ? "1" + new string('0', value % 3) + numberNames[(value / 3)] : null;
+        return (value / 3) < numberNames.Length ? "1" + new string('0', value % 3) + numberNames[value / 3] : null;
     }
 }

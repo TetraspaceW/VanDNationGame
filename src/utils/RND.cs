@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 class RND
 {
-    private static readonly Random _random = new Random();
+    private static readonly Random _random = new();
     public static int d(int n, int N = 1)
     {
         return Enumerable.Range(0, N)
