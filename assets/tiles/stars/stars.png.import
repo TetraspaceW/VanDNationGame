@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://baem61t55cfa3"
-path="res://.godot/imported/E.png-4f3310d11bf8ab471e3ec07e97510f6d.ctex"
+uid="uid://c37xoafk84g17"
+path="res://.godot/imported/stars.png-9c443bb613b96061fd2606da18b433de.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/galaxies/E.png"
-dest_files=["res://.godot/imported/E.png-4f3310d11bf8ab471e3ec07e97510f6d.ctex"]
+source_file="res://assets/tiles/stars/stars.png"
+dest_files=["res://.godot/imported/stars.png-9c443bb613b96061fd2606da18b433de.ctex"]
 
 [params]
 

@@ -278,7 +278,9 @@ class TerrainGenerator
                         break;
                     default:
                         Fill(Tiles, new[] {
-                            new TerrainRule(terrain.terrainType, true)
+                            new TerrainRule(terrain.terrainType, true, props: new Dictionary<PropKey, string>() {
+                                { PropKey.SpectralClass, terrain.props[PropKey.SpectralClass] }
+                            })
                         });
                         break;
                 }

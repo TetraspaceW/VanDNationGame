@@ -42,10 +42,10 @@ public partial class Terrain
                 return "star_clusters/dense_stars";
             case TerrainType.GalaxyCluster:
             case TerrainType.StellarBubble:
-                return "star_clusters/stars" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToLower() : "");
+                return props.ContainsKey(PropKey.SpecialStar) ? "stars/stars" : "star_clusters/stars";
             case TerrainType.GalaxyGroup:
             case TerrainType.StellarCloud:
-                return "star_clusters/stars_sparse" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToLower() : "");
+                return props.ContainsKey(PropKey.SpecialStar) ? "stars/stars" : "star_clusters/stars_sparse";
             case TerrainType.Galaxy:
                 return "galaxies/" + props[PropKey.GalaxyType].ToLower();
             case TerrainType.DwarfGalaxy:
@@ -54,16 +54,15 @@ public partial class Terrain
                 return "core_stars";
             case TerrainType.HillsCloud:
             case TerrainType.ScatteredDisk:
-                return "stars/kuiper_" + props[PropKey.SpectralClass].ToLower();
+                return "stars/stars";
             case TerrainType.OortCloudBodies:
             case TerrainType.HillsCloudBodies:
             case TerrainType.KuiperBeltBodies:
             case TerrainType.ScatteredDiskBodies:
                 return "kuiper";
             case TerrainType.SolarSystem:
-                return "stars/" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.OuterSolarSystem:
-                return "stars/" + props[PropKey.SpectralClass].ToLower() + "_noletter";
+                return "stars/stars";
             case TerrainType.FarfarfarSystemBody:
             case TerrainType.FarfarSystemBody:
             case TerrainType.FarSystemBody:
@@ -91,13 +90,10 @@ public partial class Terrain
                 return "asteroid";
             case TerrainType.InnerSolarSystem:
             case TerrainType.Star:
-                return "stars/star_" + props[PropKey.SpectralClass].ToLower();
             case TerrainType.StellarTerrain:
-                return "stars/starstuff";
             case TerrainType.WhiteDwarfTerrain:
-                return "stars/starstuff_d";
             case TerrainType.NeutronStarTerrain:
-                return "stars/starstuff_n";
+                return "stars/stars";
             case TerrainType.VerdantTerrain:
                 return "land";
             case TerrainType.Ocean:
@@ -198,6 +194,24 @@ public partial class Terrain
     {
         switch (terrainType)
         {
+            case TerrainType.StellarBubble:
+            case TerrainType.StellarCloud:
+                return props.ContainsKey(PropKey.SpecialStar) ? starPos(props[PropKey.SpecialStar].ToLower()) + new Vector2I(0, 1) : new Vector2I(0, 0);
+            case TerrainType.SolarSystem:
+                return starPos(props[PropKey.SpectralClass].ToLower());
+            case TerrainType.HillsCloud:
+            case TerrainType.ScatteredDisk:
+            case TerrainType.OuterSolarSystem:
+                return starPos(props[PropKey.SpectralClass].ToLower()) + new Vector2I(0, 1);
+            case TerrainType.InnerSolarSystem:
+            case TerrainType.Star:
+                return starPos(props[PropKey.SpectralClass].ToLower()) + new Vector2I(0, 2);
+            case TerrainType.StellarTerrain:
+                return starPos(props[PropKey.SpectralClass].ToLower()) + new Vector2I(0, 3);
+            case TerrainType.WhiteDwarfTerrain:
+                return starPos("d") + new Vector2I(0, 3);
+            case TerrainType.NeutronStarTerrain:
+                return starPos("n") + new Vector2I(0, 3);
             case TerrainType.Nucleotide:
                 return nucleotidePos(props[PropKey.Nucleobase].ToLower()) + new Vector2I(props[PropKey.Rotation].ToInt(), 0) + backbonePos(props[PropKey.NucleicBackbone].ToLower());
             case TerrainType.NucleotideBlank:
@@ -210,7 +224,36 @@ public partial class Terrain
                 return new Vector2I(0, 0);
         }
     }
-
+    private Vector2I starPos(String type)
+    {
+        switch (type)
+        {
+            case "o":
+                return new Vector2I(0, 0);
+            case "b":
+                return new Vector2I(1, 0);
+            case "a":
+                return new Vector2I(2, 0);
+            case "f":
+                return new Vector2I(3, 0);
+            case "g":
+                return new Vector2I(4, 0);
+            case "k":
+                return new Vector2I(5, 0);
+            case "m":
+                return new Vector2I(6, 0);
+            case "d":
+                return new Vector2I(7, 0);
+            case "n":
+                return new Vector2I(8, 0);
+            case "miii":
+                return new Vector2I(9, 0);
+            case "ki":
+                return new Vector2I(10, 0);
+            default:
+                return new Vector2I(-1, 0);
+        }
+    }
     private Vector2I nucleotidePos(String type)
     {
         switch (type)
@@ -245,6 +288,13 @@ public partial class Terrain
     {
         switch (terrainType)
         {
+            case TerrainType.StellarBubble:
+                return "star_clusters/stars";
+            case TerrainType.StellarCloud:
+                return "star_clusters/stars_sparse";
+            case TerrainType.HillsCloud:
+            case TerrainType.ScatteredDisk:
+                return "kuiper";
             case TerrainType.Nucleotide:
             case TerrainType.NucleotideBlank:
             case TerrainType.NucleotideTurnInner:
