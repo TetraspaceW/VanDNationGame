@@ -799,10 +799,11 @@ class TerrainGenerator
                             : AddCenter(Tiles, new[] { new TerrainRule(Terrain.TerrainType.ElectronCloud, false) });
 
                         double massNumber = AtomGenerator.GetMassNumber(terrain);
+                        double atomNumber = AtomGenerator.GetAtomicNumber(terrain);
 
                         AddCircle(Tiles, new[] {
-                                new TerrainRule(Terrain.TerrainType.Proton, true),
-                                new TerrainRule(Terrain.TerrainType.Neutron, true)
+                                new TerrainRule(Terrain.TerrainType.Proton, true, atomNumber),
+                                new TerrainRule(Terrain.TerrainType.Neutron, true, massNumber - atomNumber)
                             },
                             nucleusCenter,
                             (int)(Math.Pow(massNumber, 1.0 / 3.0) * 0.6),
