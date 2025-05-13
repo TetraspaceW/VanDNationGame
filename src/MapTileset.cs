@@ -26,7 +26,7 @@ public partial class MapTileset
 			};
 			for (int i = 0; i * 64 < s.Texture.GetWidth(); i++)
 			{
-				for (int j = 0; j * 64 < s.Texture.GetWidth(); j++)
+				for (int j = 0; j * 64 < s.Texture.GetHeight(); j++)
 				{
 					s.CreateTile(new Vector2I(i, j), new Vector2I(1, 1));
 				}
