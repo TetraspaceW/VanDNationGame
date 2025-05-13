@@ -43,4 +43,47 @@ class AtomGenerator
         };
         return massNumber;
     }
+
+    internal static double GetAtomicNumber(Terrain terrain)
+    {
+        return ElementAtomNumber((Terrain.AtomElement)Enum.Parse(typeof(Terrain.AtomElement), terrain.props[PropKey.AtomElement]));
+    }
+    
+    public static double ElementAtomNumber(Terrain.AtomElement nucleusElement)
+    {
+        var massNumber = nucleusElement switch
+        {
+            Terrain.AtomElement.Hydrogen => 1,
+            Terrain.AtomElement.Deuterium => 1,
+            Terrain.AtomElement.Tritium => 1,
+            Terrain.AtomElement.Helium => 2,
+            Terrain.AtomElement.Lithium => 3,
+            Terrain.AtomElement.Beryllium => 4,
+            Terrain.AtomElement.Boron => 5,
+            Terrain.AtomElement.Carbon => 6,
+            Terrain.AtomElement.Carbon13 => 6,
+            Terrain.AtomElement.Carbon14 => 6,
+            Terrain.AtomElement.Nitrogen => 7,
+            Terrain.AtomElement.Nitrogen15 => 7,
+            Terrain.AtomElement.Oxygen => 8,
+            Terrain.AtomElement.Fluorine => 9,
+            Terrain.AtomElement.Neon => 10,
+            Terrain.AtomElement.Sodium => 11,
+            Terrain.AtomElement.Magnesium => 12,
+            Terrain.AtomElement.Aluminium => 13,
+            Terrain.AtomElement.Silicon => 14,
+            Terrain.AtomElement.Phosphorus => 15,
+            Terrain.AtomElement.Sulfur => 16,
+            Terrain.AtomElement.Chlorine => 17,
+            Terrain.AtomElement.Argon => 18,
+            Terrain.AtomElement.Potassium => 19,
+            Terrain.AtomElement.Calcium => 20,
+            Terrain.AtomElement.Titanium => 22,
+            Terrain.AtomElement.Iron => 26,
+            Terrain.AtomElement.Bromine => 35,
+            Terrain.AtomElement.Strontium => 38,
+            _ => 0,
+        };
+        return massNumber;
+    }
 }
