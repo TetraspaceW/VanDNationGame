@@ -116,6 +116,7 @@ public partial class MapView : Area2D
 		{
 			TileSet = mapTileset.tileset
 		};
+		Tiles.AddLayer(-1);
 		AddChild(Tiles);
 
 		BuildingTiles = new TileMap
@@ -134,7 +135,8 @@ public partial class MapView : Area2D
 	void UpdateTileAtLocation(TileModel newTile, int x, int y)
 	{
 		Model.Tiles[x, y] = newTile;
-		Tiles.SetCell(0, new Vector2I(x, y), FindTileByName(Tiles.TileSet, "tiles/" + newTile.image), Vector2I.Zero);
+		Tiles.SetCell(1, new Vector2I(x, y), FindTileByName(Tiles.TileSet,"tiles/" + newTile.image), newTile.atlasCoords);
+		Tiles.SetCell(0, new Vector2I(x, y), FindTileByName(Tiles.TileSet,"tiles/" + newTile.background), newTile.backgroundAtlasCoords);
 		var building = Model.GetBuildingAt(x, y);
 		if (building != null)
 		{

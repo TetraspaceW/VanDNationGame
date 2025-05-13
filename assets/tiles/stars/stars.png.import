@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c5jifbtd7vw6t"
-path="res://.godot/imported/dna_turn_outer1.png-b375a794e6fe139b604991e5508676e6.ctex"
+uid="uid://c37xoafk84g17"
+path="res://.godot/imported/stars.png-9c443bb613b96061fd2606da18b433de.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/biomolecules/nucleotides/dna_turn_outer1.png"
-dest_files=["res://.godot/imported/dna_turn_outer1.png-b375a794e6fe139b604991e5508676e6.ctex"]
+source_file="res://assets/tiles/stars/stars.png"
+dest_files=["res://.godot/imported/stars.png-9c443bb613b96061fd2606da18b433de.ctex"]
 
 [params]
 

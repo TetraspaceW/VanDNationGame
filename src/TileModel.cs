@@ -1,6 +1,7 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using Godot;
 
 public partial class TileModel
 {
@@ -10,6 +11,9 @@ public partial class TileModel
     public bool zoomable;
     public int scale;
     public string image;
+    public Vector2I atlasCoords;
+    public string background;
+    public Vector2I backgroundAtlasCoords;
     public TileResources localResources;
 
     public static HashSet<TileModel> activeTiles = new();
@@ -27,6 +31,9 @@ public partial class TileModel
         this.scale = scale;
         this.zoomable = zoomable;
         image = terrain.filenameForTileType();
+        atlasCoords = terrain.atlasCoordsForTileType();
+        background = terrain.backgroundnameForTileType();
+        backgroundAtlasCoords = terrain.backgroundAtlasCoordsForTileType();
         localResources = GetResources(terrain, scale);
     }
 
@@ -34,6 +41,9 @@ public partial class TileModel
     {
         terrain.terrainType = terrainType;
         image = terrain.filenameForTileType();
+        atlasCoords = terrain.atlasCoordsForTileType();
+        background = terrain.backgroundnameForTileType();
+        backgroundAtlasCoords = terrain.backgroundAtlasCoordsForTileType();
     }
 
     public static TileResources GetResources(Terrain terrain, int scale) { return new TileResources(); }
