@@ -17,6 +17,7 @@ public partial class Terrain
         {
             case TerrainType.Filament:
                 return "space";
+            case TerrainType.Bulk:
             case TerrainType.Void:
             case TerrainType.IntersuperclusterVoid:
             case TerrainType.InterclusterSpace:
@@ -30,6 +31,7 @@ public partial class Terrain
                 return "void";
             case TerrainType.CMB:
             case TerrainType.InteruniversalSpace:
+            case TerrainType.Brane:
                 return "energy";
             case TerrainType.Defect:
                 return "defect";
@@ -251,6 +253,7 @@ public partial class Terrain
         // 12
         UniverseCohort,
         // 11
+        Brane, Bulk,
         // 10   10g ly across / 0th archverse level
         Universe, InteruniversalSpace,
         // 9    1g ly across

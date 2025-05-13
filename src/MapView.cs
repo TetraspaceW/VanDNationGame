@@ -20,7 +20,7 @@ public partial class MapView : Area2D
 	private double localYearLength = 1.0; // Default to Earth's year (1 turn per year)
 	public override void _Ready()
 	{
-		TileModel startingTile = new(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, 11, zoomable: true);
+		TileModel startingTile = new(new Terrain(Terrain.TerrainType.UniverseCohort), null, 11, zoomable: true);
 
 		// universe start
 		Model = new MapModel(startingTile);
@@ -246,7 +246,7 @@ public partial class MapView : Area2D
 	{
 		if (Tile.parent.parent == null)
 		{
-			Tile.parent.parent = new TileModel(new Terrain(Terrain.TerrainType.InteruniversalSpace), null, Tile.scale + 2, zoomable: true);
+			Tile.parent.parent = new TileModel(new Terrain(Terrain.TerrainType.UniverseCohort), null, Tile.scale + 2, zoomable: true);
 			SetRootTo(Tile.parent.parent);
 		}
 		if (Tile.parent.parent.internalMap == null)

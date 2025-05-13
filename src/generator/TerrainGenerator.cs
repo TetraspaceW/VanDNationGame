@@ -18,18 +18,23 @@ class TerrainGenerator
 
         switch (terrain.terrainType)
         {
-            case Terrain.TerrainType.InteruniversalSpace:
+            case Terrain.TerrainType.UniverseCohort:
                 if (scale > 11)
                 {
-                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.InteruniversalSpace, zoomable: true) });
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.UniverseCohort, zoomable: true) });
                 }
                 else
                 {
-                    Fill(Tiles, new[] {
-                        new TerrainRule(Terrain.TerrainType.InteruniversalSpace),
-                        new TerrainRule(Terrain.TerrainType.Universe, zoomable: true, 0.01)
-                        });
+                    Fill(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Bulk) });
+                    AddStripes(Tiles, new[] { new TerrainRule(Terrain.TerrainType.Brane, zoomable: true) }, 3, 0.2);
                 }
+                break;
+            case Terrain.TerrainType.Brane:
+                Fill(Tiles, new[] {
+                    new TerrainRule(Terrain.TerrainType.InteruniversalSpace),
+                    new TerrainRule(Terrain.TerrainType.Universe, zoomable: true, 0.05)
+                    });
+                
                 break;
             case Terrain.TerrainType.Universe:
                 Fill(Tiles, new[] {
@@ -925,6 +930,44 @@ class TerrainGenerator
         }
     }
 
+
+    private void AddStripes(TileModel[,] tiles, TerrainRule[] rules, int spacing, double wiggliness)
+    {
+        var offset = RND.Next(0, spacing - 1);
+
+        var (width, height) = Shape3D(tiles);
+
+        for (var i = offset - spacing; i < width + spacing; i += spacing)
+        {
+            var pos = RND.Next(0, spacing - 2);
+            var posLast = pos;
+
+            for (var j = 0; j < height; j++)
+            {
+                if (i + pos >= 0 && i + pos < width)
+                    tiles[i + pos, j] = RandomTileFromRule(rules);
+                var posTemp = pos;
+                if (pos == posLast && RND.NextDouble() < wiggliness)
+                {
+                    if (pos >= spacing - 2)
+                    {
+                        pos = spacing - 3;
+                    }
+                    else if (pos <= 0)
+                    {
+                        pos = 1;
+                    }
+                    else
+                    {
+                        pos += RND.NextDouble() < 0.5 ? 1 : -1;
+                    }
+                    if (i + pos >= 0 && i + pos < width)
+                        tiles[i + pos, j] = RandomTileFromRule(rules);
+                }
+                posLast = posTemp;
+            }
+        }
+    }
     private (int, int) AddCenter(TileModel[,] tiles, TerrainRule[] rules)
     {
         return TerrainGenRule.AddCenter(parent: tile, tiles, rules);
