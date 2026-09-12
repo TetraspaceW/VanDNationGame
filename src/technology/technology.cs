@@ -13,12 +13,11 @@ class TechTree
 {
     public static List<TreeTechnology> techTree = new TechTreeLoader().techs;
 
-    public partial class TreeTechnology
+    public partial class TreeTechnology(Technology tech)
     {
-        public Technology techDef;
+        public Technology techDef = tech;
         public int? x;
         public int? y;
-        public TreeTechnology(Technology tech) { techDef = tech; }
     }
 
     class TechTreeLoader

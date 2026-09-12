@@ -1,17 +1,10 @@
 using System.Collections.Generic;
-class TerrainRule
+class TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, double weight = 1, Dictionary<PropKey, string> props = null)
 {
-    public double weight;
-    public Terrain.TerrainType terrainType;
-    public bool zoomable;
-    public Dictionary<PropKey, string> props;
-    public TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, double weight = 1, Dictionary<PropKey, string> props = null)
-    {
-        this.terrainType = terrainType;
-        this.zoomable = zoomable;
-        this.weight = weight;
-        this.props = props;
-    }
+    public double weight = weight;
+    public Terrain.TerrainType terrainType = terrainType;
+    public bool zoomable = zoomable;
+    public Dictionary<PropKey, string> props = props;
 
     public TerrainRule Rotate(int rot)
     {

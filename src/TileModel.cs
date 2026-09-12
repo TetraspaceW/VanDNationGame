@@ -2,15 +2,15 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-public partial class TileModel
+public partial class TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
 {
-    public Terrain terrain;
+    public Terrain terrain = terrain;
     public MapModel internalMap;
-    public TileModel parent;
-    public bool zoomable;
-    public int scale;
-    public string image;
-    public TileResources localResources;
+    public TileModel parent = parent;
+    public bool zoomable = zoomable;
+    public int scale = scale;
+    public string image = terrain.filenameForTileType();
+    public TileResources localResources = GetResources(terrain, scale);
 
     public static HashSet<TileModel> activeTiles = new();
     public HashSet<Building> storageBuildings = new();
@@ -19,16 +19,6 @@ public partial class TileModel
     public TileResources totalChildResources = new();
     public TileResources totalChildCapacity = new();
     public int highestTransportInside = int.MinValue;
-
-    public TileModel(Terrain terrain, TileModel parent, int scale, bool zoomable = false)
-    {
-        this.terrain = terrain;
-        this.parent = parent;
-        this.scale = scale;
-        this.zoomable = zoomable;
-        image = terrain.filenameForTileType();
-        localResources = GetResources(terrain, scale);
-    }
 
     public void SetTerrainType(Terrain.TerrainType terrainType)
     {

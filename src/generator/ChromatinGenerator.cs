@@ -1,15 +1,10 @@
 using System.Linq;
 using System.Collections.Generic;
-class ChromatinGenerator
+class ChromatinGenerator(TileModel tile, TileModel[,] Tiles)
 {
-    readonly TileModel tile;
-    TileModel[,] Tiles;
+    readonly TileModel tile = tile;
+    TileModel[,] Tiles = Tiles;
 
-    public ChromatinGenerator(TileModel tile, TileModel[,] Tiles)
-    {
-        this.tile = tile;
-        this.Tiles = Tiles;
-    }
     public TileModel[,] GenerateHeterochromatin()
     {
         TerrainRule[] HNSM = new[] { new TerrainRule(Terrain.TerrainType.Nucleosome, true) };

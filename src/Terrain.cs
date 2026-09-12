@@ -1,15 +1,9 @@
 using System.Collections.Generic;
 using System;
-public partial class Terrain
+public partial class Terrain(Terrain.TerrainType type, Dictionary<PropKey, string> props = null)
 {
-    public TerrainType terrainType;
-    public Dictionary<PropKey, string> props;
-
-    public Terrain(TerrainType type, Dictionary<PropKey, string> props = null)
-    {
-        terrainType = type;
-        this.props = (props == null) ? new Dictionary<PropKey, string>() : props;
-    }
+    public TerrainType terrainType = type;
+    public Dictionary<PropKey, string> props = (props == null) ? new Dictionary<PropKey, string>() : props;
 
     public string filenameForTileType()
     {

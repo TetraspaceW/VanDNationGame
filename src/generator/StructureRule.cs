@@ -1,10 +1,5 @@
-class StructureRule
+class StructureRule(Structure structure, double weight = 1)
 {
-    public double weight;
-    public Structure structure;
-    public StructureRule(Structure structure, double weight = 1)
-    {
-        this.structure = structure;
-        this.weight = weight;
-    }
+    public double weight = weight;
+    public Structure structure = structure;
 }

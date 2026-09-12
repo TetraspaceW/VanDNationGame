@@ -2,13 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-class TerrainGenerator
+class TerrainGenerator(TileModel insideTile)
 {
-    readonly TileModel tile;
-    public TerrainGenerator(TileModel insideTile)
-    {
-        tile = insideTile;
-    }
+    readonly TileModel tile = insideTile;
 
     public TileModel[,] GenerateTerrain()
     {
