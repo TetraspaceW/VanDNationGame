@@ -9,9 +9,9 @@ class TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, double
     public TerrainRule Rotate(int rot)
     {
         TerrainRule rot0 = new(terrainType, zoomable, weight, new Dictionary<PropKey, string>(props));
-        if (props.ContainsKey(PropKey.Rotation))
+        if (props.TryGetValue(PropKey.Rotation, out string value))
         {
-            rot0.props[PropKey.Rotation] = (int.Parse(props[PropKey.Rotation]) + rot) % 4 + "";
+            rot0.props[PropKey.Rotation] = (int.Parse(value) + rot) % 4 + "";
         }
         else
         {
@@ -30,6 +30,6 @@ class TerrainRule(Terrain.TerrainType terrainType, bool zoomable = false, double
         rot1.props[PropKey.Rotation] = "1";
         rot2.props[PropKey.Rotation] = "2";
         rot3.props[PropKey.Rotation] = "3";
-        return new[] { rot0, rot1, rot2, rot3 };
+        return [rot0, rot1, rot2, rot3];
     }
 }

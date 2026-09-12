@@ -3,7 +3,7 @@ using System;
 public partial class Terrain(Terrain.TerrainType type, Dictionary<PropKey, string> props = null)
 {
     public TerrainType terrainType = type;
-    public Dictionary<PropKey, string> props = (props == null) ? new Dictionary<PropKey, string>() : props;
+    public Dictionary<PropKey, string> props = (props == null) ? [] : props;
 
     public string filenameForTileType()
     {
@@ -35,10 +35,10 @@ public partial class Terrain(Terrain.TerrainType type, Dictionary<PropKey, strin
                 return "star_clusters/dense_stars";
             case TerrainType.GalaxyCluster:
             case TerrainType.StellarBubble:
-                return "star_clusters/stars" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToLower() : "");
+                return "star_clusters/stars" + (props.TryGetValue(PropKey.SpecialStar, out string stellarBubbleSpecialStar) ? "_" + stellarBubbleSpecialStar.ToLower() : "");
             case TerrainType.GalaxyGroup:
             case TerrainType.StellarCloud:
-                return "star_clusters/stars_sparse" + (props.ContainsKey(PropKey.SpecialStar) ? "_" + props[PropKey.SpecialStar].ToLower() : "");
+                return "star_clusters/stars_sparse" + (props.TryGetValue(PropKey.SpecialStar, out string stellarCloudSpecialStar) ? "_" + stellarCloudSpecialStar.ToLower() : "");
             case TerrainType.Galaxy:
                 return "galaxies/" + props[PropKey.GalaxyType].ToLower();
             case TerrainType.DwarfGalaxy:

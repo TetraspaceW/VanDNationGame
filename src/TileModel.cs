@@ -12,8 +12,8 @@ public partial class TileModel(Terrain terrain, TileModel parent, int scale, boo
     public string image = terrain.filenameForTileType();
     public TileResources localResources = GetResources(terrain, scale);
 
-    public static HashSet<TileModel> activeTiles = new();
-    public HashSet<Building> storageBuildings = new();
+    public static HashSet<TileModel> activeTiles = [];
+    public HashSet<Building> storageBuildings = [];
 
     // recursive
     public TileResources totalChildResources = new();
@@ -103,8 +103,7 @@ public partial class TileModel(Terrain terrain, TileModel parent, int scale, boo
         var buildings = new HashSet<Building>();
         if (internalMap != null) // this weird check makes me think it binds to maps instead
         {
-            buildings = internalMap.Buildings
-               .Where((building) => building.template.transport != null && building.active && building.template.transport.range >= scale).ToHashSet();
+            buildings = [.. internalMap.Buildings.Where((building) => building.template.transport != null && building.active && building.template.transport.range >= scale)];
 
             foreach (var tile in internalMap.Tiles)
             {

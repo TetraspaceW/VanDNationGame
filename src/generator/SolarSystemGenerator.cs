@@ -149,15 +149,15 @@ class SolarSystemGenerator : CelestialGenerator
 
         var Tiles = new TileModel[10, 10];
 
-        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
+        TerrainGenRule.Fill(parent, Tiles, [new TerrainRule(smallBodiesMaterial)]);
         var center = TerrainGenRule.ArbitraryCenter(Tiles);
-        TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
+        TerrainGenRule.AddCircle(parent, Tiles, [new TerrainRule(fillMaterial)], center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true);
 
-        TerrainGenRule.AddCircle(parent, Tiles, new[] {
+        TerrainGenRule.AddCircle(parent, Tiles, [
             new TerrainRule(starTerrain, true, props: new Dictionary<PropKey, string>() {
                 { PropKey.SpectralClass, spectralClass.ToString() }
             })
-        }, center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
+        ], center, (int)Math.Round(stellarRadius / (innerRadiusAU * 2)), true);
 
         PlaceWorlds(Tiles, parent, innerRadiusAU, systemArea, center);
 
@@ -172,23 +172,23 @@ class SolarSystemGenerator : CelestialGenerator
         var Tiles = new TileModel[10, 10];
 
         // fill the solar system up with small bodies dust
-        TerrainGenRule.Fill(parent, Tiles, new[] { new TerrainRule(smallBodiesMaterial) });
+        TerrainGenRule.Fill(parent, Tiles, [new TerrainRule(smallBodiesMaterial)]);
 
         // add the central tile of the solar system containing the next step in
-        var center = TerrainGenRule.AddCenter(parent, Tiles, new[] {
+        var center = TerrainGenRule.AddCenter(parent, Tiles, [
             new TerrainRule(centerPieceMaterial, centerIsZoomable, props: new Dictionary<PropKey, string>() {
                 { PropKey.SpectralClass, spectralClass.ToString() }
             })
-        });
+        ]);
 
         // if it's the whole solar system view, add an Oort cloud with r = 5 tiles / 0.5 ly
         if (isWholeSystem && spectralClass != SpectralClass.n)
         {
-            TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(Terrain.TerrainType.OortCloudBodies) }, center, 5, true, center);
+            TerrainGenRule.AddCircle(parent, Tiles, [new TerrainRule(Terrain.TerrainType.OortCloudBodies)], center, 5, true, center);
         }
 
         // remove the small bodies dust from any orbits that are cleared by outer planets
-        TerrainGenRule.AddCircle(parent, Tiles, new[] { new TerrainRule(fillMaterial) }, center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true, center);
+        TerrainGenRule.AddCircle(parent, Tiles, [new TerrainRule(fillMaterial)], center, (int)Math.Round(outermostPlanetDistance / (innerRadiusAU * 2)), true, center);
 
         if (centerIsZoomable)
         {
@@ -230,9 +230,9 @@ class SolarSystemGenerator : CelestialGenerator
                 _ => Terrain.TerrainType.AsteroidBeltBodies,
             };
             TerrainGenRule.AddCircle(parent, Tiles,
-            rules: new[] {
+            rules: [
                 new TerrainRule(terrainType)
-            }, center, distance, false);
+            ], center, distance, false);
         }
         else
         {
@@ -253,7 +253,7 @@ class SolarSystemGenerator : CelestialGenerator
             }
 
             TerrainGenRule.AddAtDistance(parent, Tiles,
-            rules: new[] {
+            rules: [
                 new TerrainRule(terrainType, true, props: new Dictionary<PropKey, string>() {
                     { PropKey.PlanetType, planetType.ToString() },
                     { PropKey.PlanetIsLifeBearing, body.hasLife.ToString() },
@@ -263,14 +263,14 @@ class SolarSystemGenerator : CelestialGenerator
                     { PropKey.PlanetTemperature, (body.temperature - 273.15).ToString() },
                     { PropKey.OrbitalPeriod, body.orbit.orbitalPeriod.ToString() }
                 })
-            },
+            ],
             center,
             distance,
-            mask: new List<Terrain.TerrainType> {
+            mask: [
                 Terrain.TerrainType.InnerSystemBody, Terrain.TerrainType.OuterSystemBody, Terrain.TerrainType.FarfarfarSystemBody, Terrain.TerrainType.FarfarSystemBody, Terrain.TerrainType.FarSystemBody,
                 Terrain.TerrainType.Star, Terrain.TerrainType.InnerSolarSystem, Terrain.TerrainType.OuterSolarSystem, Terrain.TerrainType.ScatteredDisk, Terrain.TerrainType.HillsCloud,
                 Terrain.TerrainType.StellarTerrain
-            });
+            ]);
         }
     }
 
@@ -322,7 +322,7 @@ class SolarSystemGenerator : CelestialGenerator
 
     class Atmosphere
     {
-        readonly List<G> gasesPresent = new();
+        readonly List<G> gasesPresent = [];
         public double pressure = 0;
 
         public Atmosphere(double temperature, double mass, double radius)
@@ -337,40 +337,40 @@ class SolarSystemGenerator : CelestialGenerator
             {
                 switch (atmosphereRoll)
                 {
-                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.H2 }; break;
-                    case 5: case 6: gasesPresent = new List<G> { G.He }; break;
-                    case 7: case 8: gasesPresent = new List<G> { G.H2, G.He }; break;
-                    case 9: gasesPresent = new List<G> { G.Ne }; break;
+                    case 1: case 2: case 3: case 4: gasesPresent = [G.H2]; break;
+                    case 5: case 6: gasesPresent = [G.He]; break;
+                    case 7: case 8: gasesPresent = [G.H2, G.He]; break;
+                    case 9: gasesPresent = [G.Ne]; break;
                 }
             }
             else if (temperature > 50 && temperature <= 150)
             {
                 switch (atmosphereRoll)
                 {
-                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CH4 }; break;
-                    case 5: case 6: gasesPresent = new List<G> { G.H2, G.He, G.N2 }; break;
-                    case 7: case 8: gasesPresent = new List<G> { G.N2, G.CO }; break;
-                    case 9: gasesPresent = new List<G> { G.H2, G.He }; break;
+                    case 1: case 2: case 3: case 4: gasesPresent = [G.N2, G.CH4]; break;
+                    case 5: case 6: gasesPresent = [G.H2, G.He, G.N2]; break;
+                    case 7: case 8: gasesPresent = [G.N2, G.CO]; break;
+                    case 9: gasesPresent = [G.H2, G.He]; break;
                 }
             }
             else if (temperature > 150 && temperature <= 400)
             {
                 switch (atmosphereRoll)
                 {
-                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CO2 }; break;
-                    case 5: case 6: gasesPresent = new List<G> { G.CO2 }; break;
-                    case 7: case 8: gasesPresent = new List<G> { G.N2, G.CH4 }; break;
-                    case 9: gasesPresent = (temperature > 240) ? new List<G> { G.CO2, G.CH4, G.NH3 } : new List<G> { G.H2, G.He }; break;
+                    case 1: case 2: case 3: case 4: gasesPresent = [G.N2, G.CO2]; break;
+                    case 5: case 6: gasesPresent = [G.CO2]; break;
+                    case 7: case 8: gasesPresent = [G.N2, G.CH4]; break;
+                    case 9: gasesPresent = (temperature > 240) ? [G.CO2, G.CH4, G.NH3] : [G.H2, G.He]; break;
                 }
             }
             else if (temperature > 400)
             {
                 switch (atmosphereRoll)
                 {
-                    case 1: case 2: case 3: case 4: gasesPresent = new List<G> { G.N2, G.CO2 }; break;
-                    case 5: case 6: gasesPresent = new List<G> { G.CO2 }; break;
-                    case 7: case 8: gasesPresent = new List<G> { G.NO2, G.SO2 }; break;
-                    case 9: gasesPresent = new List<G> { G.SO2 }; break;
+                    case 1: case 2: case 3: case 4: gasesPresent = [G.N2, G.CO2]; break;
+                    case 5: case 6: gasesPresent = [G.CO2]; break;
+                    case 7: case 8: gasesPresent = [G.NO2, G.SO2]; break;
+                    case 9: gasesPresent = [G.SO2]; break;
                 }
             }
 
@@ -792,7 +792,7 @@ class SolarSystemGenerator : CelestialGenerator
             return orbits;
         }
 
-        double UpdateTemperature(double temperature, Atmosphere atmosphere, Hydrosphere hydrosphere, int hydrosphereCoverage, Orbit orbit)
+        static double UpdateTemperature(double temperature, Atmosphere atmosphere, Hydrosphere hydrosphere, int hydrosphereCoverage, Orbit orbit)
         {
             int outerAlbedoRoll = d(10) +
                 (orbit.inner ? (

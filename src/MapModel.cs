@@ -4,7 +4,7 @@ public partial class MapModel
 {
 	public TileModel[,] Tiles;
 	public TileModel parent;
-	public List<Building> Buildings = new();
+	public List<Building> Buildings = [];
 
 	public MapModel(TileModel parent)
 	{
@@ -93,7 +93,7 @@ public partial class MapModel
 	private (int, int) GetUnoccupiedTileOfType(Terrain.TerrainType type)
 	{
 		var (width, height) = TerrainGenerator.Shape3D(Tiles);
-		List<(int, int)> possibleLocations = new();
+		List<(int, int)> possibleLocations = [];
 
 		for (int x = 0; x < width; x++)
 		{

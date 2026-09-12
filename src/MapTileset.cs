@@ -12,7 +12,7 @@ public partial class MapTileset
 		buildingTileset = GetTilesetWithImages("/buildings");
 	}
 
-	TileSet GetTilesetWithImages(string folder)
+	static TileSet GetTilesetWithImages(string folder)
 	{
 		var images = GetFilesInFolder(folder);
 		var newTileset = new TileSet();
@@ -41,7 +41,7 @@ public partial class MapTileset
 	{
 		string extension = ".png";
 
-		List<String> filesInFolder = new();
+		List<String> filesInFolder = [];
 		var dir = DirAccess.Open("res://assets" + folder);
 		_ = dir.ListDirBegin();
 		while (true)

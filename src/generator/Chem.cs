@@ -4,125 +4,125 @@ using System.Linq.Expressions;
 
 class Chem
 {
-    private static readonly TerrainRule[] hydr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 99.99, props: new Dictionary<PropKey, string>() {
+    private static readonly TerrainRule[] hydr = [ new TerrainRule(Terrain.TerrainType.Atom, true, 99.99, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()}
     }), new TerrainRule(Terrain.TerrainType.Atom, true, 0.01, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Deuterium.ToString()}
-    })};
+    })];
 
-    private static readonly TerrainRule[] heli = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    private static readonly TerrainRule[] heli = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()}
-    })};
+    })];
 
-    private static readonly TerrainRule[] hion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 99.99, props: new Dictionary<PropKey, string>() {
+    private static readonly TerrainRule[] hion = [ new TerrainRule(Terrain.TerrainType.Atom, true, 99.99, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Hydrogen.ToString()},
         {PropKey.AtomIsIonized, "True"}
     }), new TerrainRule(Terrain.TerrainType.Atom, true, 0.01, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Deuterium.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] heio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] heio = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Helium.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] oion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] oion = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] cion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 99, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] cion = [ new TerrainRule(Terrain.TerrainType.Atom, true, 99, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()},
         {PropKey.AtomIsIonized, "True"}
     }), new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Carbon13.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] feio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] feio = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] neio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] neio = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Neon.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] nion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 99.6, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] nion = [ new TerrainRule(Terrain.TerrainType.Atom, true, 99.6, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Nitrogen.ToString()},
         {PropKey.AtomIsIonized, "True"}
     }), new TerrainRule(Terrain.TerrainType.Atom, true, 0.4, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Nitrogen15.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] siio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] siio = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Silicon.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] mgio = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] mgio = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Magnesium.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] sion = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] sion = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Sulfur.ToString()},
         {PropKey.AtomIsIonized, "True"}
-    })};
-    private static readonly TerrainRule[] carb = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 99, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] carb = [ new TerrainRule(Terrain.TerrainType.Atom, true, 99, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Carbon.ToString()}
     }), new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Carbon13.ToString()}
-    })};
-    private static readonly TerrainRule[] nitr = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 99.6, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] nitr = [ new TerrainRule(Terrain.TerrainType.Atom, true, 99.6, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Nitrogen.ToString()}
     }), new TerrainRule(Terrain.TerrainType.Atom, true, 0.4, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Nitrogen15.ToString()}
-    })};
-    private static readonly TerrainRule[] oxyg = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] oxyg = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Oxygen.ToString()}
-    })};
-    private static readonly TerrainRule[] silc = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] silc = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Silicon.ToString()}
-    })};
-    private static readonly TerrainRule[] phos = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] phos = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Phosphorus.ToString()}
-    })};
-    private static readonly TerrainRule[] magn = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] magn = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Magnesium.ToString()}
-    })};
-    private static readonly TerrainRule[] alum = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] alum = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Aluminium.ToString()}
-    })};
-    private static readonly TerrainRule[] sulf = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] sulf = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Sulfur.ToString()}
-    })};
-    private static readonly TerrainRule[] calc = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] calc = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Calcium.ToString()}
-    })};
-    private static readonly TerrainRule[] iron = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] iron = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Iron.ToString()}
-    })};
-    private static readonly TerrainRule[] tita = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] tita = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Titanium.ToString()}
-    })};
-    private static readonly TerrainRule[] boro = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] boro = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Boron.ToString()}
-    })};
-    private static readonly TerrainRule[] sodi = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] sodi = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Sodium.ToString()}
-    })};
-    private static readonly TerrainRule[] pota = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] pota = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Potassium.ToString()}
-    })};
-    private static readonly TerrainRule[] stro = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] stro = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Strontium.ToString()}
-    })};
-    private static readonly TerrainRule[] chlo = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] chlo = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Chlorine.ToString()}
-    })};
-    private static readonly TerrainRule[] brom = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] brom = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Bromine.ToString()}
-    })};
-    private static readonly TerrainRule[] flur = new[] { new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
+    })];
+    private static readonly TerrainRule[] flur = [ new TerrainRule(Terrain.TerrainType.Atom, true, 1, props: new Dictionary<PropKey, string>() {
         {PropKey.AtomElement, Terrain.AtomElement.Fluorine.ToString()}
-    })};
-    private static readonly TerrainRule[] molc = new[] { new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1) };
-    private static readonly TerrainRule[] elec = new[] { new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1) };
+    })];
+    private static readonly TerrainRule[] molc = [new TerrainRule(Terrain.TerrainType.IntermolecularSpace, false, 1)];
+    private static readonly TerrainRule[] elec = [new TerrainRule(Terrain.TerrainType.FreeElectron, true, 1)];
 
     public static readonly Structure HYDROGEN = new(new TerrainRule[,][] {
         { null, molc, null },

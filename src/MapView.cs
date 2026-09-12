@@ -198,7 +198,7 @@ public partial class MapView : Area2D
 
 	public List<(BuildingTemplate, bool)> GetAvailableBuildingsList()
 	{
-		return BuildingTemplateList.buildingTemplates.Where((buildingTemplate) =>
+		return [.. BuildingTemplateList.buildingTemplates.Where((buildingTemplate) =>
 			buildingTemplate.terrainTypes.Intersect(Model.GetTerrainTypes()).Count() > 0
 			 && FactionList.GetPlayerFaction().techsKnown.Contains(buildingTemplate.technology)
 			 && buildingTemplate.size == Model.GetTileScale()
@@ -207,7 +207,7 @@ public partial class MapView : Area2D
 				buildingTemplate,
 				Model.parent.GetAvailableResources().GetAmount(buildingTemplate.cost.resource) >= buildingTemplate.cost.amount
 			)
-		).ToList();
+		)];
 	}
 
 	public void CreateSidebar()

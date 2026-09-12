@@ -6,8 +6,7 @@ class RND
     public static int d(int n, int N = 1)
     {
         return Enumerable.Range(0, N)
-        .Select(_ => { return _random.Next(1, n + 1); })
-        .Sum();
+        .Sum(_ => { return _random.Next(1, n + 1); });
     }
 
     public static int Next() { return _random.Next(); }

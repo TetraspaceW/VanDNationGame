@@ -24,7 +24,7 @@ class TerrainGenRule
     {
         var (width, height) = Shape3D(tiles);
         var (centerX, centerY) = center;
-        List<(int, int)> possibleLocations = new();
+        List<(int, int)> possibleLocations = [];
 
         for (int x = Math.Max(centerX - radius - 1, 0); x < Math.Min(centerX + radius + 1, width); x++)
         {
@@ -52,7 +52,7 @@ class TerrainGenRule
     static public void AddOneRandomly(TileModel parent, TileModel[,] tiles, TerrainRule[] rules, List<Terrain.TerrainType> mask)
     {
         var (width, height) = Shape3D(tiles);
-        List<(int, int)> possibleLocations = new();
+        List<(int, int)> possibleLocations = [];
 
         for (int x = 0; x < width; x++)
         {

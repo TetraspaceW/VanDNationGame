@@ -2,7 +2,7 @@ using System.Collections.Generic;
 class Structure
 {
     public TerrainRule[,][] rules;
-    public static Dictionary<string, Structure> structureDict = new();
+    public static Dictionary<string, Structure> structureDict = [];
     public string name;
 
     public static readonly Structure NULL = new(new TerrainRule[,][] {
@@ -214,7 +214,7 @@ class Structure
     }
     public StructureRule[] RotateAll(double weight)
     {
-        return new[] { new StructureRule(this, weight / 4), new StructureRule(Rotate(1), weight / 4), new StructureRule(Rotate(2), weight / 4), new StructureRule(Rotate(3), weight / 4) };
+        return [new StructureRule(this, weight / 4), new StructureRule(Rotate(1), weight / 4), new StructureRule(Rotate(2), weight / 4), new StructureRule(Rotate(3), weight / 4)];
     }
 
     public static TerrainRule CreateStructureTile(string name, int shiftX, int shiftY, int rot = 0, double weight = 1)

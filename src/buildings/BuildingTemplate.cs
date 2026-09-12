@@ -9,7 +9,7 @@ public partial class BuildingTemplate
     {
         this.name = name;
         this.size = size;
-        this.terrainTypes = terrainTypes.Select((it) => (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it)).ToHashSet();
+        this.terrainTypes = [.. terrainTypes.Select((it) => (Terrain.TerrainType)Enum.Parse(typeof(Terrain.TerrainType), it))];
         this.technology = technology;
         this.cost = cost;
         this.extraction = extraction;
