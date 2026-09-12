@@ -354,6 +354,7 @@
     {
         "name": "Automated Mine",
         "size": -10,
+        "image": "mine",
         "terrainTypes": [
             "VerdantTerrain"
         ],

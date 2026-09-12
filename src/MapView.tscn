@@ -1,19 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://dv80wyaad63o7"]
+[gd_scene format=3 uid="uid://dv80wyaad63o7"]
 
-[ext_resource type="Script" path="res://src/MapView.cs" id="1"]
-[ext_resource type="Script" path="res://src/CameraBuddy.cs" id="3"]
+[ext_resource type="Script" uid="uid://bjcdqhmdecsf4" path="res://src/MapView.cs" id="1"]
+[ext_resource type="Script" uid="uid://b8j0thfkrjcb6" path="res://src/CameraBuddy.cs" id="3"]
 
 [sub_resource type="RectangleShape2D" id="1"]
 size = Vector2(640, 640)
 
-[node name="MapView" type="Area2D"]
+[node name="MapView" type="Area2D" unique_id=2062074360]
 position = Vector2(0, 16)
 script = ExtResource("1")
 
-[node name="CameraBuddy" type="Node2D" parent="."]
+[node name="CameraBuddy" type="Node2D" parent="." unique_id=1697064566]
 script = ExtResource("3")
 
-[node name="MapCamera" type="Camera2D" parent="CameraBuddy"]
+[node name="MapCamera" type="Camera2D" parent="CameraBuddy" unique_id=106584029]
 limit_left = 0
 limit_top = 0
 limit_right = 6400
@@ -27,6 +27,6 @@ drag_right_margin = 0.5
 drag_bottom_margin = 0.5
 editor_draw_drag_margin = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1680309298]
 position = Vector2(320, 320)
 shape = SubResource("1")
